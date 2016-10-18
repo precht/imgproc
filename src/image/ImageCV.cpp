@@ -7,8 +7,10 @@
 #include "image/ImageCV.hpp"
 
 #include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
+// TODO delete debug cerrs
+#include <iostream>
 
 namespace imgprocapp
 {
@@ -17,45 +19,59 @@ namespace image
 
 ImageCV::ImageCV(std::string input_name, std::string output_name)
     : Image(input_name, output_name)
-{ }
-
-ImageCV::ImageCV(ImageCV &&rval)
-    : Image(std::move(rval))
-    , data_matrix_(std::move(rval.data_matrix_))
-{ }
+{ 
+    if(DEBUG) std::cerr << "constructing ImageCV(args)..." << std::endl; 
+    load_image(input_name);
+}
 
 ImageCV::~ImageCV()
-{ }
-
-bool ImageCV::load_image(std::string image_name)
-{
-    return false;
+{ 
+    if(DEBUG) std::cerr  << "destructing ImageCV..." << std::endl;
+    data_matrix_.release();
 }
 
-bool ImageCV::save_image(std::string image_name)
+void ImageCV::load_image(const std::string& image_name)
 {
-    return false;
+    if(!data_matrix_.empty()) data_matrix_.release();
+    if(DEBUG) std::cerr << "loading_image(name) ImageCV..." << std::endl;
+    data_matrix_ = cv::imread(image_name, CV_LOAD_IMAGE_ANYCOLOR);
+    // TODO porper exceptions
+    if(data_matrix_.empty()) throw "ImageCV: Failed to load image, probably wrong name";
+    if(!data_matrix_.isContinuous()) throw "ImageCV: Image is not continuous, not supported  ";
 }
 
-size_t ImageCV::channels()
+void ImageCV::save_image(const std::string& image_name)
 {
-    return 0;
+    if(DEBUG) std::cerr << "saving_image(name) ImageCV..." << std::endl;
+    cv::imwrite(image_name, data_matrix_);
 }
 
-size_t ImageCV::rows()
+int ImageCV::channels()
 {
-    return 0;
+    return data_matrix_.channels();
 }
 
-size_t ImageCV::columns()
+int ImageCV::rows()
 {
-    return 0;
+    return data_matrix_.rows;
 }
 
-BYTE* ImageCV::at(size_t x, size_t y)
+int ImageCV::columns()
 {
-    return NULL;
+    return data_matrix_.cols;
 }
+
+BYTE* ImageCV::ptr(int x, int y, size_t channel)
+{
+    if(channel >= data_matrix_.channels()) throw "ImageCV::ptr: Wrong channel number!";
+    return data_matrix_.ptr<BYTE>(x) + (y * data_matrix_.channels()) + channel;
+}
+
+const cv::Mat& ImageCV::get_Mat()
+{
+    return data_matrix_;
+}
+
 
 } // namespace image
 } // namespace imgprocapp

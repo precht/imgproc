@@ -3,40 +3,51 @@
  *          The main purpose for Controller class is to call proper operations on image due to
  *          passed arguments.
  *
- *      Created:    12th Oct 2016
+ *      Created:    13th Oct 2016
  *      Author:     Jakub Precht
  */
 
+#ifndef CONTROLLER_HPP
+#define CONTROLLER_HPP
+
 #include "image/Image.hpp"
-
-#include <map>
-#include <memory>
-#include <iostream>
-
+#include <utility>
+#include <vector>
+#include <string>
 
 namespace imgprocapp
 {
 
-typedef std::unique_ptr<std::map<std::string, int>> UPTR_M_SI;
+typedef std::vector<std::pair<std::string, std::string>> V_P_SS;
+const std::string INPUT_NAME = "in";
+const std::string OUTPUT_NAME = "out";
+const std::string BRIGHTNESS = "brightness";
+const std::string CONTRAST = "contrast";
+const std::string NEGATIVE = "negative";
+const std::string DEFAULT_OUTPUT_NAME = "a.bmp";
 
 class Controller
 {
   public:
+    /* allocates new vector, puts there arguments and returns pointer to that vector,
+     * you should release it's memory by yourself
+     * input image name will be the first element 
+     * output name will be the second element */
+    static V_P_SS *read_arguments(int argc, char **argv);
 
-    /* reads arguments and returns map with command-value entries */
-    static UPTR_M_SI read_arguments(int argc, char **argv);
-
-    /* constructs Controller using passed Image implementation and map from function
-     * Controller::read_arguments */
-    Controller(image::SPTR_IMG image, UPTR_M_SI arguments);
-
+    Controller(V_P_SS *arguments);
     virtual ~Controller();
+
+    /* performs operations on image due to passed arguments */
     virtual void run();
 
+  protected:
+    image::Image *image_;
+
   private:
-    UPTR_M_SI arguments_;
-    image::SPTR_IMG image_;
+    std::vector<std::pair<std::string, std::string>> *arguments_;
 };
 
 } // namespace imgprocapp
 
+#endif // CONTROLLER_HPP

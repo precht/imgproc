@@ -7,17 +7,22 @@
  *      Author:     Jakub Precht
  */
 
-#include "Controller.hpp"
 #include "image/Image.hpp"
 #include "image/ImageCV.hpp"
+#include "gui/SimpleGui.hpp"
+#include "gui/SimpleGuiCV.hpp"
+#include "Controller.hpp"
+#include "GuiController.hpp"
 
 #include <exception>
 #include <iostream>
 #include <memory>
-#include <map>
+#include <utility>
+#include <vector>
 
 using namespace imgprocapp;
 using namespace imgprocapp::image;
+using namespace imgprocapp::gui;
 using namespace std;
 
 typedef unique_ptr<map<string, int>> UPTR_M_SI;
@@ -26,12 +31,19 @@ int main(int argc, char **argv)
 {
     try
     {
-        Controller ctr(make_shared<ImageCV>(""), Controller::read_arguments(argc, argv));
-    }
-    catch (std::exception& e)
+        GuiController ctr(Controller::read_arguments(argc, argv));
+        ctr.run();
+    } 
+    // TODO porp except
+    catch (char const *e)
     {
-        cerr << "Exception caught: " << e.what() << endl;
+        cerr << e << endl;
     }
+    catch (const exception& e) 
+    {
+        cerr << e.what() << endl;
+    }
+
     return 0;
 }
 

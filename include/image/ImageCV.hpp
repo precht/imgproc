@@ -10,32 +10,35 @@
 #define IMAGE_CV_HPP
 
 #include "Image.hpp"
-#include <opencv2/core/core.hpp>
 
+#include <opencv2/core/core.hpp>
 
 namespace imgprocapp
 {
 namespace image
 {
 
-#define DEFAULT_OUTPUT_NAME "a.bmp"
-
 class ImageCV : public Image
 {
   public:
-
-    /* intput_name must be provied,
-     * output_name may be left empty and it will obtain default value */
-    ImageCV(std::string intput_name, std::string output_name = DEFAULT_OUTPUT_NAME);
-    ImageCV(ImageCV &&rval);
+    /* output_name may be lest empty, it will obtain default value;
+     * constructor does not load any image, you have to call load_image. */
+    ImageCV(std::string intput_name, std::string output_name);
 
     ~ImageCV();
-    bool load_image(std::string);
-    bool save_image(std::string);
-    size_t channels();
-    size_t rows();
-    size_t columns();
-    BYTE* at(size_t x, size_t y);
+
+    /* loads image using input_name */
+    void load_image(const std::string &image_name);
+
+    /* saves image using output_name */
+    void save_image(const std::string &image_name);
+    int channels();
+    int rows();
+    int columns();
+
+
+    /* channel numbering starts with 0 */
+    BYTE* ptr(int x, int y, size_t channel);
 
     /* This function is meant for gui classes which want to dispaly image.
      * It is not recommended to use it to change values of image matrix

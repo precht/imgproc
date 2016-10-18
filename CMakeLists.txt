@@ -7,21 +7,30 @@ project(${APP_NAME})
 #set c++14
 set(CMAKE_CXX_STANDARD 14)          # C++14...
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # ...is required...
-set(CMAKE_CXX_EXTENSIONS OFF)       # ...without compiler extensions like gnu++11
+set(CMAKE_CXX_EXTENSIONS OFF)       # ...without compiler extensions like gnu++14
 
 # set headers (put all your .hpp files here)
 set(HEADERS
-    include/image/Image.hpp
-    include/image/ImageCV.hpp
-    include/Controller.hpp
+    ./include/image/Image.hpp
+    ./include/image/ImageCV.hpp
+    ./include/image/utils/BasicUtils.hpp
+    ./include/gui/SimpleGui.hpp
+    ./include/gui/SimpleGuiCV.hpp
+    ./include/Controller.hpp
+    ./include/GuiController.hpp
+
     )
 
 # set sources (put all your .cpp files here)
 set(SOURCES
-    src/image/Image.cpp
-    src/image/ImageCV.cpp
-    src/Controller.cpp
-    src/main.cpp
+    ./src/image/Image.cpp
+    ./src/image/ImageCV.cpp
+    ./src/image/utils/BasicUtils.cpp
+    ./src/gui/SimpleGui.cpp
+    ./src/gui/SimpleGuiCV.cpp
+    ./src/Controller.cpp
+    ./src/GuiController.cpp
+    ./src/main.cpp
     )
 
 # request opencv library

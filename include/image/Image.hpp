@@ -12,50 +12,51 @@
 #define IMAGE_HPP
 
 #include <string>
-#include <memory>
 
 namespace imgprocapp
 {
 namespace image
 {
 
-#define DEFAULT_OUTPUT_NAME "a.bmp"
+#define DEBUG false
 typedef unsigned char BYTE;
+typedef BYTE* PIXEL[3];
+const size_t COLORS_NUMBER = 256;
 
 class Image
 {
   public:
-
+    /* Constructor does not load any image. You have to call load_image. */
     Image(std::string input_name, std::string output_name);
-    Image(Image &&rval);
     virtual ~Image();
-
-    virtual bool load_image(std::string image_name) = 0;
-    virtual bool save_image(std::string image_name) = 0;
+    virtual void load_image(const std::string &image_name) = 0;
+    virtual void save_image(const std::string &image_name) = 0;
 
     /* get image channels number */
-    virtual size_t channels() = 0;
+    virtual int channels() = 0;
 
     /* get image rows number */
-    virtual size_t rows() = 0;
+    virtual int rows() = 0;
 
     /* get image columns number */
-    virtual size_t columns() = 0;
+    virtual int columns() = 0;
 
-    /* get pointer to matrix's element at position x, y */
-    virtual BYTE* at(size_t x, size_t y) = 0;
+    /* channel numbering starts with 0 */
+    virtual BYTE* ptr(int x, int y, size_t channel) = 0;
 
     void set_input_name(std::string input_name);
     void set_output_name(std::string output_name);
-    bool load_image();
-    bool save_image();
+
+    /* loads image using input_name */
+    void load_image();
+
+    /* saves image using output_name */
+    void save_image();
 
   private:
     std::string input_name_;
     std::string output_name_;
 };
-
-typedef std::shared_ptr<Image> SPTR_IMG;
 
 } // namespace image
 } // namespace imgprocapp

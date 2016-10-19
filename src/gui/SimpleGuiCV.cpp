@@ -3,8 +3,8 @@
  *      Author:     Jakub Precht
  */
 
-#include "image/Image.hpp"
-#include "image/ImageCV.hpp"
+#include "img/Image.hpp"
+#include "img/ImageCV.hpp"
 #include "gui/SimpleGui.hpp"
 #include "gui/SimpleGuiCV.hpp"
 
@@ -26,9 +26,9 @@ void SimpleGuiCV::create_window()
     cv::namedWindow(DEFAULT_WINDOW_NAME, cv::WINDOW_AUTOSIZE);
 }
 
-void SimpleGuiCV::show(image::Image &image)
+void SimpleGuiCV::show(img::Image &image)
 {
-    image::ImageCV &image_cv = dynamic_cast<image::ImageCV&>(image);
+    img::ImageCV &image_cv = dynamic_cast<img::ImageCV&>(image);
     cv::imshow(DEFAULT_WINDOW_NAME, image_cv.get_Mat());
 }
 

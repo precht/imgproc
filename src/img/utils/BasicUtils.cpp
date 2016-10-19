@@ -3,12 +3,11 @@
  *      Author:     Jakub Precht
  */
 
-#include "image/utils/BasicUtils.hpp"
-#include <vector>
+#include "img/utils/BasicUtils.hpp"
 
 namespace imgprocapp
 {
-namespace image
+namespace img
 {
 namespace utils
 {
@@ -35,7 +34,7 @@ void BasicUtils::change_brightness(Image *image, int shift)
             else pallete[i] = (BYTE)(i + shift);
         }
     }
-    BasicUtils::perform(image, pallete);
+    perform(image, pallete);
     delete pallete;
 }
 
@@ -50,16 +49,20 @@ void BasicUtils::change_contrast(Image *image, double slope)
         else if (value > COLORS_NUMBER - 1) value = COLORS_NUMBER - 1;
         pallete[i] = (BYTE)value;
     }
-    BasicUtils::perform(image, pallete);
+    perform(image, pallete);
     delete pallete;
 }
 
 void BasicUtils::negate(Image *image)
 {
-    BYTE *pallete = new BYTE[COLORS_NUMBER];
-    for(unsigned i = 0; i < COLORS_NUMBER; ++i) pallete[i] = ~((BYTE)i);
-    BasicUtils::perform(image, pallete);
-    delete pallete;
+    // it turns out that this method isn't really faster then contrast with slope=-1
+    // let's use it instead
+    change_contrast(image, -1);
+
+    // BYTE *pallete = new BYTE[COLORS_NUMBER];
+    // for(unsigned i = 0; i < COLORS_NUMBER; ++i) pallete[i] = ~((BYTE)i);
+    // perform(image, pallete);
+    // delete pallete;
 }
 
 void BasicUtils::perform(Image *image, BYTE *pallete)
@@ -78,6 +81,6 @@ void BasicUtils::perform(Image *image, BYTE *pallete)
 }
 
 } // namespace utils 
-} // namespace image
+} // namespace img
 } // namespace imgprocapp
 

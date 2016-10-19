@@ -3,14 +3,17 @@
  *      Author:     Jakub Precht
  */
 
-#include "image/Image.hpp"
+#include "img/Image.hpp"
 
 #include <iostream>
 
 namespace imgprocapp
 {
-namespace image
+namespace img
 {
+
+Image::Image(int rows, int columns, int channels) 
+{ }
 
 Image::Image(std::string input_name, std::string output_name)
     : input_name_(input_name)
@@ -44,6 +47,6 @@ void Image::save_image()
     save_image(output_name_);
 }
 
-} // namespace image
+} // namespace img
 } // imgprocapp
 

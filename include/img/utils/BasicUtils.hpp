@@ -6,11 +6,14 @@
  *      Authors:    Jakub Precht
  */
 
-#include "image/Image.hpp"
+#ifndef BASIC_UTILS_HPP
+#define BASIC_UTILS_HPP
+
+#include "img/Image.hpp"
 
 namespace imgprocapp
 {
-namespace image
+namespace img
 {
 namespace utils
 {
@@ -29,6 +32,7 @@ class BasicUtils
 };
 
 } // namespace utils 
-} // namespace image
+} // namespace img
 } // namespace imgprocapp
 
+#endif // BASIC_UTILS_HPP

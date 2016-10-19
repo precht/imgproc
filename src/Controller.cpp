@@ -4,8 +4,8 @@
  */
 
 #include "Controller.hpp"
-#include "image/ImageCV.hpp"
-#include "image/utils/BasicUtils.hpp"
+#include "img/ImageCV.hpp"
+#include "img/utils/utils.hpp"
 
 #include <regex>
 #include <cstring>
@@ -19,10 +19,9 @@ namespace imgprocapp
 
 V_P_SS *Controller::read_arguments(int argc, char **argv)
 {
-    std::vector<std::pair<std::string, std::string>> *v = 
-            new std::vector<std::pair<std::string, std::string>>();
-    v->push_back(std::pair<std::string, std::string>(INPUT_NAME, ""));
-    v->push_back(std::pair<std::string, std::string>(INPUT_NAME, ""));
+    V_P_SS *v = new V_P_SS();
+    v->push_back(P_SS(INPUT_NAME, ""));
+    v->push_back(P_SS(INPUT_NAME, ""));
     // regex that will find options arguments
     std::regex rgx("^--?([a-zA-z]+)=?(.*)$");
     for(unsigned i = 1; i < argc; ++i) {
@@ -43,12 +42,11 @@ V_P_SS *Controller::read_arguments(int argc, char **argv)
                 }
                 else 
                 {
-                    v->push_back(std::pair<std::string, std::string>(std::string(match[1]), 
-                            std::string(match[2])));
+                    v->push_back(P_SS(std::string(match[1]), std::string(match[2])));
                 }
             }
             else if(match.size() == 2) // there is only command
-                v->push_back(std::pair<std::string, std::string>(std::string(match[1]), ""));
+                v->push_back(P_SS(std::string(match[1]), ""));
             else assert(false); // if matched there should be one or two matches
         }
     }
@@ -62,7 +60,7 @@ V_P_SS *Controller::read_arguments(int argc, char **argv)
 Controller::Controller(V_P_SS *arguments)
     : arguments_(arguments)
 { 
-    image_ = new image::ImageCV(arguments_->at(0).second, arguments_->at(1).second);
+    image_ = new img::ImageCV(arguments_->at(0).second, arguments_->at(1).second);
 }
 
 Controller::~Controller()
@@ -76,36 +74,57 @@ void Controller::run()
     for(auto it = arguments_->begin() + 2; it != arguments_->end(); ++it)
     {
         // Negative
-        if(it->first.compare(NEGATIVE) == 0) image::utils::BasicUtils::negate(image_);
+        if(it->first.compare(NEGATIVE) == 0) 
+        {
+            if(it->second.compare("") != 0) throw "Negative option shouldn't have any value";
+            img::utils::BasicUtils::negate(image_);
+        }
         // Brightness
         else if(it->first.compare(BRIGHTNESS) == 0) 
         {
-            int shift;
-            // TODO porp except
-            try 
-            {
-                shift = std::stoi(it->second);
-            } 
-            catch (const std::exception& e) 
-            {
-                throw "Failed to convert brightness value to int, probably incorrect input";
-            }
-            image::utils::BasicUtils::change_brightness(image_, shift);
+            std::regex rgx("^-?\\d+$");
+            if(!std::regex_match(it->second, rgx)) throw "Wrong brightness value";
+            int shift = std::stoi(it->second);
+            img::utils::BasicUtils::change_brightness(image_, shift);
         }
         // Contrast
         else if(it->first.compare(CONTRAST) == 0) 
         {
-            double slope;
-            // TODO porp except
-            try 
-            {
-                slope = std::stod(it->second);
-            } 
-            catch (const std::exception& e) 
-            {
-                throw "Failed to convert contrast value to double, probably incorrect input";
-            }
-            image::utils::BasicUtils::change_contrast(image_, slope);
+            std::regex rgx("^-?\\d+\\.?\\d*$");
+            if(!std::regex_match(it->second, rgx)) throw "Wrong contrast value";
+            double slope = std::stod(it->second);
+            img::utils::BasicUtils::change_contrast(image_, slope);
+        }
+        // Fliping
+        else if(it->first.compare(HORIZONTAL_FLIP) == 0)
+        {
+            if(it->second.compare("") != 0) throw "Flip option shouldn't have any value";
+            img::utils::GeometricUtils::flip_horizontally(image_);
+        }
+        else if(it->first.compare(VERTICAL_FLIP) == 0)
+        {
+            if(it->second.compare("") != 0) throw "Flip option shouldn't have any value";
+            img::utils::GeometricUtils::flip_vertically(image_);
+        }
+        else if(it->first.compare(DIAGONAL_FLIP) == 0)
+        {
+            if(it->second.compare("") != 0) throw "Flip option shouldn't have any value";
+            img::utils::GeometricUtils::flip_diagonally(image_);
+        }
+        // Scaling
+        else if(it->first.compare(SHRINK) == 0)
+        {
+            std::regex rgx("^[1-9]\\d*\\.?\\d*$");
+            if(!std::regex_match(it->second, rgx)) throw "Wrong shrinking value";
+            double times = std::stod(it->second);
+            img::utils::GeometricUtils::scale(image_, 1 / times);
+        }
+        else if(it->first.compare(ENLARGE) == 0)
+        {
+            std::regex rgx("^[1-9]\\d*\\.?\\d*$");
+            if(!std::regex_match(it->second, rgx)) throw "Wrong enlarging value";
+            double times = std::stod(it->second);
+            img::utils::GeometricUtils::scale(image_, times);
         }
         // Default, wrong input args
         else throw "Unknown option";

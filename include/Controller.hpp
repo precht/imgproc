@@ -10,7 +10,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "image/Image.hpp"
+#include "img/Image.hpp"
 #include <utility>
 #include <vector>
 #include <string>
@@ -18,12 +18,18 @@
 namespace imgprocapp
 {
 
+typedef std::pair<std::string, std::string> P_SS;
 typedef std::vector<std::pair<std::string, std::string>> V_P_SS;
 const std::string INPUT_NAME = "in";
 const std::string OUTPUT_NAME = "out";
 const std::string BRIGHTNESS = "brightness";
 const std::string CONTRAST = "contrast";
 const std::string NEGATIVE = "negative";
+const std::string HORIZONTAL_FLIP = "hflip";
+const std::string VERTICAL_FLIP = "vflip";
+const std::string DIAGONAL_FLIP = "dflip";
+const std::string SHRINK = "shrink";
+const std::string ENLARGE = "enlarge";
 const std::string DEFAULT_OUTPUT_NAME = "a.bmp";
 
 class Controller
@@ -42,10 +48,10 @@ class Controller
     virtual void run();
 
   protected:
-    image::Image *image_;
+    img::Image *image_;
 
   private:
-    std::vector<std::pair<std::string, std::string>> *arguments_;
+    V_P_SS *arguments_;
 };
 
 } // namespace imgprocapp

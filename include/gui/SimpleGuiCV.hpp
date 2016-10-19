@@ -13,7 +13,7 @@
 #ifndef SIMPLE_GUI_CV_HPP 
 #define SIMPLE_GUI_CV_HPP
 
-#include "image/Image.hpp"
+#include "img/Image.hpp"
 #include "gui/SimpleGui.hpp"
 
 namespace imgprocapp
@@ -31,7 +31,7 @@ class SimpleGuiCV : public SimpleGui
     void create_window();
 
     /* Careful, this methods will try to cast image to ImageCV */
-    void show(image::Image &image);
+    void show(img::Image &image);
 
     void close_window();
 

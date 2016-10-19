@@ -3,8 +3,8 @@
  *      Author:     Jakub Precht
  */
 
-#include "image/Image.hpp"
-#include "image/ImageCV.hpp"
+#include "img/Image.hpp"
+#include "img/ImageCV.hpp"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -14,8 +14,17 @@
 
 namespace imgprocapp
 {
-namespace image
+namespace img
 {
+
+ImageCV::ImageCV(int rows, int columns, int channels)
+    : Image(rows, columns, channels)
+{
+    if(channels == 1) data_matrix_.create(rows, columns, CV_8UC1);
+    else if(channels == 2) data_matrix_.create(rows, columns, CV_8UC2);
+    else if(channels == 3) data_matrix_.create(rows, columns, CV_8UC3);
+    else throw "ImageCV: wrong channel numer"; //TODO
+}
 
 ImageCV::ImageCV(std::string input_name, std::string output_name)
     : Image(input_name, output_name)
@@ -46,6 +55,13 @@ void ImageCV::save_image(const std::string& image_name)
     cv::imwrite(image_name, data_matrix_);
 }
 
+void ImageCV::swap_content(Image *other)
+{
+    ImageCV *other_cv = dynamic_cast<img::ImageCV*>(other);
+    if (other_cv == NULL) throw "Failed to cast Image to ImageCV";
+    cv::swap(data_matrix_, other_cv->data_matrix_);
+}
+
 int ImageCV::channels()
 {
     return data_matrix_.channels();
@@ -73,6 +89,6 @@ const cv::Mat& ImageCV::get_Mat()
 }
 
 
-} // namespace image
+} // namespace img
 } // namespace imgprocapp
 

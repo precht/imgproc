@@ -15,7 +15,7 @@
 
 namespace imgprocapp
 {
-namespace image
+namespace img
 {
 
 #define DEBUG false
@@ -26,11 +26,14 @@ const size_t COLORS_NUMBER = 256;
 class Image
 {
   public:
-    /* Constructor does not load any image. You have to call load_image. */
+    /* This constructor does not load any image, it only allocates empty space */
+    Image(int rows, int columns, int channels);
+    /* This constructor loads image */
     Image(std::string input_name, std::string output_name);
     virtual ~Image();
     virtual void load_image(const std::string &image_name) = 0;
     virtual void save_image(const std::string &image_name) = 0;
+    virtual void swap_content(Image *other) = 0;
 
     /* get image channels number */
     virtual int channels() = 0;
@@ -58,7 +61,7 @@ class Image
     std::string output_name_;
 };
 
-} // namespace image
+} // namespace img
 } // namespace imgprocapp
 
 

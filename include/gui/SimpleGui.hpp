@@ -10,7 +10,7 @@
 #ifndef SIMPLE_GUI_HPP
 #define SIMPLE_GUI_HPP
 
-#include "image/Image.hpp"
+#include "img/Image.hpp"
 
 namespace imgprocapp
 {
@@ -22,7 +22,7 @@ class SimpleGui
   public:
     virtual ~SimpleGui();
     virtual void create_window() = 0;
-    virtual void show(image::Image &image) = 0;
+    virtual void show(img::Image &image) = 0;
     virtual void close_window() = 0;
 
     /* wait for user action */

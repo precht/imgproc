@@ -9,7 +9,7 @@
 #ifndef GUI_CONTROLLER_HPP
 #define GUI_CONTROLLER_HPP
 
-#include "image/Image.hpp"
+#include "img/Image.hpp"
 #include "gui/SimpleGui.hpp"
 #include "Controller.hpp"
 

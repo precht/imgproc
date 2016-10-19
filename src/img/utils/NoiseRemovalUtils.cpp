@@ -42,8 +42,7 @@ void NoiseRemovalUtils::alpha_trimmed_mean_filter(Image *image, unsigned alpha, 
 
 BYTE NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<BYTE> &region, unsigned alpha)
 {
-    if(alpha >= region.size()) throw "Alpha cannot be bigger than region size"; // TODO prop except
-    if(alpha % 2) throw "Alpha is not even";
+    if(alpha << 1 >= region.size()) throw "Alpha cannot be bigger than region size"; // TODO prop except
 
     // to perform faster for alpha equal 0 or 2 we don't need to sort region
     // instread find max and min value
@@ -60,16 +59,16 @@ BYTE NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<BYTE> &reg
     }
 
     // if alpha == 0 do nothing, cut is 0
-    if(alpha == 2) cut += min + max;
-    else if(alpha > 2) 
+    if(alpha == 1) cut += min + max;
+    else if(alpha > 1) 
     {
         std::sort(region.begin(), region.end());
         auto itb = region.begin();
         auto itr = region.rbegin();
-        for(int i = alpha; i > 0; i -= 2, ++itb, ++itr) cut += *itb + *itr;
+        for(int i = alpha; i > 0; --i, ++itb, ++itr) cut += *itb + *itr;
     }
 
-    int result = (double)(sum - cut) / (region.size() - 2);
+    int result = (double)(sum - cut) / (region.size() - (alpha << 1));
     if(result >= COLORS_NUMBER) result = COLORS_NUMBER - 1;
     assert(result >= 0); // division of two positive numbers should give negative one
     return (BYTE)result;
@@ -82,7 +81,7 @@ void NoiseRemovalUtils::perform_core(Image *image, BYTE(*filter)(std::vector<BYT
     Image *tmp = new ImageCV(image->rows(), image->columns(), image->channels());
     std::vector<BYTE> region;
 
-    // TODO picture edges
+    // middle 
     for(int x = radius; x < image->rows() - 1; ++x)
     {
         for(int y = radius; y < image->columns() - 1; ++y)
@@ -96,6 +95,24 @@ void NoiseRemovalUtils::perform_core(Image *image, BYTE(*filter)(std::vector<BYT
                 }
                 *tmp->ptr(x, y, c) = filter(region, alpha);
             }
+        }
+    }
+
+    // edges 
+    for(int x = 0; x < image->rows(); ++x)
+    {
+        for(int c = 0; c < image->channels(); ++c)
+        {
+            *tmp->ptr(x, 0, c) = *(image->ptr(x, 0, c));
+            *tmp->ptr(x, image->columns() - 1, c) = *(image->ptr(x, image->columns() - 1, c));
+        }
+    }
+    for(int y = 0; y < image->rows(); ++y)
+    {
+        for(int c = 0; c < image->channels(); ++c)
+        {
+            *tmp->ptr(0, y, c) = *(image->ptr(0, y, c));
+            *tmp->ptr(image->rows() - 1, y, c) = *(image->ptr(image->rows() - 1, y, c));
         }
     }
 

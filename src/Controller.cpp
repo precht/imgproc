@@ -136,7 +136,7 @@ void Controller::run()
         }
         else if(it->first.compare(ALPHA_TRIMMED_MEAN_FILTER) == 0)
         {
-            std::regex rgx("^\\d*[02468]$");
+            std::regex rgx("^\\d+$");
             if(!std::regex_match(it->second, rgx)) throw "Wrong alpha value";
             int alpha = std::stoi(it->second);
             img::utils::NoiseRemovalUtils::alpha_trimmed_mean_filter(image_, alpha);

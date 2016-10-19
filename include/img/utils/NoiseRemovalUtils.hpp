@@ -22,14 +22,14 @@ namespace utils
 class NoiseRemovalUtils
 {
   public:
-    /* Radius specify the size of rectangle used to calculate new pixel value, it tell how manmy 
+    /* Radius specify the size of rectangle used to calculate new pixel value, it tell how many 
      * values consider around choosen pixel, by default it's 1, examples:
      * radius = 1, rectangle = 3x3; radius = 2, rectangle = 5x5; */
     static void geometric_mean_filter(Image *image, int radius = 1);
-  
-    /* Alpha tell how many extreme values drop before calculating mean value, it should be even 
-     * and cannot be greater then the number of pixels in rectangle 
-     * Radius specify the size of rectangle used to calculate new pixel value, it tell how manmy 
+
+    /* Alpha tell how many extreme values drop from one side (max and respectivly min) when 
+     * calculating mean value, it cannot be greater then the number of pixels in rectangle 
+     * Radius specify the size of rectangle used to calculate new pixel value, it tell how many 
      * values consider around choosen pixel, by default it's 1, examples:
      * radius = 1, rectangle = 3x3; radius = 2, rectangle = 5x5; */
     static void alpha_trimmed_mean_filter(Image *image, unsigned alpha, int radius = 1);

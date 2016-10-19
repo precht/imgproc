@@ -69,6 +69,7 @@ Controller::~Controller()
     delete arguments_;
 }
 
+// TODO this method it too long
 void Controller::run()
 { 
     for(auto it = arguments_->begin() + 2; it != arguments_->end(); ++it)
@@ -125,6 +126,20 @@ void Controller::run()
             if(!std::regex_match(it->second, rgx)) throw "Wrong enlarging value";
             double times = std::stod(it->second);
             img::utils::GeometricUtils::scale(image_, times);
+        }
+        // Filters
+        // TODO add option to set radius
+        else if(it->first.compare(GEOMETRIC_MEAN_FILTER) == 0)
+        {
+            if(it->second.compare("") != 0) throw "Geometric filter shouldn't have any value";
+            img::utils::NoiseRemovalUtils::geometric_mean_filter(image_);
+        }
+        else if(it->first.compare(ALPHA_TRIMMED_MEAN_FILTER) == 0)
+        {
+            std::regex rgx("^\\d*[02468]$");
+            if(!std::regex_match(it->second, rgx)) throw "Wrong alpha value";
+            int alpha = std::stoi(it->second);
+            img::utils::NoiseRemovalUtils::alpha_trimmed_mean_filter(image_, alpha);
         }
         // Default, wrong input args
         else throw "Unknown option";

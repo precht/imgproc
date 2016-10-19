@@ -5,9 +5,6 @@
 
 #include "img/ImageCV.hpp"
 #include "img/utils/GeometricUtils.hpp"
-#include "img/utils/BasicUtils.hpp"
-
-#include <iostream>
 
 using namespace std;
 
@@ -33,6 +30,7 @@ void GeometricUtils::flip_diagonally(Image *image)
     perform(image, -1, image->rows(), -1, image->columns());
 }
 
+// TODO add scaling by specifying new image size
 void GeometricUtils::scale(Image *image, double times)
 {
     if(times <= 0) throw "Wrong scaling value";
@@ -44,7 +42,7 @@ void GeometricUtils::perform(Image *image, double ax, double bx, double ay, doub
 {
     if(size_x < 0) size_x = image->rows();
     if(size_y < 0) size_y = image->columns();
-    Image *tmp = new img::ImageCV(size_x, size_y, image->channels());
+    Image *tmp = new ImageCV(size_x, size_y, image->channels());
 
     for(int new_x = 0; new_x < size_x; ++new_x)
     {

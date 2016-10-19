@@ -24,7 +24,7 @@ void GuiController::run()
 {
     simple_gui_->create_window();
     simple_gui_->show(*image_);
-    // simple_gui_.wait();
+    // simple_gui_->wait();
     Controller::run();
     simple_gui_->wait();
     simple_gui_->show(*image_);

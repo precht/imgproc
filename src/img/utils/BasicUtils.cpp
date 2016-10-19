@@ -30,7 +30,7 @@ void BasicUtils::change_brightness(Image *image, int shift)
         if(shift >= COLORS_NUMBER) throw "BasicUtils: Brightness shift out of range";
         for(int i = 0; i < COLORS_NUMBER; ++i) 
         {
-            if(i + shift > COLORS_NUMBER - 1) pallete[i] = (BYTE)(COLORS_NUMBER - 1);
+            if(i + shift >= COLORS_NUMBER) pallete[i] = (BYTE)(COLORS_NUMBER - 1);
             else pallete[i] = (BYTE)(i + shift);
         }
     }
@@ -46,7 +46,7 @@ void BasicUtils::change_contrast(Image *image, double slope)
     {
         double value = slope * i + shift;
         if(value < 0) value = 0;
-        else if (value > COLORS_NUMBER - 1) value = COLORS_NUMBER - 1;
+        else if (value >= COLORS_NUMBER) value = COLORS_NUMBER - 1;
         pallete[i] = (BYTE)value;
     }
     perform(image, pallete);

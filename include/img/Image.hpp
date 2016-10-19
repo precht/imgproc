@@ -21,7 +21,7 @@ namespace img
 #define DEBUG false
 typedef unsigned char BYTE;
 typedef BYTE* PIXEL[3];
-const size_t COLORS_NUMBER = 256;
+const unsigned COLORS_NUMBER = 256;
 
 class Image
 {
@@ -45,7 +45,7 @@ class Image
     virtual int columns() = 0;
 
     /* channel numbering starts with 0 */
-    virtual BYTE* ptr(int x, int y, size_t channel) = 0;
+    virtual BYTE* ptr(int x, int y, unsigned channel) = 0;
 
     void set_input_name(std::string input_name);
     void set_output_name(std::string output_name);

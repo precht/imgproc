@@ -77,7 +77,7 @@ int ImageCV::columns()
     return data_matrix_.cols;
 }
 
-BYTE* ImageCV::ptr(int x, int y, size_t channel)
+BYTE* ImageCV::ptr(int x, int y, unsigned channel)
 {
     if(channel >= data_matrix_.channels()) throw "ImageCV::ptr: Wrong channel number!";
     return data_matrix_.ptr<BYTE>(x) + (y * data_matrix_.channels()) + channel;

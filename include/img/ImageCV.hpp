@@ -44,7 +44,7 @@ class ImageCV : public Image
 
 
     /* channel numbering starts with 0 */
-    BYTE* ptr(int x, int y, size_t channel);
+    BYTE* ptr(int x, int y, unsigned channel);
 
     /* This function is meant for gui classes which want to dispaly image.
      * It is not recommended to use it to change values of image matrix

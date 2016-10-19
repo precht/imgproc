@@ -41,7 +41,16 @@ set(SOURCES
     )
 
 # request opencv library
-find_package(OpenCV 2.4.9 REQUIRED)
+if()
+find_package(OpenCV 3.1.0 REQUIRED)
+else()
+set(OPENCV_ROOT "D:/OpenCV")
+set(OpenCV_INCLUDE_DIR "${OPENCV_ROOT}/opencv/build/include")
+set(OpenCV_LIBRARY_DIR"${OPENCV_ROOT}/opencv/build/x64/vc14")
+set(OpenCV_LIBS "${OPENCV_ROOT}/opencv/build/x64/vc14/lib/opencv_world310d.lib")
+include_directories(${OpenCV_INCLUDE_DIR})
+endif()
+
 # set output bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 # specify headers directory

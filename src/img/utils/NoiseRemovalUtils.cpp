@@ -81,38 +81,35 @@ void NoiseRemovalUtils::perform_core(Image *image, BYTE(*filter)(std::vector<BYT
     Image *tmp = new ImageCV(image->rows(), image->columns(), image->channels());
     std::vector<BYTE> region;
 
-    // middle 
-    for(int x = radius; x < image->rows() - 1; ++x)
+    const int rows = image->rows();
+    const int columns = image->columns();
+    const int channels = image->channels();
+    // for detecting edges and shifting position, so values from middle are taken
+    int shift_x = 0;
+    int shift_y = 0;
+
+    for(int x = 0; x < rows; ++x)
     {
-        for(int y = radius; y < image->columns() - 1; ++y)
+        for(int y = 0; y < columns; ++y)
         {
-            for(int c = 0; c < image->channels(); ++c)
+            for(int c = 0; c < channels; ++c)
             {
                 region.clear();
                 for(int i = -radius; i <= radius; ++i)
                 {
-                    for(int j = -radius; j <= radius; ++j) region.push_back(*(image->ptr(x + i, y + j, c)));
+                    // detect column edge
+                    shift_x = (x + i) < 0 ? -(x + i) : 
+                            (x + i) >= rows ? (rows - 1) - (x + i) : 0;
+                    for(int j = -radius; j <= radius; ++j)
+                    {
+                        // detect row edge
+                        shift_y = (y + j) < 0 ? -(y + j) : 
+                                (y + j) >= columns ? (columns - 1) - (y + j) : 0;
+                        region.push_back( *(image->ptr(x + i + shift_x, y + j + shift_y, c)));
+                    }
                 }
                 *tmp->ptr(x, y, c) = filter(region, alpha);
             }
-        }
-    }
-
-    // edges 
-    for(int x = 0; x < image->rows(); ++x)
-    {
-        for(int c = 0; c < image->channels(); ++c)
-        {
-            *tmp->ptr(x, 0, c) = *(image->ptr(x, 0, c));
-            *tmp->ptr(x, image->columns() - 1, c) = *(image->ptr(x, image->columns() - 1, c));
-        }
-    }
-    for(int y = 0; y < image->rows(); ++y)
-    {
-        for(int c = 0; c < image->channels(); ++c)
-        {
-            *tmp->ptr(0, y, c) = *(image->ptr(0, y, c));
-            *tmp->ptr(image->rows() - 1, y, c) = *(image->ptr(image->rows() - 1, y, c));
         }
     }
 

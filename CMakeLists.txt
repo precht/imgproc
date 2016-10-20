@@ -44,7 +44,7 @@ set(SOURCES
 
 # request opencv library
 if()
-find_package(OpenCV 3.1.0 REQUIRED)
+find_package(OpenCV REQUIRED)
 else()
 set(OPENCV_ROOT "D:/OpenCV")
 set(OpenCV_INCLUDE_DIR "${OPENCV_ROOT}/opencv/build/include")

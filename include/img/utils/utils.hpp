@@ -12,5 +12,6 @@
 #include "img/utils/BasicUtils.hpp"
 #include "img/utils/GeometricUtils.hpp"
 #include "img/utils/NoiseRemovalUtils.hpp"
+#include "img/utils/ErrorMeasureUtils.hpp"
 
 #endif // UTILS_HPP

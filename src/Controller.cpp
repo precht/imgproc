@@ -13,7 +13,6 @@
 #include <cassert>
 
 
-
 namespace imgprocapp
 {
 
@@ -21,7 +20,7 @@ V_P_SS *Controller::read_arguments(int argc, char **argv)
 {
     V_P_SS *v = new V_P_SS();
     v->push_back(P_SS(INPUT_NAME, ""));
-    v->push_back(P_SS(INPUT_NAME, ""));
+    v->push_back(P_SS(OUTPUT_NAME, ""));
     // regex that will find options arguments
     std::regex rgx("^--?([a-zA-z]+)=?(.*)$");
     for(unsigned i = 1; i < argc; ++i) {
@@ -72,6 +71,7 @@ Controller::~Controller()
 // TODO this method it too long
 void Controller::run()
 { 
+    bool modified_image = false;
     for(auto it = arguments_->begin() + 2; it != arguments_->end(); ++it)
     {
         // Negative
@@ -79,6 +79,7 @@ void Controller::run()
         {
             if(it->second.compare("") != 0) throw "Negative option shouldn't have any value";
             img::utils::BasicUtils::negate(image_);
+            modified_image = true;
         }
         // Brightness
         else if(it->first.compare(BRIGHTNESS) == 0) 
@@ -87,6 +88,7 @@ void Controller::run()
             if(!std::regex_match(it->second, rgx)) throw "Wrong brightness value";
             int shift = std::stoi(it->second);
             img::utils::BasicUtils::change_brightness(image_, shift);
+            modified_image = true;
         }
         // Contrast
         else if(it->first.compare(CONTRAST) == 0) 
@@ -95,22 +97,26 @@ void Controller::run()
             if(!std::regex_match(it->second, rgx)) throw "Wrong contrast value";
             double slope = std::stod(it->second);
             img::utils::BasicUtils::change_contrast(image_, slope);
+            modified_image = true;
         }
         // Fliping
         else if(it->first.compare(HORIZONTAL_FLIP) == 0)
         {
             if(it->second.compare("") != 0) throw "Flip option shouldn't have any value";
             img::utils::GeometricUtils::flip_horizontally(image_);
+            modified_image = true;
         }
         else if(it->first.compare(VERTICAL_FLIP) == 0)
         {
             if(it->second.compare("") != 0) throw "Flip option shouldn't have any value";
             img::utils::GeometricUtils::flip_vertically(image_);
+            modified_image = true;
         }
         else if(it->first.compare(DIAGONAL_FLIP) == 0)
         {
             if(it->second.compare("") != 0) throw "Flip option shouldn't have any value";
             img::utils::GeometricUtils::flip_diagonally(image_);
+            modified_image = true;
         }
         // Scaling
         else if(it->first.compare(SHRINK) == 0)
@@ -119,6 +125,7 @@ void Controller::run()
             if(!std::regex_match(it->second, rgx)) throw "Wrong shrinking value";
             double times = std::stod(it->second);
             img::utils::GeometricUtils::scale(image_, 1 / times);
+            modified_image = true;
         }
         else if(it->first.compare(ENLARGE) == 0)
         {
@@ -126,6 +133,7 @@ void Controller::run()
             if(!std::regex_match(it->second, rgx)) throw "Wrong enlarging value";
             double times = std::stod(it->second);
             img::utils::GeometricUtils::scale(image_, times);
+            modified_image = true;
         }
         // Filters
         // TODO add option to set radius
@@ -133,6 +141,7 @@ void Controller::run()
         {
             if(it->second.compare("") != 0) throw "Geometric filter shouldn't have any value";
             img::utils::NoiseRemovalUtils::geometric_mean_filter(image_);
+            modified_image = true;
         }
         else if(it->first.compare(ALPHA_TRIMMED_MEAN_FILTER) == 0)
         {
@@ -140,11 +149,43 @@ void Controller::run()
             if(!std::regex_match(it->second, rgx)) throw "Wrong alpha value";
             int alpha = std::stoi(it->second);
             img::utils::NoiseRemovalUtils::alpha_trimmed_mean_filter(image_, alpha);
+            modified_image = true;
+        }
+        // Errors
+        else if(it->first.compare(MAXIMUM_DIFFERENCE) == 0)
+        {
+            img::ImageCV orginal(it->second, "");
+            std::cout << img::utils::ErrorMeasureUtils::maximum_difference(&orginal, image_) 
+                    << std::endl;
+        }
+        else if(it->first.compare(MEAN_SQUARE_ERROR) == 0)
+        {
+            img::ImageCV orginal(it->second, "");
+            std::cout << img::utils::ErrorMeasureUtils::mean_square_error(&orginal, image_) 
+                    << std::endl;
+        }
+        else if(it->first.compare(PEAK_MEAN_SQUARE_ERROR) == 0)
+        {
+            img::ImageCV orginal(it->second, "");
+            std::cout << img::utils::ErrorMeasureUtils::peak_mean_square_error(&orginal, image_) 
+                    << std::endl;
+        }
+        else if(it->first.compare(SIGNAL_NOISE_RATIO) == 0)
+        {
+            img::ImageCV orginal(it->second, "");
+            std::cout << img::utils::ErrorMeasureUtils::signal_to_noise_ratio(&orginal, image_) 
+                    << std::endl;
+        }
+        else if(it->first.compare(PEAK_SIGNAL_NOISE_RATIO) == 0)
+        {
+            img::ImageCV orginal(it->second, "");
+            std::cout << img::utils::ErrorMeasureUtils::peak_signal_to_noise_ratio(&orginal, image_)
+                    << std::endl;
         }
         // Default, wrong input args
         else throw "Unknown option";
     }
-    image_->save_image();
+    if(modified_image) image_->save_image();
 }
 
 } // namespace imgprocapp

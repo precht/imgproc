@@ -32,6 +32,11 @@ const std::string SHRINK = "shrink";
 const std::string ENLARGE = "enlarge";
 const std::string GEOMETRIC_MEAN_FILTER = "gmean";
 const std::string ALPHA_TRIMMED_MEAN_FILTER = "alpha";
+const std::string MAXIMUM_DIFFERENCE = "md";
+const std::string MEAN_SQUARE_ERROR = "mse";
+const std::string PEAK_MEAN_SQUARE_ERROR = "pmse";
+const std::string SIGNAL_NOISE_RATIO = "snr";
+const std::string PEAK_SIGNAL_NOISE_RATIO = "psnr";
 const std::string DEFAULT_OUTPUT_NAME = "a.bmp";
 
 class Controller

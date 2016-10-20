@@ -21,6 +21,7 @@ set(HEADERS
     include/img/utils/BasicUtils.hpp
     include/img/utils/GeometricUtils.hpp
     include/img/utils/NoiseRemovalUtils.hpp
+    include/img/utils/ErrorMeasureUtils.hpp
     include/gui/SimpleGui.hpp
     include/gui/SimpleGuiCV.hpp
     include/Controller.hpp
@@ -34,6 +35,7 @@ set(SOURCES
     src/img/utils/BasicUtils.cpp
     src/img/utils/GeometricUtils.cpp
     src/img/utils/NoiseRemovalUtils.cpp
+    src/img/utils/ErrorMeasureUtils.cpp
     src/gui/SimpleGui.cpp
     src/gui/SimpleGuiCV.cpp
     src/Controller.cpp

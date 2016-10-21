@@ -1,6 +1,6 @@
 /**
  *      Created:    13th Oct 2016
- *      Author:     Jakub Precht
+ *      Author(s):  Jakub Precht
  */
 
 #include "GuiController.hpp"

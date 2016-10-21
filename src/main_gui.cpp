@@ -10,27 +10,10 @@
 #include "Controller.hpp"
 #include "GuiController.hpp"
 
-#include <exception>
-#include <iostream>
-
-using namespace imgprocapp;
-using namespace std;
-
 int main(int argc, char **argv)
 {
-    try
-    {
-        GuiController ctr(Controller::read_arguments(argc, argv));
-        ctr.run();
-    } 
-    catch (char const *e)
-    {
-        cerr << e << endl;
-    }
-    catch (const exception& e) 
-    {
-        cerr << e.what() << endl;
-    }
+    imgprocapp::GuiController ctr(imgprocapp::Controller::read_arguments(argc, argv));
+    ctr.run();
 
     return 0;
 }

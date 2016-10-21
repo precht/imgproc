@@ -3,7 +3,8 @@
  *          Class contains basic image operations from task instruction
  *
  *      Created:    18th Oct 2016
- *      Authors:    Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #ifndef BASIC_UTILS_HPP

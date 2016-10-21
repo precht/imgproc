@@ -1,6 +1,6 @@
 /**
  *      Created:    12th Oct 2016
- *      Author:     Jakub Precht
+ *      Author(s):  Jakub Precht
  */
 
 #include "gui/SimpleGui.hpp"

@@ -9,28 +9,10 @@
 
 #include "Controller.hpp"
 
-#include <exception>
-#include <iostream>
-
-using namespace imgprocapp;
-using namespace std;
-
 int main(int argc, char **argv)
 {
-    try
-    {
-        Controller ctr(Controller::read_arguments(argc, argv));
-        ctr.run();
-    } 
-    // TODO porp except
-    catch (char const *e)
-    {
-        cerr << e << endl;
-    }
-    catch (const exception& e) 
-    {
-        cerr << e.what() << endl;
-    }
+    imgprocapp::Controller ctr(imgprocapp::Controller::read_arguments(argc, argv));
+    ctr.run();
 
     return 0;
 }

@@ -13,6 +13,21 @@ set(CMAKE_CXX_STANDARD 14)          # C++14...
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # ...is required...
 set(CMAKE_CXX_EXTENSIONS OFF)       # ...without compiler extensions like gnu++14
 
+#Set debug profile, also maximum level of optimalization O3
+set(CMAKE_BUILD_TYPE Debug)
+if(CMAKE_COMPILER_IS_GNUCC)
+    # set(CMAKE_C_FLAGS_DEBUG "-g3 -gdwarf-4")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -O3")
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX)
+    # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
+    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -O3")
+endif()
+
+enable_language(CXX)
+# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# set(CMAKE_VERBOSE_MAKEFILE TRUE)
+
 # set headers (put all your .hpp files here)
 set(HEADERS
     include/img/Image.hpp

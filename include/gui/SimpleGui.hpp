@@ -4,7 +4,7 @@
  *          in it image. It's behaviour shouldn't depend on derived class implementation.
  *
  *      Created:    12th Oct 2016
- *      Author:     Jakub Precht
+ *      Author(s):     Jakub Precht
  */
 
 #ifndef SIMPLE_GUI_HPP

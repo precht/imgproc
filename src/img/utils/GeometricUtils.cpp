@@ -1,6 +1,7 @@
 /**
  *      Created:    18th Oct 2016
- *      Authors:    Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #include "img/ImageCV.hpp"
@@ -30,10 +31,8 @@ void GeometricUtils::flip_diagonally(Image *image)
     perform(image, -1, image->rows(), -1, image->columns());
 }
 
-// TODO add scaling by specifying new image size
 void GeometricUtils::scale(Image *image, double times)
 {
-    if(times <= 0) throw "Wrong scaling value";
     perform(image, 1 / times, 0, 1 / times, 0, image->rows() * times, image->columns() * times);
 }
 

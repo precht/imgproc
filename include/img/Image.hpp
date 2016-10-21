@@ -5,7 +5,8 @@
  *          image matrix and modify values regardless of the Image's implementation.
  *
  *      Created:    12th Oct 2016
- *      Autor:      Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #ifndef IMAGE_HPP
@@ -21,11 +22,12 @@ namespace img
 #define DEBUG false
 typedef unsigned char BYTE;
 typedef BYTE* PIXEL[3];
-const unsigned COLORS_NUMBER = 256;
+const int COLORS_NUMBER = 256;
 
 class Image
 {
   public:
+    Image();
     /* This constructor does not load any image, it only allocates empty space */
     Image(int rows, int columns, int channels);
     /* This constructor loads image */
@@ -45,7 +47,7 @@ class Image
     virtual int columns() = 0;
 
     /* channel numbering starts with 0 */
-    virtual BYTE* ptr(int x, int y, unsigned channel) = 0;
+    virtual BYTE* ptr(int x, int y, int channel) = 0;
 
     void set_input_name(std::string input_name);
     void set_output_name(std::string output_name);

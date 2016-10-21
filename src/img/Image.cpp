@@ -1,16 +1,18 @@
 /**
  *      Created:    12th Oct 2016
- *      Author:     Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #include "img/Image.hpp"
-
-#include <iostream>
 
 namespace imgprocapp
 {
 namespace img
 {
+
+Image::Image()
+{ }
 
 Image::Image(int rows, int columns, int channels) 
 { }
@@ -19,12 +21,10 @@ Image::Image(std::string input_name, std::string output_name)
     : input_name_(input_name)
     , output_name_(output_name)
 { 
-    if(DEBUG) std::cerr << "constructing Image(args)..." << std::endl;
 }
 
 Image::~Image()
 { 
-    if(DEBUG) std::cerr << "destructing Image..." << std::endl;
 }
 
 void Image::set_input_name(std::string input_name)

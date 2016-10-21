@@ -3,7 +3,8 @@
  *          Class contains error measure operations from task instruction
  *
  *      Created:    19th Oct 2016
- *      Authors:    Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #ifndef ERROR_MEASURE_HPP

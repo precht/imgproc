@@ -1,6 +1,7 @@
 /**
  *      Created:    19th Oct 2016
- *      Authors:    Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #include "img/utils/NoiseRemovalUtils.hpp"
@@ -17,15 +18,13 @@ namespace img
 namespace utils
 {
 
-void NoiseRemovalUtils::geometric_mean_filter(Image *image, int radius)
+void NoiseRemovalUtils::geometric_mean_filter(Image *image, const int radius)
 {
     perform_core(image, &perform_geometric_mean_filter, radius);
 }
 
-BYTE NoiseRemovalUtils::perform_geometric_mean_filter(std::vector<BYTE> &region, unsigned)
+BYTE NoiseRemovalUtils::perform_geometric_mean_filter(std::vector<BYTE> &region, int)
 {
-    if(region.size() == 0) throw "Empty region"; // TODO
-
     double product = 1;
     for(auto it = region.begin(); it != region.end(); ++it) product *= *it;
 
@@ -35,15 +34,13 @@ BYTE NoiseRemovalUtils::perform_geometric_mean_filter(std::vector<BYTE> &region,
     return (BYTE)result;
 }
 
-void NoiseRemovalUtils::alpha_trimmed_mean_filter(Image *image, unsigned alpha, int radius)
+void NoiseRemovalUtils::alpha_trimmed_mean_filter(Image *image, const int alpha, const int radius)
 {
     perform_core(image, &perform_alpha_trimmed_mean_filter, radius, alpha);
 }
 
-BYTE NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<BYTE> &region, unsigned alpha)
+BYTE NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<BYTE> &region, const int alpha)
 {
-    if(alpha << 1 >= region.size()) throw "Alpha cannot be bigger than region size"; // TODO prop except
-
     // to perform faster for alpha equal 0 or 2 we don't need to sort region
     // instread find max and min value
 
@@ -74,10 +71,9 @@ BYTE NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<BYTE> &reg
     return (BYTE)result;
 }
 
-void NoiseRemovalUtils::perform_core(Image *image, BYTE(*filter)(std::vector<BYTE>&, unsigned), 
-        int radius, int alpha)
+void NoiseRemovalUtils::perform_core(Image *image, BYTE(*filter)(std::vector<BYTE>&, const int), 
+        const int radius, const int alpha)
 {
-    if(radius < 0) radius = -radius;
     Image *tmp = new ImageCV(image->rows(), image->columns(), image->channels());
     std::vector<BYTE> region;
 

@@ -3,7 +3,8 @@
  *          Class contains geometric image operations from task instruction
  *
  *      Created:    18th Oct 2016
- *      Authors:    Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #ifndef GEOMETRIC_UTILS_HPP

@@ -3,7 +3,8 @@
  *          ImageCV is implementation of Image class that useses OpenCV as a helping library.
  *
  *      Created:    12th Oct 2016
- *      Author:     Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #ifndef IMAGE_CV_HPP
@@ -21,6 +22,7 @@ namespace img
 class ImageCV : public Image
 {
   public:
+    ImageCV();
     /* This constructor does not load any image, it only allocates empty space */
     ImageCV(int rows, int columns, int channels);
     /* output_name may be lest empty, it will obtain default value;
@@ -44,7 +46,7 @@ class ImageCV : public Image
 
 
     /* channel numbering starts with 0 */
-    BYTE* ptr(int x, int y, unsigned channel);
+    BYTE* ptr(int x, int y, int channel);
 
     /* This function is meant for gui classes which want to dispaly image.
      * It is not recommended to use it to change values of image matrix

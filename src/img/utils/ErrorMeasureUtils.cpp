@@ -1,6 +1,7 @@
 /**
  *      Created:    19th Oct 2016
- *      Authors:    Jakub Precht
+ *      Author(s):  Jakub Precht,
+ *                  Olek Winogradow
  */
 
 #include "img/Image.hpp"
@@ -44,7 +45,6 @@ double ErrorMeasureUtils::peak_signal_to_noise_ratio(Image *orginal, Image *chan
 
 double ErrorMeasureUtils::perform(Image *orginal, Image *changed, ERROR_TYPE type)
 {
-    // TODO prop except
     if(orginal->rows() != changed->rows() || orginal->columns() != changed->columns()) 
         throw "Incomparable images: different size";
     if(orginal->channels() != changed->channels())

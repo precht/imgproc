@@ -3,7 +3,7 @@
  *          This class is an extension of Controller. It adds gui functionality to its parent.
  *
  *      Created:    13th Oct 2016
- *      Author:     Jakub Precht
+ *      Author(s):  Jakub Precht
  */
 
 #ifndef GUI_CONTROLLER_HPP

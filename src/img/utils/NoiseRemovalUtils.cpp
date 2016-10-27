@@ -23,7 +23,7 @@ void NoiseRemovalUtils::geometric_mean_filter(Image *image, const int radius)
     perform_core(image, &perform_geometric_mean_filter, radius);
 }
 
-BYTE NoiseRemovalUtils::perform_geometric_mean_filter(std::vector<BYTE> &region, int)
+byte NoiseRemovalUtils::perform_geometric_mean_filter(std::vector<byte> &region, const int)
 {
     double product = 1;
     for(auto it = region.begin(); it != region.end(); ++it) product *= *it;
@@ -31,7 +31,7 @@ BYTE NoiseRemovalUtils::perform_geometric_mean_filter(std::vector<BYTE> &region,
     int result = std::pow(product, 1.0 / region.size());
     if(result >= COLORS_NUMBER) result = COLORS_NUMBER - 1;
     assert(result >= 0); // power should never give negative number
-    return (BYTE)result;
+    return (byte)result;
 }
 
 void NoiseRemovalUtils::alpha_trimmed_mean_filter(Image *image, const int alpha, const int radius)
@@ -39,7 +39,7 @@ void NoiseRemovalUtils::alpha_trimmed_mean_filter(Image *image, const int alpha,
     perform_core(image, &perform_alpha_trimmed_mean_filter, radius, alpha);
 }
 
-BYTE NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<BYTE> &region, const int alpha)
+byte NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<byte> &region, const int alpha)
 {
     // to perform faster for alpha equal 0 or 2 we don't need to sort region
     // instread find max and min value
@@ -68,14 +68,14 @@ BYTE NoiseRemovalUtils::perform_alpha_trimmed_mean_filter(std::vector<BYTE> &reg
     int result = (double)(sum - cut) / (region.size() - (alpha << 1));
     if(result >= COLORS_NUMBER) result = COLORS_NUMBER - 1;
     assert(result >= 0); // division of two positive numbers should give negative one
-    return (BYTE)result;
+    return (byte)result;
 }
 
-void NoiseRemovalUtils::perform_core(Image *image, BYTE(*filter)(std::vector<BYTE>&, const int), 
+void NoiseRemovalUtils::perform_core(Image *image, byte(*filter)(std::vector<byte>&, const int), 
         const int radius, const int alpha)
 {
     Image *tmp = new ImageCV(image->rows(), image->columns(), image->channels());
-    std::vector<BYTE> region;
+    std::vector<byte> region;
 
     const int rows = image->rows();
     const int columns = image->columns();

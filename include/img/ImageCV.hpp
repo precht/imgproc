@@ -7,8 +7,8 @@
  *                  Olek Winogradow
  */
 
-#ifndef IMAGE_CV_HPP
-#define IMAGE_CV_HPP
+#ifndef IMAGE_CV_HPP_
+#define IMAGE_CV_HPP_
 
 #include "img/Image.hpp"
 
@@ -25,6 +25,8 @@ class ImageCV : public Image
     ImageCV();
     /* This constructor does not load any image, it only allocates empty space */
     ImageCV(int rows, int columns, int channels);
+    // Create image that uses data instead of allocationg own memory (remember you have to free data by yourself)
+    ImageCV(int rows, int columns, int channels, byte *data);
     /* output_name may be lest empty, it will obtain default value;
      * constructor does not load any image, you have to call load_image. */
     ImageCV(std::string intput_name, std::string output_name);
@@ -40,13 +42,16 @@ class ImageCV : public Image
     /* swap image matrix with other image */
     void swap_content(Image *other);
 
-    int channels();
-    int rows();
-    int columns();
+    int channels() const;
+    int rows() const;
+    int columns() const;
 
 
     /* channel numbering starts with 0 */
-    BYTE* ptr(int x, int y, int channel);
+    byte* ptr(int index) const;
+    byte* ptr(int x, int y, int channel) const;
+
+    void print(std::ostream &where) const;
 
     /* This function is meant for gui classes which want to dispaly image.
      * It is not recommended to use it to change values of image matrix
@@ -61,4 +66,4 @@ class ImageCV : public Image
 } // namespace imgprocapp
 
 
-#endif // IMAGE_CV_HPP
+#endif // IMAGE_CV_HPP_

@@ -15,12 +15,12 @@ namespace utils
 
 void BasicUtils::change_brightness(Image *image, int shift)
 {
-    BYTE *pallete = new BYTE[COLORS_NUMBER];
+    byte *pallete = new byte[COLORS_NUMBER];
     for(int i = 0; i < COLORS_NUMBER; ++i) 
     {
-        if(i + shift < 0) pallete[i] = (BYTE)0;
-        else if(i + shift >= COLORS_NUMBER) pallete[i] = (BYTE)(COLORS_NUMBER - 1);
-        else pallete[i] = (BYTE)(i + shift);
+        if(i + shift < 0) pallete[i] = (byte)0;
+        else if(i + shift >= COLORS_NUMBER) pallete[i] = (byte)(COLORS_NUMBER - 1);
+        else pallete[i] = (byte)(i + shift);
     }
     perform(image, pallete);
     delete pallete;
@@ -29,24 +29,28 @@ void BasicUtils::change_brightness(Image *image, int shift)
 void BasicUtils::change_contrast(Image *image, double slope)
 {
     double shift = CONTRAST_CONST_POINT * (1 - slope);
-    BYTE *pallete = new BYTE[COLORS_NUMBER];
+    byte *pallete = new byte[COLORS_NUMBER];
     for(unsigned i = 0; i < COLORS_NUMBER; ++i) 
     {
         double value = slope * i + shift;
         if(value < 0) value = 0;
         else if (value >= COLORS_NUMBER) value = COLORS_NUMBER - 1;
-        pallete[i] = (BYTE)value;
+        pallete[i] = (byte)value;
     }
     perform(image, pallete);
     delete pallete;
 }
 
+// change_contrast -1 is not as precise as explicite bit negation (because of doubles?)
 void BasicUtils::negate(Image *image)
 {
-    change_contrast(image, -1);
+    byte *pallete = new byte[COLORS_NUMBER];
+    for(unsigned i = 0; i < COLORS_NUMBER; ++i) pallete[i] = ~((byte)i);
+    BasicUtils::perform(image, pallete);
+    delete pallete;
 }
 
-void BasicUtils::perform(Image *image, BYTE *pallete)
+void BasicUtils::perform(Image *image, byte *pallete)
 {
     for(int x = 0; x < image->rows(); ++x)
     {
@@ -54,7 +58,7 @@ void BasicUtils::perform(Image *image, BYTE *pallete)
         {
             for(int c = 0; c < image->channels(); ++c)
             {
-                BYTE *b = image->ptr(x, y, c);
+                byte *b = image->ptr(x, y, c);
                 *b = pallete[*b];
             }
         }

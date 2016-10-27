@@ -39,11 +39,11 @@ class NoiseRemovalUtils
     /* moves around the whole image and calculates new value for each pixel using provided filter
      * function, alpha parameter can be ommited if passed function do not use it (although defuault 
      * value 0 will be passed to that function */
-    static void perform_core(Image *image, BYTE(*filter)(std::vector<BYTE>&, const int), 
+    static void perform_core(Image *image, byte(*filter)(std::vector<byte>&, const int), 
             const int radius, const int alpha = 0);
 
-    static BYTE perform_geometric_mean_filter(std::vector<BYTE> &region, const int);
-    static BYTE perform_alpha_trimmed_mean_filter(std::vector<BYTE> &region, const int alpha);
+    static byte perform_geometric_mean_filter(std::vector<byte> &region, const int);
+    static byte perform_alpha_trimmed_mean_filter(std::vector<byte> &region, const int alpha);
 };
 
 } // namespace utils 

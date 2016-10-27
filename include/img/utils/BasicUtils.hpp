@@ -29,7 +29,7 @@ class BasicUtils
     static void negate(Image *image);
   
   private:
-    static void perform(Image *image, BYTE *pallete);
+    static void perform(Image *image, byte *pallete);
 };
 
 } // namespace utils 

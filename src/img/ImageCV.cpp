@@ -9,6 +9,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <iomanip>
 
 namespace imgprocapp
 {
@@ -25,6 +26,19 @@ ImageCV::ImageCV(int rows, int columns, int channels)
     else if(channels == 2) data_matrix_.create(rows, columns, CV_8UC2);
     else if(channels == 3) data_matrix_.create(rows, columns, CV_8UC3);
     else throw "ImageCV: not supported channel numer";
+}
+
+// Create image that uses data instead of allocationg own memory (remember you have to delete data by yourself)
+ImageCV::ImageCV(int rows, int columns, int channels, byte *data)
+    : Image(rows, columns, channels)
+{
+    cv::Mat *tmp = NULL;
+    if(channels == 1) tmp = new cv::Mat(rows, columns, CV_8UC1, data);
+    else if(channels == 2) tmp = new cv::Mat(rows, columns, CV_8UC2, data);
+    else if(channels == 3) tmp = new cv::Mat(rows, columns, CV_8UC3, data);
+    else throw "ImageCV: not supported channel numer";
+    cv::swap(data_matrix_, *tmp);
+    delete tmp;
 }
 
 ImageCV::ImageCV(std::string input_name, std::string output_name)
@@ -66,24 +80,47 @@ void ImageCV::swap_content(Image *other)
     cv::swap(data_matrix_, other_cv->data_matrix_);
 }
 
-int ImageCV::channels()
+int ImageCV::channels() const
 {
     return data_matrix_.channels();
 }
 
-int ImageCV::rows()
+int ImageCV::rows() const
 {
     return data_matrix_.rows;
 }
 
-int ImageCV::columns()
+int ImageCV::columns() const
 {
     return data_matrix_.cols;
 }
 
-BYTE* ImageCV::ptr(int x, int y, int channel)
+byte* ImageCV::ptr(int index) const
 {
-    return data_matrix_.ptr<BYTE>(x) + (y * data_matrix_.channels()) + channel;
+    int x = index / (columns() * channels());
+    int y = index % (columns() * channels());
+    return (byte*)data_matrix_.ptr<byte>(x) + y;
+}
+
+byte* ImageCV::ptr(int x, int y, int channel) const
+{
+    return (byte*)data_matrix_.ptr<byte>(x) + (y * channels()) + channel;
+}
+
+void ImageCV::print(std::ostream &where) const
+{
+    const int ch = channels();
+    const int size_y = columns() * channels();
+    const int size_total = size_y * rows();
+    where << "{\n" << std::setw(4) << (int)(*ptr(0)) ;
+    for(int i = 1; i < size_total; ++i)
+    {
+        if(i % size_y == 0) where << ",\n";
+        else if(i % ch == 0) where << ",   ";
+        else where << ",";
+        where << std::setw(4) << (int)(*ptr(i)) ;
+    }
+    where << "\n}";
 }
 
 const cv::Mat& ImageCV::get_Mat()

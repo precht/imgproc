@@ -6,7 +6,7 @@
 
 #include "Controller.hpp"
 #include "img/ImageCV.hpp"
-#include "img/utils/utils.hpp"
+#include "img/utils.hpp"
 
 #include <regex>
 #include <cstring>

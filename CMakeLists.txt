@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
 # set app name
-set(APP_NAME imgproc)
-set(APP_NAME_LIB ${APP_NAME})
-set(APP_NAME_GUI g${APP_NAME}app)
-set(APP_NAME_NOGUI ${APP_NAME}app)
+set(PROJECT_NAME imgproc)
+set(PROJECT_NAME_LIB ${PROJECT_NAME})
+set(PROJECT_NAME_GUI g${PROJECT_NAME}app)
+set(PROJECT_NAME_NOGUI ${PROJECT_NAME}app)
 
-project(${APP_NAME})
+project(${PROJECT_NAME})
 
 #set c++14
 set(CMAKE_CXX_STANDARD 14)          # C++14...
@@ -21,18 +21,23 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
     # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
-    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -O3")
+    add_definitions(-Wall -O2 -g)
 endif()
 
 enable_language(CXX)
 # set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
+
+#-------------------
+# Main
+#-------------------
+
 # set headers (put all your .hpp files here)
 set(HEADERS
     include/img/Image.hpp
     include/img/ImageCV.hpp
-    include/img/utils/utils.hpp
+    include/img/utils.hpp
     include/img/utils/BasicUtils.hpp
     include/img/utils/GeometricUtils.hpp
     include/img/utils/NoiseRemovalUtils.hpp
@@ -58,27 +63,69 @@ set(SOURCES
     )
 
 # request opencv library
-if()
+#if()
 find_package(OpenCV REQUIRED)
-else()
-set(OPENCV_ROOT "D:/OpenCV")
-set(OpenCV_INCLUDE_DIR "${OPENCV_ROOT}/opencv/build/include")
-set(OpenCV_LIBRARY_DIR"${OPENCV_ROOT}/opencv/build/x64/vc14")
-set(OpenCV_LIBS "${OPENCV_ROOT}/opencv/build/x64/vc14/lib/opencv_world310d.lib")
-include_directories(${OpenCV_INCLUDE_DIR})
-endif()
+#else()
+#set(OPENCV_ROOT "D:/OpenCV")
+#set(OpenCV_INCLUDE_DIR "${OPENCV_ROOT}/opencv/build/include")
+#set(OpenCV_LIBRARY_DIR"${OPENCV_ROOT}/opencv/build/x64/vc14")
+#set(OpenCV_LIBS "${OPENCV_ROOT}/opencv/build/x64/vc14/lib/opencv_world310d.lib")
+#include_directories(${OpenCV_INCLUDE_DIR})
+#endif()
 
 # set output bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 # specify headers directory
 include_directories(${PROJECT_SOURCE_DIR}/include)
 # compile library
-add_library(${APP_NAME_LIB} ${SOURCES} ${HEADERS})
-# create executable
-add_executable(${APP_NAME_GUI} src/main_gui.cpp)
-add_executable(${APP_NAME_NOGUI} src/main_nogui.cpp)
-# link libs
-target_link_libraries(${APP_NAME_LIB} ${OpenCV_LIBS})
-target_link_libraries(${APP_NAME_GUI} ${APP_NAME_LIB})
-target_link_libraries(${APP_NAME_NOGUI} ${APP_NAME_LIB})
+add_library(${PROJECT_NAME_LIB} ${SOURCES} ${HEADERS})
+target_link_libraries(${PROJECT_NAME_LIB} ${OpenCV_LIBS})
 
+# create executable
+add_executable(${PROJECT_NAME_GUI} src/main_gui.cpp)
+add_executable(${PROJECT_NAME_NOGUI} src/main_nogui.cpp)
+# link libs
+target_link_libraries(${PROJECT_NAME_GUI} ${PROJECT_NAME_LIB})
+target_link_libraries(${PROJECT_NAME_NOGUI} ${PROJECT_NAME_LIB})
+
+
+#-------------------
+# Test
+#-------------------
+
+find_package(Threads REQUIRED)
+
+enable_testing()
+set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
+include_directories(
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/external/include
+    )
+
+file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
+
+if(NOT WIN32 OR MINGW)
+    target_link_libraries(${PROJECT_TEST_NAME}
+        ${PROJECT_SOURCE_DIR}/external/lib/libgtest.a
+        ${PROJECT_SOURCE_DIR}/external/lib/libgmock.a
+        ${PROJECT_SOURCE_DIR}/external/lib/libgmock_main.a
+        )
+else()
+    target_link_libraries(${PROJECT_TEST_NAME}
+         ${PROJECT_SOURCE_DIR}/external/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
+         ${PROJECT_SOURCE_DIR}/external/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gmock${CMAKE_FIND_LIBRARY_SUFFIXES}
+         ${PROJECT_SOURCE_DIR}/external/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gmock_main${CMAKE_FIND_LIBRARY_SUFFIXES}
+        )
+endif()
+
+target_link_libraries(${PROJECT_TEST_NAME}
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${PROJECT_NAME_LIB}
+)
+
+add_test(test1 ${PROJECT_TEST_NAME})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)

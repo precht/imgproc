@@ -63,15 +63,16 @@ set(SOURCES
     )
 
 # request opencv library
-#if()
-find_package(OpenCV REQUIRED)
-#else()
-#set(OPENCV_ROOT "D:/OpenCV")
-#set(OpenCV_INCLUDE_DIR "${OPENCV_ROOT}/opencv/build/include")
-#set(OpenCV_LIBRARY_DIR"${OPENCV_ROOT}/opencv/build/x64/vc14")
-#set(OpenCV_LIBS "${OPENCV_ROOT}/opencv/build/x64/vc14/lib/opencv_world310d.lib")
-#include_directories(${OpenCV_INCLUDE_DIR})
-#endif()
+if(NOT WIN32)
+    find_package(OpenCV REQUIRED)
+else()
+    # Olek's custom settings
+    set(OPENCV_ROOT "D:/OpenCV")
+    set(OpenCV_INCLUDE_DIR "${OPENCV_ROOT}/opencv/build/include")
+    set(OpenCV_LIBRARY_DIR"${OPENCV_ROOT}/opencv/build/x64/vc14")
+    set(OpenCV_LIBS "${OPENCV_ROOT}/opencv/build/x64/vc14/lib/opencv_world310d.lib")
+    include_directories(${OpenCV_INCLUDE_DIR})
+endif()
 
 # set output bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
@@ -93,6 +94,8 @@ target_link_libraries(${PROJECT_NAME_NOGUI} ${PROJECT_NAME_LIB})
 # Test
 #-------------------
 
+if(NOT WIN32)
+
 find_package(Threads REQUIRED)
 
 enable_testing()
@@ -107,21 +110,10 @@ file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 
-if(NOT WIN32 OR MINGW)
-    target_link_libraries(${PROJECT_TEST_NAME}
-        ${PROJECT_SOURCE_DIR}/external/lib/libgtest.a
-        ${PROJECT_SOURCE_DIR}/external/lib/libgmock.a
-        ${PROJECT_SOURCE_DIR}/external/lib/libgmock_main.a
-        )
-else()
-    target_link_libraries(${PROJECT_TEST_NAME}
-         ${PROJECT_SOURCE_DIR}/external/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_FIND_LIBRARY_SUFFIXES}
-         ${PROJECT_SOURCE_DIR}/external/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gmock${CMAKE_FIND_LIBRARY_SUFFIXES}
-         ${PROJECT_SOURCE_DIR}/external/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gmock_main${CMAKE_FIND_LIBRARY_SUFFIXES}
-        )
-endif()
-
 target_link_libraries(${PROJECT_TEST_NAME}
+    ${PROJECT_SOURCE_DIR}/external/lib/libgtest.a
+    ${PROJECT_SOURCE_DIR}/external/lib/libgmock.a
+    ${PROJECT_SOURCE_DIR}/external/lib/libgmock_main.a
     ${CMAKE_THREAD_LIBS_INIT}
     ${PROJECT_NAME_LIB}
 )
@@ -129,3 +121,5 @@ target_link_libraries(${PROJECT_TEST_NAME}
 add_test(test1 ${PROJECT_TEST_NAME})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+
+endif()

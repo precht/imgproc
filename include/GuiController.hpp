@@ -30,6 +30,9 @@ class GuiController : public Controller
 
   private:
     gui::SimpleGui *simple_gui_;
+
+    static const std::string IMAGE_WINDOW_NAME_;
+    static const std::string HISTOGRAM_WINDOW_NAME_;
 };
 
 } // namespace imgprocapp

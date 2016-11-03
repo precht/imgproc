@@ -101,6 +101,7 @@ TEST_F(ImageF, fixtureSetUpTest2)
 //    cout << image2 << endl;
 }
 
+/*
 // Brightness
 TEST_F(ImageF, brightnessTest1_1)
 {
@@ -300,7 +301,7 @@ TEST_F(ImageF, diagonalFlipTest2)
     EXPECT_FALSE(check_if_different(x2, y2, ch2, data, image2));
 //    cout << image2 << endl;
 }
-
+*/
 
 
 

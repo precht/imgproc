@@ -21,19 +21,17 @@ namespace imgprocapp
 namespace gui
 {
 
-#define DEFAULT_WINDOW_NAME "imgprocapp"
-
 class SimpleGuiCV : public SimpleGui
 {
   public:
     SimpleGuiCV();
     ~SimpleGuiCV();
-    void create_window();
+    void create_window(const std::string &name);
 
     /* Careful, this methods will try to cast image to ImageCV */
-    void show(img::Image &image);
+    void show(img::Image &image, const std::string &window_name);
 
-    void close_window();
+    void close_window(const std::string &name);
 
     /* wait for user action */
     void wait();

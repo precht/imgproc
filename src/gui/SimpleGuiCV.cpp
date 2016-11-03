@@ -21,20 +21,20 @@ SimpleGuiCV::SimpleGuiCV()
 SimpleGuiCV::~SimpleGuiCV()
 { }
 
-void SimpleGuiCV::create_window()
+void SimpleGuiCV::create_window(const std::string &name)
 {
-    cv::namedWindow(DEFAULT_WINDOW_NAME, cv::WINDOW_AUTOSIZE);
+    cv::namedWindow(name, cv::WINDOW_AUTOSIZE);
 }
 
-void SimpleGuiCV::show(img::Image &image)
+void SimpleGuiCV::show(img::Image &image, const std::string &window_name)
 {
     img::ImageCV &image_cv = dynamic_cast<img::ImageCV&>(image);
-    cv::imshow(DEFAULT_WINDOW_NAME, image_cv.get_Mat());
+    cv::imshow(window_name, image_cv.get_Mat());
 }
 
-void SimpleGuiCV::close_window()
+void SimpleGuiCV::close_window(const std::string &name)
 {
-    cv::destroyWindow(DEFAULT_WINDOW_NAME);
+    cv::destroyWindow(name);
 }
 
 void SimpleGuiCV::wait()

@@ -27,8 +27,6 @@ class BasicUtils
     static void change_brightness(Image *image, int shift);
     static void change_contrast(Image *image, double slope);
     static void negate(Image *image);
-  
-  private:
     static void perform(Image *image, byte *pallete);
 };
 

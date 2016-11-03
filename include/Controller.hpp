@@ -15,6 +15,7 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include "img/Histogram.hpp"
 
 namespace imgprocapp
 {
@@ -40,6 +41,7 @@ const std::string SIGNAL_NOISE_RATIO = "snr";
 const std::string PEAK_SIGNAL_NOISE_RATIO = "psnr";
 const std::string HELP = "help";
 const std::string DEFAULT_OUTPUT_NAME = "a.bmp";
+const std::string HUNIFORM = "huniform";
 
 class Controller
 {
@@ -58,9 +60,11 @@ class Controller
 
   protected:
     img::Image *image_;
+    img::Histogram histogram_;
 
   private:
     V_P_SS *arguments_;
+
 };
 
 const std::string HELP_CONTENT = "\n"

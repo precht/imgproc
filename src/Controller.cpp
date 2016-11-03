@@ -84,6 +84,7 @@ Controller::Controller(V_P_SS *arguments)
     try 
     {
         image_ = new img::ImageCV(arguments_->at(0).second, arguments_->at(1).second);
+        histogram_.createHistogram(*image_);
     }
     catch (const char *e)
     {
@@ -105,7 +106,8 @@ Controller::~Controller()
 
 // TODO this method it too long
 void Controller::run()
-{ 
+{
+    std::cout << "Input image:" << std::endl << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
     bool modified_image = false;
     try
     {
@@ -222,6 +224,10 @@ void Controller::run()
                 std::cout << img::utils::ErrorMeasureUtils::peak_signal_to_noise_ratio(&orginal, 
                         image_) << std::endl;
             }
+            else if(it->first.compare(HUNIFORM) == 0)
+            {
+                img::utils::QualityImprovementUtils::uniformFinalProbabilityDensity(image_, histogram_);
+            }
             // Default, wrong input args
             else throw "Unknown option";
         }
@@ -237,6 +243,9 @@ void Controller::run()
         std::cerr << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
+    histogram_.createHistogram(*image_);
+    std::cout << "Output image:" << std::endl << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
+
 }
 
 } // namespace imgprocapp

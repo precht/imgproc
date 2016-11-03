@@ -37,11 +37,16 @@ enable_language(CXX)
 set(HEADERS
     include/img/Image.hpp
     include/img/ImageCV.hpp
+    include/img/Histogram.hpp
     include/img/utils.hpp
     include/img/utils/BasicUtils.hpp
     include/img/utils/GeometricUtils.hpp
     include/img/utils/NoiseRemovalUtils.hpp
     include/img/utils/ErrorMeasureUtils.hpp
+    include/img/utils/CharacteristicUtils.hpp
+    include/img/utils/QualityImprovementUtils.hpp
+#    include/img/utils/LinearFiltrationUtils.hpp
+#    include/img/utils/NonlinearFiltrationUtils.hpp
     include/gui/SimpleGui.hpp
     include/gui/SimpleGuiCV.hpp
     include/Controller.hpp
@@ -52,10 +57,15 @@ set(HEADERS
 set(SOURCES
     src/img/Image.cpp
     src/img/ImageCV.cpp
+    src/img/Histogram.cpp
     src/img/utils/BasicUtils.cpp
     src/img/utils/GeometricUtils.cpp
     src/img/utils/NoiseRemovalUtils.cpp
     src/img/utils/ErrorMeasureUtils.cpp
+    src/img/utils/CharacteristicUtils.cpp
+    src/img/utils/QualityImprovementUtils.cpp
+#    src/img/utils/LinearFiltrationUtils.cpp
+#    src/img/utils/NonlinearFiltrationUtils.cpp
     src/gui/SimpleGui.cpp
     src/gui/SimpleGuiCV.cpp
     src/Controller.cpp

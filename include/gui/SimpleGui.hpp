@@ -11,6 +11,7 @@
 #define SIMPLE_GUI_HPP
 
 #include "img/Image.hpp"
+#include <string>
 
 namespace imgprocapp
 {
@@ -21,9 +22,9 @@ class SimpleGui
 {
   public:
     virtual ~SimpleGui();
-    virtual void create_window() = 0;
-    virtual void show(img::Image &image) = 0;
-    virtual void close_window() = 0;
+    virtual void create_window(const std::string &name) = 0;
+    virtual void show(img::Image &image, const std::string &window_name) = 0;
+    virtual void close_window(const std::string &name) = 0;
 
     /* wait for user action */
     virtual void wait() = 0;

@@ -227,6 +227,7 @@ void Controller::run()
             else if(it->first.compare(HUNIFORM) == 0)
             {
                 img::utils::QualityImprovementUtils::uniformFinalProbabilityDensity(image_, histogram_);
+                modified_image = true;
             }
             // Default, wrong input args
             else throw "Unknown option";

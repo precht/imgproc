@@ -24,15 +24,12 @@ namespace img
 typedef unsigned char byte;
 const int COLORS_NUMBER = 256;
 
+enum ImageType{ unsigned_8bit, signed_16bit };
+
 class Image
 {
   public:
     Image();
-    // This constructor does not load any image, it only allocates empty space
-    Image(int rows, int columns, int channels);
-    // Create image that uses data instead of allocationg own memory (remember you have to free data by yourself)
-    Image(int rows, int columns, int channels, byte *data);
-    // This constructor loads image
     Image(std::string input_name, std::string output_name);
     virtual ~Image();
     virtual void load_image(const std::string &image_name) = 0;
@@ -60,6 +57,9 @@ class Image
 
     // saves image using output_name
     void save_image();
+
+    // crop image specified number of pixels from each side
+    virtual void crop(int rows_from_start, int rows_from_end, int columns_from_start, int columns_from_end) = 0;
 
     // we cannnot overload operator<<, thus it will use virtual print function
     virtual void print(std::ostream &where) const = 0;

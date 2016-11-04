@@ -24,9 +24,9 @@ class ImageCV : public Image
   public:
     ImageCV();
     /* This constructor does not load any image, it only allocates empty space */
-    ImageCV(int rows, int columns, int channels);
+    ImageCV(int rows, int columns, int channels, ImageType type = unsigned_8bit);
     // Create image that uses data instead of allocationg own memory (remember you have to free data by yourself)
-    ImageCV(int rows, int columns, int channels, byte *data);
+    ImageCV(int rows, int columns, int channels, byte *data, ImageType type = unsigned_8bit);
     /* output_name may be lest empty, it will obtain default value;
      * constructor does not load any image, you have to call load_image. */
     ImageCV(std::string intput_name, std::string output_name);
@@ -46,6 +46,7 @@ class ImageCV : public Image
     int rows() const;
     int columns() const;
 
+    void crop(int rows_from_start, int rows_from_end, int columns_from_start, int columns_from_end);
 
     /* channel numbering starts with 0 */
     byte* ptr(int index) const;

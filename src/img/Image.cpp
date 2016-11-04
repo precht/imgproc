@@ -14,12 +14,6 @@ namespace img
 Image::Image()
 { }
 
-Image::Image(int rows, int columns, int channels) 
-{ }
-
-Image::Image(int rows, int columns, int channels, byte *data)
-{ }
-
 Image::Image(std::string input_name, std::string output_name)
     : input_name_(input_name)
     , output_name_(output_name)

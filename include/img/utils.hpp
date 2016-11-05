@@ -15,7 +15,7 @@
 #include "img/utils/ErrorMeasureUtils.hpp"
 #include "img/utils/CharacteristicUtils.hpp"
 #include "img/utils/QualityImprovementUtils.hpp"
-//#include "img/utils/LinearFiltrationUtils.hpp"
+#include "img/utils/LinearFiltrationUtils.hpp"
 //#include "img/utils/NonlinearFiltrationUtils.hpp"
 
 #endif // UTILS_HPP_

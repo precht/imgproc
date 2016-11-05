@@ -21,7 +21,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
     # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
-    add_definitions(-Wall -O2 -g)
+    add_definitions(-Wall -Wextra -Wpedantic -g3 -gdwarf-4)
 endif()
 
 enable_language(CXX)
@@ -46,6 +46,7 @@ set(HEADERS
     include/img/utils/CharacteristicUtils.hpp
     include/img/utils/QualityImprovementUtils.hpp
 #    include/img/utils/LinearFiltrationUtils.hpp
+    include/img/utils/LinearFiltrationUtils.hpp
 #    include/img/utils/NonlinearFiltrationUtils.hpp
     include/gui/SimpleGui.hpp
     include/gui/SimpleGuiCV.hpp
@@ -65,6 +66,7 @@ set(SOURCES
     src/img/utils/CharacteristicUtils.cpp
     src/img/utils/QualityImprovementUtils.cpp
 #    src/img/utils/LinearFiltrationUtils.cpp
+    src/img/utils/LinearFiltrationUtils.cpp
 #    src/img/utils/NonlinearFiltrationUtils.cpp
     src/gui/SimpleGui.cpp
     src/gui/SimpleGuiCV.cpp

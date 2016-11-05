@@ -42,6 +42,7 @@ const std::string PEAK_SIGNAL_NOISE_RATIO = "psnr";
 const std::string HELP = "help";
 const std::string DEFAULT_OUTPUT_NAME = "a.bmp";
 const std::string HUNIFORM = "huniform";
+const std::string SLINEID= "slineid";
 
 class Controller
 {

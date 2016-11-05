@@ -107,7 +107,7 @@ Controller::~Controller()
 // TODO this method it too long
 void Controller::run()
 {
-    std::cout << "Input image:" << std::endl << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
+//    std::cout << "Input image:" << std::endl << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
     bool modified_image = false;
     try
     {
@@ -229,6 +229,11 @@ void Controller::run()
                 img::utils::QualityImprovementUtils::uniformFinalProbabilityDensity(image_, histogram_);
                 modified_image = true;
             }
+            else if(it->first.compare(SLINEID) == 0)
+            {
+                img::utils::LinearFiltrationUtils::lineIdentification(image_);
+                modified_image = true;
+            }
             // Default, wrong input args
             else throw "Unknown option";
         }
@@ -245,7 +250,7 @@ void Controller::run()
         std::exit(EXIT_FAILURE);
     }
     histogram_.createHistogram(*image_);
-    std::cout << "Output image:" << std::endl << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
+//    std::cout << "Output image:" << std::endl << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
 
 }
 

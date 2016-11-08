@@ -51,6 +51,7 @@ class ImageCV : public Image
     /* channel numbering starts with 0 */
     byte* ptr(int index) const;
     byte* ptr(int x, int y, int channel) const;
+    byte& operator()(int x, int y, int c);
 
     void print(std::ostream &where) const;
 

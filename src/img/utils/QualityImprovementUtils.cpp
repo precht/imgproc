@@ -16,6 +16,7 @@ namespace utils
 void QualityImprovementUtils::uniformFinalProbabilityDensity(Image *image, Histogram &histogram, int output_min_level,
                                                              int output_max_level)
 {
+    // TODO output level by user
     byte pallete[COLORS_NUMBER];
     int sum = 0;
     for (int i = 0; i < COLORS_NUMBER; ++i)

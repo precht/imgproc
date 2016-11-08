@@ -48,6 +48,7 @@ class Image
     // channel numbering starts with 0
     virtual byte* ptr(int index) const = 0;
     virtual byte* ptr(int x, int y, int channel) const = 0;
+    virtual byte& operator()(int x, int y, int c) = 0;
 
     void set_input_name(std::string input_name);
     void set_output_name(std::string output_name);

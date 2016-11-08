@@ -19,13 +19,16 @@ namespace utils {
 class LinearFiltrationUtils
 {
   public:
-    const static int MASK_EDGE = 3;
-    const static int MASK_SIZE = MASK_EDGE * MASK_EDGE;
-    static void lineIdentification(Image *image);
-    static void perform(Image *image, int mask[MASK_SIZE]);
+    static const int MASK_EDGE = 3;
+    static const int MASK_SIZE = MASK_EDGE * MASK_EDGE;
+    static void lineIdentification(Image &image);
+    static void perform(Image &image, const int mask[MASK_SIZE]);
 
   private:
-    static void flipMask(int mask[]);
+    static const int LINE_IDENTIFICATION_MASK_1_[MASK_SIZE];
+    static const int LINE_IDENTIFICATION_MASK_2_[MASK_SIZE];
+    static const int LINE_IDENTIFICATION_MASK_3_[MASK_SIZE];
+    static const int LINE_IDENTIFICATION_MASK_4_[MASK_SIZE];
 };
 
 } // namespace utils

@@ -234,6 +234,11 @@ void Controller::run()
                 img::utils::LinearFiltrationUtils::lineIdentification(image_);
                 modified_image = true;
             }
+			else if (it->first.compare(UOLIS) == 0)
+			{
+				img::utils::NonLinearFiltrationUtils::Uolis(image_);
+				modified_image = true;
+			}
             // Default, wrong input args
             else throw "Unknown option";
         }

@@ -239,7 +239,13 @@ void Controller::run()
             }
             else if(it->first.compare(SLINEID) == 0)
             {
-                img::utils::LinearFiltrationUtils::lineIdentification(*image_);
+                if(it->second != "")
+                {
+                    std::regex rgx("^[1234]$");
+                    if(!std::regex_match(it->second, rgx)) throw "Wrong line identification value";
+                    img::utils::LinearFiltrationUtils::lineIdentification(*image_, std::stoi(it->second));
+                }
+                else img::utils::LinearFiltrationUtils::lineIdentification(*image_);
                 modified_image = true;
             }
             else if(it->first.compare(UOLIS) == 0)
@@ -247,10 +253,59 @@ void Controller::run()
                 img::utils::NonLinearFiltrationUtils::Uolis(*image_);
                 modified_image = true;
             }
+            // characteristics
             else if(it->first.compare(CALL) == 0)
             {
                 histogram_.createHistogram(*image_);
                 std::cout << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CMEAN) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::mean(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CVARIANCE) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::variance(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CSTDEV) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::standardDeviation(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CASYCO) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::asymmetryCoefficient(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CFLATCO) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::flatteningCoefficient(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CVARCOI) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::variationCoefficient1(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CVARCOII) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::variationCoefficient2(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CENTROPY) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::informationSourceEntropy(histogram_) << std::endl;
                 modified_image = true;
             }
             else if(it->first.compare(HISTOGRAM) == 0)

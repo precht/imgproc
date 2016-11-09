@@ -22,6 +22,7 @@ class LinearFiltrationUtils
     static const int MASK_EDGE = 3;
     static const int MASK_SIZE = MASK_EDGE * MASK_EDGE;
     static void lineIdentification(Image &image);
+    static void lineIdentification(Image &image, const int id);
     static void perform(Image &image, const int mask[MASK_SIZE]);
 
   private:

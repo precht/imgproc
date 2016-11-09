@@ -27,7 +27,7 @@ void NonLinearFiltrationUtils::Uolis(Image &image)
         {
             numerator = pow((double)image(i,j,0) + 1, 4.0);
             denominator = (double)(image(i - 1, j, 0) + 1) * (image(i, j + 1, 0) + 1) * (image(i + 1, j, 0) + 1) * (image(i, j - 1, 0) + 1);
-            table[i][j] = log(numerator / denominator);
+            table[i][j] = log10(numerator / denominator);
             if(table[i][j] > max_val) max_val = table[i][j];
             if(table[i][j] < min_val) min_val = table[i][j];
 //            std::cout << i << "," << j << ": " << (int)image(i, j, 0) << " " << numerator << " " << denominator << " "
@@ -36,7 +36,7 @@ void NonLinearFiltrationUtils::Uolis(Image &image)
     }
 
 
-//    std::cout << "MAX_MIN " << min_val << " " << max_val << std::endl;
+    std::cout << "MIN_MAX " << min_val << " " << max_val << std::endl;
     double scale = (double)255 / (max_val - min_val);
     double shift = -min_val;
     for (int x = 0; x < rows; ++x)

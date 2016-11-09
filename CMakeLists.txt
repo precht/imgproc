@@ -21,7 +21,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
     # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
-    add_definitions(-Wall -Wextra -Wpedantic -g3 -gdwarf-4)
+    add_definitions(-Wall -Wextra -Wpedantic -O2)
 endif()
 
 enable_language(CXX)

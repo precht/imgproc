@@ -11,7 +11,6 @@
 #include <climits>
 #include <iostream>
 #include <cmath>
-#include <cfloat>
 using std::cout;
 using std::endl;
 
@@ -29,10 +28,10 @@ void LinearFiltrationUtils::lineIdentification(Image &image)
 {
     const int rows = image.rows();
     const int columns = image.columns();
-    double max_val = DBL_MIN;
-    double min_val = DBL_MAX;
-    double **table = new double*[rows];
-    for (int i = 0 ; i < rows; ++i) table[i] = new double[columns]{0};
+    int **table = new int*[rows];
+    int max_val = INT_MIN;
+    int min_val = INT_MAX;
+    for (int i = 0 ; i < rows; ++i) table[i] = new int[columns]{0};
     int accumulator = 0;
 
     for (int x = 1; x < rows - 1; ++x)
@@ -89,10 +88,10 @@ void LinearFiltrationUtils::perform(Image &image, const int mask[MASK_SIZE])
     const int rows = image.rows();
     const int columns = image.columns();
     const int half_edge = MASK_EDGE / 2;
-    double **table = new double*[rows];
-    int max_val = DBL_MIN;
-    int min_val = DBL_MAX;
-    for (int i = 0 ; i < rows; ++i) table[i] = new double[columns]{0};
+    int **table = new int*[rows];
+    int max_val = INT_MIN;
+    int min_val = INT_MAX;
+    for (int i = 0 ; i < rows; ++i) table[i] = new int[columns]{0};
 
     for (int x = 0; x < rows; ++x)
     {
@@ -113,7 +112,7 @@ void LinearFiltrationUtils::perform(Image &image, const int mask[MASK_SIZE])
     }
 
     double scale = (double)255 / (max_val - min_val);
-    double shift = -min_val;
+    int shift = -min_val;
     for (int x = 0; x < rows; ++x)
         for (int y = 0; y < columns; ++y)
             image(x, y, 0) = scale * (table[x][y] + shift);

@@ -104,32 +104,59 @@ target_link_libraries(${PROJECT_NAME_NOGUI} ${PROJECT_NAME_LIB})
 # Test
 #-------------------
 
-if(NOT WIN32)
+if(MSVC)
+    if(NOT BOOST_ROOT)
+        set(BOOST_ROOT "C:/local/boost_1_60_0")
+    endif()
+    set(Boost_INCLUDE_DIR "${BOOST_ROOT}")
+    set(Boost_LIBRARY_DIR "${BOOST_ROOT}/lib32-msvc-14.0")
+    set(Boost_USE_STATIC_LIBS ON)
+    set(Boost_USE_MULTITHREADED ON)
 
-find_package(Threads REQUIRED)
+    if(NOT EXISTS ${Boost_LIBRARY_DIR})
+        message(WARNING "Boost library requires manual installation in Windows")
+        message("1) Browse: https://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/")
+        message("2) Download: boost_1_60_0-msvc-14.0-32.exe")
+        message("3) Install into default directory: C:\\local")
+        message("")
+        message(FATAL_ERROR "Boost libraries not found at ${Boost_LIBRARY_DIR}")
+    endif()
 
-enable_testing()
+    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+
+    include_directories(${Boost_INCLUDE_DIR})
+    link_directories(${Boost_LIBRARY_DIR})
+
+else()
+    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+endif()
+
 set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
-include_directories(
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/external/include
-    )
-
-file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
-add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
-
-target_link_libraries(${PROJECT_TEST_NAME}
-    ${PROJECT_SOURCE_DIR}/external/lib/libgtest.a
-    ${PROJECT_SOURCE_DIR}/external/lib/libgmock.a
-    ${PROJECT_SOURCE_DIR}/external/lib/libgmock_main.a
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${PROJECT_NAME_LIB}
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${Boost_INCLUDE_DIRS}
 )
 
-add_test(test1 ${PROJECT_TEST_NAME})
+set(TEST_SOURCES
+    include/test/ImageFixture.hpp
+    test/ImageFixture.cpp
+    test/master.cpp
+    test/BasicUtilsTest.cpp
+)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
 
-endif()
+target_link_libraries(${PROJECT_TEST_NAME}
+    ${PROJECT_NAME_LIB}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+)
+
+add_custom_target(check ${CMAKE_COMMAND} -E env CTEST_OUPUT_ON_FAILURE=1 BOOST_TEST_LOG_LEVEL=all
+    ${CMAKE_CTEST_COMMAND} -C $<CONFIG> --verbose
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+enable_testing()
+add_test(${PROJECT_TEST_NAME}s ${PROJECT_TEST_NAME})
+

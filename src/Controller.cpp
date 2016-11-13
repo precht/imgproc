@@ -226,17 +226,100 @@ void Controller::run()
             }
             else if(it->first.compare(HUNIFORM) == 0)
             {
-                img::utils::QualityImprovementUtils::uniformFinalProbabilityDensity(image_, histogram_);
+                int gmin, gmax;
+                std::regex rgx("^([1-9]\\d*),([1-9]\\d*)$");
+                std::smatch match;
+                if(std::regex_search(it->second, match, rgx) && match.size() == 3) {
+                    gmin = std::stoi(match[1]);
+                    gmax = std::stoi(match[2]);
+                    img::utils::QualityImprovementUtils::uniformFinalProbabilityDensity(image_, histogram_, gmin, gmax);
+                }
+                else img::utils::QualityImprovementUtils::uniformFinalProbabilityDensity(image_, histogram_);
                 modified_image = true;
             }
             else if(it->first.compare(SLINEID) == 0)
             {
-                img::utils::LinearFiltrationUtils::lineIdentification(image_);
+                if(it->second != "")
+                {
+                    std::regex rgx("^[1234]$");
+                    if(!std::regex_match(it->second, rgx)) throw "Wrong line identification value";
+                    img::utils::LinearFiltrationUtils::lineIdentification(*image_, std::stoi(it->second));
+                }
+                else img::utils::LinearFiltrationUtils::lineIdentification(*image_);
+                modified_image = true;
+            }
+            else if(it->first.compare(UOLIS) == 0)
+            {
+                img::utils::NonLinearFiltrationUtils::Uolis(*image_);
+                modified_image = true;
+            }
+            // characteristics
+            else if(it->first.compare(CALL) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::all(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CMEAN) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::mean(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CVARIANCE) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::variance(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CSTDEV) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::standardDeviation(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CASYCO) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::asymmetryCoefficient(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CFLATCO) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::flatteningCoefficient(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CVARCOI) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::variationCoefficient1(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CVARCOII) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::variationCoefficient2(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(CENTROPY) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::cout << img::utils::CharacteristicUtils::informationSourceEntropy(histogram_) << std::endl;
+                modified_image = true;
+            }
+            else if(it->first.compare(HISTOGRAM) == 0)
+            {
+                histogram_.createHistogram(*image_);
+                std::string name = "a_histogram.bmp";
+                if(it->second != "")
+                    name = it->second;
+                histogram_.saveAsImage()->save_image(name);
                 modified_image = true;
             }
 			else if (it->first.compare(UOLIS) == 0)
 			{
-				img::utils::NonLinearFiltrationUtils::Uolis(image_);
+                img::utils::NonLinearFiltrationUtils::Uolis(*image_);
 				modified_image = true;
 			}
             // Default, wrong input args

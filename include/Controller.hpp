@@ -42,8 +42,18 @@ const std::string PEAK_SIGNAL_NOISE_RATIO = "psnr";
 const std::string HELP = "help";
 const std::string DEFAULT_OUTPUT_NAME = "a.bmp";
 const std::string HUNIFORM = "huniform";
-const std::string SLINEID = "slineid";
+const std::string SLINEID= "slineid";
 const std::string UOLIS = "ouolis";
+const std::string CALL = "call";
+const std::string HISTOGRAM = "histogram";
+const std::string CMEAN = "cmean";
+const std::string CVARIANCE = "cvariance";
+const std::string CSTDEV = "cstdev";
+const std::string CVARCOI = "cvarcoi";
+const std::string CASYCO = "casyco";
+const std::string CFLATCO = "casyco";
+const std::string CVARCOII = "cvarcoii";
+const std::string CENTROPY = "centropy";
 
 class Controller
 {
@@ -96,18 +106,23 @@ const std::string HELP_CONTENT = "\n"
 "\n"
 "TASK2 PART\n"
 "\n"
-"    -histogram\n"
 "        creating an histogram of an image and displaying it\n"
 "        if you want to have your histogram saved you should type in command line\n"
 "        -histogram=[NameOfOutputFile]\n"
 "        if you leave empty space after -histogram it will be saved as a_histogram.bmp\n "
 "\n"
-"    -huniform=[gmin, gmax]\n"
+"    -huniform=[gmin,gmax]\n"
 "        applying uniform final probability density function to histogram\n"
 "        in order to improve the quality of the image\n"
 "        gmin denotes minimum brightness in output image\n"
 "        respectively gmax denotes maximum brightness in output image\n"
 "\n"
+"    -call\n"
+"       this function invokes all image characteristics\n"
+"       you need to type name of input file and after kind of image characteristic\n"
+"      -in=[InputImageName] -call\n"
+"\n"
+"{\n"
 "    -cmean\n"
 "        comparing original image with the image\n"
 "        after one of the quality improvement method\n"
@@ -132,7 +147,11 @@ const std::string HELP_CONTENT = "\n"
 "        comparing original image with the image\n"
 "        after one of the quality improvement method\n"
 "        in this case it is compared by asymmetry coefficient\n"
-"        or flatenning coefficient\n"
+"\n"
+"    -cflatco\n"
+"        comparing original image with the image\n"
+"        after one of the quality improvement method\n"
+"        in this case it is compared by flattening coefficient\n"
 "\n"
 "    -cvarcoii\n"
 "        comparing original image with the image\n"
@@ -144,11 +163,14 @@ const std::string HELP_CONTENT = "\n"
 "        after one of the quality improvement method\n"
 "        in this case it is compared by information source entropy\n"
 "\n"
+"}\n"
 "    -slineid\n"
 "        applying linear image filtration algorithm based on convolution\n"
 "        in order to identify lines in our picture\n"
 "        there are four types of masks which can be used with -slineid function\n"
 "        each of them denote different lines orientation\n"
+"        you have to type -slineid=[1-4] to choose the proper mask\n"
+"        if left empty the fourth one will be chosen\n"
 "\n"
 "    -ouolis\n"
 "        applying non-linear image filtration alghoritm \n"
@@ -156,6 +178,7 @@ const std::string HELP_CONTENT = "\n"
 "\n"
 "TASK1 PART\n"
 "\n"
+"    -histogram\n"
 "    -brightness=[shift]\n"
 "        change image birghtness. shift can be both positive and negative but\n"
 "        it's absolute value can not be greater then the number of image's \n"

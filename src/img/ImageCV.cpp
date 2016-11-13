@@ -133,6 +133,12 @@ byte* ImageCV::ptr(int index) const
     return (byte*)data_matrix_.ptr<byte>(x) + y;
 }
 
+
+byte& ImageCV::operator()(int x, int y, int c)
+{
+    return *(data_matrix_.ptr<byte>(x) + (y * channels()) + c);
+}
+
 byte* ImageCV::ptr(int x, int y, int channel) const
 {
     return (byte*)data_matrix_.ptr<byte>(x) + (y * channels()) + channel;

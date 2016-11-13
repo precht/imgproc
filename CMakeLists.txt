@@ -45,7 +45,6 @@ set(HEADERS
     include/img/utils/ErrorMeasureUtils.hpp
     include/img/utils/CharacteristicUtils.hpp
     include/img/utils/QualityImprovementUtils.hpp
-#    include/img/utils/LinearFiltrationUtils.hpp
     include/img/utils/LinearFiltrationUtils.hpp
     include/img/utils/NonLinearFiltrationUtils.hpp
     include/gui/SimpleGui.hpp
@@ -65,7 +64,6 @@ set(SOURCES
     src/img/utils/ErrorMeasureUtils.cpp
     src/img/utils/CharacteristicUtils.cpp
     src/img/utils/QualityImprovementUtils.cpp
-#    src/img/utils/LinearFiltrationUtils.cpp
     src/img/utils/LinearFiltrationUtils.cpp
     src/img/utils/NonLinearFiltrationUtils.cpp
     src/gui/SimpleGui.cpp

@@ -1,8 +1,9 @@
+#include "img/utils/NonLinearFiltrationUtils.hpp"
+
 #include <iostream>
-#include <cmath>
 #include <climits>
 #include <cfloat>
-#include "img/utils/NonLinearFiltrationUtils.hpp"
+#include <cmath>
 
 namespace imgprocapp {
 namespace img {
@@ -30,13 +31,9 @@ void NonLinearFiltrationUtils::Uolis(Image &image)
             table[i][j] = log10(numerator / denominator);
             if(table[i][j] > max_val) max_val = table[i][j];
             if(table[i][j] < min_val) min_val = table[i][j];
-//            std::cout << i << "," << j << ": " << (int)image(i, j, 0) << " " << numerator << " " << denominator << " "
-//                      << numerator / denominator << " "<< table[i][j] << std::endl;
         }
     }
 
-
-    std::cout << "MIN_MAX " << min_val << " " << max_val << std::endl;
     double scale = (double)255 / (max_val - min_val);
     double shift = -min_val;
     for (int x = 0; x < rows; ++x)

@@ -143,6 +143,8 @@ set(TEST_SOURCES
     test/ImageFixture.cpp
     test/master.cpp
     test/BasicUtilsTest.cpp
+    test/GeometricUtilsTest.cpp
+    test/NoiseRemovalUtilsTest.cpp
 )
 
 add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})

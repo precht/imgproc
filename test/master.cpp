@@ -21,4 +21,4 @@ struct MyConfig
     ~MyConfig() { }
 };
 
-BOOST_GLOBAL_FIXTURE(MyConfig)
+BOOST_GLOBAL_FIXTURE(MyConfig);

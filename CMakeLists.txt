@@ -109,7 +109,7 @@ if(MSVC)
         set(BOOST_ROOT "C:/local/boost_1_60_0")
     endif()
     set(Boost_INCLUDE_DIR "${BOOST_ROOT}")
-    set(Boost_LIBRARY_DIR "${BOOST_ROOT}/lib32-msvc-14.0")
+    set(Boost_LIBRARY_DIR "${BOOST_ROOT}/lib64-msvc-14.0")
     set(Boost_USE_STATIC_LIBS ON)
     set(Boost_USE_MULTITHREADED ON)
 

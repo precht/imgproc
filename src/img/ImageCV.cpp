@@ -126,6 +126,13 @@ void ImageCV::crop(int rows_from_start, int rows_from_end, int columns_from_star
     data_matrix_ = data_matrix_(cv::Rect(rows_from_start, columns_from_start, width, hight)).clone();
 }
 
+byte& ImageCV::operator()(int index)
+{
+    int x = index / (columns() * channels());
+    int y = index % (columns() * channels());
+    return *(data_matrix_.ptr<byte>(x) + y);
+}
+
 byte* ImageCV::ptr(int index) const
 {
     int x = index / (columns() * channels());

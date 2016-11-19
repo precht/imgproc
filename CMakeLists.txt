@@ -25,8 +25,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 enable_language(CXX)
-# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# set(CMAKE_VERBOSE_MAKEFILE TRUE)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 
 #-------------------
@@ -122,13 +122,13 @@ if(MSVC)
         message(FATAL_ERROR "Boost libraries not found at ${Boost_LIBRARY_DIR}")
     endif()
 
-    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 
     include_directories(${Boost_INCLUDE_DIR})
     link_directories(${Boost_LIBRARY_DIR})
 
 else()
-    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 endif()
 
 set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
@@ -139,12 +139,14 @@ include_directories(
 )
 
 set(TEST_SOURCES
-    include/test/ImageFixture.hpp
-    test/ImageFixture.cpp
     test/master.cpp
-    test/BasicUtilsTest.cpp
-    test/GeometricUtilsTest.cpp
-    test/NoiseRemovalUtilsTest.cpp
+    test/ImageTest.cpp
+    test/ImageOpenCVTest.cpp
+#    include/test/ImageFixture.hpp
+#    test/ImageFixture.cpp
+#    test/BasicUtilsTest.cpp
+#    test/GeometricUtilsTest.cpp
+#    test/NoiseRemovalUtilsTest.cpp
 )
 
 add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
@@ -152,6 +154,8 @@ add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
 target_link_libraries(${PROJECT_TEST_NAME}
     ${PROJECT_NAME_LIB}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
 )
 
 add_custom_target(check ${CMAKE_COMMAND} -E env CTEST_OUPUT_ON_FAILURE=1 BOOST_TEST_LOG_LEVEL=all

@@ -21,11 +21,11 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
     # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
-    add_definitions(-Wall -O2 -g)
+    add_definitions(-Wall -Wextra -Wpedantic -g3 -gdwarf-4)
 endif()
 
 enable_language(CXX)
-# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 
@@ -35,32 +35,40 @@ enable_language(CXX)
 
 # set headers (put all your .hpp files here)
 set(HEADERS
-    include/img/Image.hpp
-    include/img/ImageCV.hpp
-    include/img/utils.hpp
-    include/img/utils/BasicUtils.hpp
-    include/img/utils/GeometricUtils.hpp
-    include/img/utils/NoiseRemovalUtils.hpp
-    include/img/utils/ErrorMeasureUtils.hpp
-    include/gui/SimpleGui.hpp
-    include/gui/SimpleGuiCV.hpp
-    include/Controller.hpp
-    include/GuiController.hpp
-    )
+    ./include/core/Image.hpp
+    ./include/core/Histogram.hpp
+    ./include/core/utils/BasicUtils.hpp
+    ./include/core/utils/GeometricUtils.hpp
+    ./include/core/utils/NoiseRemovalUtils.hpp
+    ./include/core/utils/ErrorMeasureUtils.hpp
+    ./include/core/utils/CharacteristicUtils.hpp
+    ./include/core/utils/QualityImprovementUtils.hpp
+    ./include/core/utils/LinearFiltrationUtils.hpp
+    ./include/core/utils/NonLinearFiltrationUtils.hpp
+    ./include/core/core.hpp
+    ./include/opencv/OpenCVImageHelper.hpp
+    ./include/opencv/OpenCVWindows.hpp
+    ./include/cli/Controller.hpp
+    ./include/cli/GuiController.hpp
+)
 
 # set sources (put all your .cpp files here)
 set(SOURCES
-    src/img/Image.cpp
-    src/img/ImageCV.cpp
-    src/img/utils/BasicUtils.cpp
-    src/img/utils/GeometricUtils.cpp
-    src/img/utils/NoiseRemovalUtils.cpp
-    src/img/utils/ErrorMeasureUtils.cpp
-    src/gui/SimpleGui.cpp
-    src/gui/SimpleGuiCV.cpp
-    src/Controller.cpp
-    src/GuiController.cpp
-    )
+    ./src/core/Image.cpp
+    ./src/core/Histogram.cpp
+    ./src/core/utils/BasicUtils.cpp
+    ./src/core/utils/GeometricUtils.cpp
+    ./src/core/utils/NoiseRemovalUtils.cpp
+    ./src/core/utils/ErrorMeasureUtils.cpp
+    ./src/core/utils/CharacteristicUtils.cpp
+    ./src/core/utils/QualityImprovementUtils.cpp
+    ./src/core/utils/LinearFiltrationUtils.cpp
+    ./src/core/utils/NonLinearFiltrationUtils.cpp
+    ./src/opencv/OpenCVImageHelper.cpp
+    ./src/opencv/OpenCVWindows.cpp
+    ./src/cli/Controller.cpp
+    ./src/cli/GuiController.cpp
+)
 
 # request opencv library
 if(NOT WIN32)
@@ -83,43 +91,76 @@ add_library(${PROJECT_NAME_LIB} ${SOURCES} ${HEADERS})
 target_link_libraries(${PROJECT_NAME_LIB} ${OpenCV_LIBS})
 
 # create executable
-add_executable(${PROJECT_NAME_GUI} src/main_gui.cpp)
-add_executable(${PROJECT_NAME_NOGUI} src/main_nogui.cpp)
+add_executable(${PROJECT_NAME_NOGUI} ./src/cli/main_nogui.cpp)
+add_executable(${PROJECT_NAME_GUI} ./src/cli/main_gui.cpp)
 # link libs
-target_link_libraries(${PROJECT_NAME_GUI} ${PROJECT_NAME_LIB})
 target_link_libraries(${PROJECT_NAME_NOGUI} ${PROJECT_NAME_LIB})
+target_link_libraries(${PROJECT_NAME_GUI} ${PROJECT_NAME_LIB})
 
 
 #-------------------
 # Test
 #-------------------
 
-if(NOT WIN32)
+if(MSVC)
+    if(NOT BOOST_ROOT)
+        set(BOOST_ROOT "C:/local/boost_1_60_0")
+    endif()
+    set(Boost_INCLUDE_DIR "${BOOST_ROOT}")
+    set(Boost_LIBRARY_DIR "${BOOST_ROOT}/lib64-msvc-14.0")
+    set(Boost_USE_STATIC_LIBS ON)
+    set(Boost_USE_MULTITHREADED ON)
 
-find_package(Threads REQUIRED)
+    if(NOT EXISTS ${Boost_LIBRARY_DIR})
+        message(WARNING "Boost library requires manual installation in Windows")
+        message("1) Browse: https://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/")
+        message("2) Download: boost_1_60_0-msvc-14.0-32.exe")
+        message("3) Install into default directory: C:\\local")
+        message("")
+        message(FATAL_ERROR "Boost libraries not found at ${Boost_LIBRARY_DIR}")
+    endif()
 
-enable_testing()
+    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
+
+    include_directories(${Boost_INCLUDE_DIR})
+    link_directories(${Boost_LIBRARY_DIR})
+
+else()
+    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
+endif()
+
 set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
-include_directories(
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/external/include
-    )
-
-file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
-add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
-
-target_link_libraries(${PROJECT_TEST_NAME}
-    ${PROJECT_SOURCE_DIR}/external/lib/libgtest.a
-    ${PROJECT_SOURCE_DIR}/external/lib/libgmock.a
-    ${PROJECT_SOURCE_DIR}/external/lib/libgmock_main.a
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${PROJECT_NAME_LIB}
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${Boost_INCLUDE_DIRS}
 )
 
-add_test(test1 ${PROJECT_TEST_NAME})
+set(TEST_SOURCES
+    ./test/master.cpp
+    ./test/core/ImageTest.cpp
+    ./test/opencv/OpenCVImageHelperTest.cpp
+    ./include/test/ImageFixture.hpp
+    ./test/ImageFixture.cpp
+    ./test/core/utils/BasicUtilsTest.cpp
+    ./test/core/utils/GeometricUtilsTest.cpp
+    ./test/core/utils/NoiseRemovalUtilsTest.cpp
+)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
 
-endif()
+target_link_libraries(${PROJECT_TEST_NAME}
+    ${PROJECT_NAME_LIB}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
+)
+
+add_custom_target(check ${CMAKE_COMMAND} -E env CTEST_OUPUT_ON_FAILURE=1 BOOST_TEST_LOG_LEVEL=all
+    ${CMAKE_CTEST_COMMAND} -C $<CONFIG> --verbose
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+enable_testing()
+add_test(${PROJECT_TEST_NAME}s ${PROJECT_TEST_NAME})
+

@@ -25,7 +25,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 enable_language(CXX)
-# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 
@@ -35,42 +35,40 @@ enable_language(CXX)
 
 # set headers (put all your .hpp files here)
 set(HEADERS
-    include/img/Image.hpp
-    include/img/ImageCV.hpp
-    include/img/Histogram.hpp
-    include/img/utils.hpp
-    include/img/utils/BasicUtils.hpp
-    include/img/utils/GeometricUtils.hpp
-    include/img/utils/NoiseRemovalUtils.hpp
-    include/img/utils/ErrorMeasureUtils.hpp
-    include/img/utils/CharacteristicUtils.hpp
-    include/img/utils/QualityImprovementUtils.hpp
-    include/img/utils/LinearFiltrationUtils.hpp
-    include/img/utils/NonLinearFiltrationUtils.hpp
-    include/gui/SimpleGui.hpp
-    include/gui/SimpleGuiCV.hpp
-    include/Controller.hpp
-    include/GuiController.hpp
-    )
+    ./include/core/Image.hpp
+    ./include/core/Histogram.hpp
+    ./include/core/utils/BasicUtils.hpp
+    ./include/core/utils/GeometricUtils.hpp
+    ./include/core/utils/NoiseRemovalUtils.hpp
+    ./include/core/utils/ErrorMeasureUtils.hpp
+    ./include/core/utils/CharacteristicUtils.hpp
+    ./include/core/utils/QualityImprovementUtils.hpp
+    ./include/core/utils/LinearFiltrationUtils.hpp
+    ./include/core/utils/NonLinearFiltrationUtils.hpp
+    ./include/core/core.hpp
+    ./include/opencv/OpenCVImageHelper.hpp
+    ./include/opencv/OpenCVWindows.hpp
+    ./include/cli/Controller.hpp
+    ./include/cli/GuiController.hpp
+)
 
 # set sources (put all your .cpp files here)
 set(SOURCES
-    src/img/Image.cpp
-    src/img/ImageCV.cpp
-    src/img/Histogram.cpp
-    src/img/utils/BasicUtils.cpp
-    src/img/utils/GeometricUtils.cpp
-    src/img/utils/NoiseRemovalUtils.cpp
-    src/img/utils/ErrorMeasureUtils.cpp
-    src/img/utils/CharacteristicUtils.cpp
-    src/img/utils/QualityImprovementUtils.cpp
-    src/img/utils/LinearFiltrationUtils.cpp
-    src/img/utils/NonLinearFiltrationUtils.cpp
-    src/gui/SimpleGui.cpp
-    src/gui/SimpleGuiCV.cpp
-    src/Controller.cpp
-    src/GuiController.cpp
-    )
+    ./src/core/Image.cpp
+    ./src/core/Histogram.cpp
+    ./src/core/utils/BasicUtils.cpp
+    ./src/core/utils/GeometricUtils.cpp
+    ./src/core/utils/NoiseRemovalUtils.cpp
+    ./src/core/utils/ErrorMeasureUtils.cpp
+    ./src/core/utils/CharacteristicUtils.cpp
+    ./src/core/utils/QualityImprovementUtils.cpp
+    ./src/core/utils/LinearFiltrationUtils.cpp
+    ./src/core/utils/NonLinearFiltrationUtils.cpp
+    ./src/opencv/OpenCVImageHelper.cpp
+    ./src/opencv/OpenCVWindows.cpp
+    ./src/cli/Controller.cpp
+    ./src/cli/GuiController.cpp
+)
 
 # request opencv library
 if(NOT WIN32)
@@ -93,11 +91,11 @@ add_library(${PROJECT_NAME_LIB} ${SOURCES} ${HEADERS})
 target_link_libraries(${PROJECT_NAME_LIB} ${OpenCV_LIBS})
 
 # create executable
-add_executable(${PROJECT_NAME_GUI} src/main_gui.cpp)
-add_executable(${PROJECT_NAME_NOGUI} src/main_nogui.cpp)
+add_executable(${PROJECT_NAME_NOGUI} ./src/cli/main_nogui.cpp)
+add_executable(${PROJECT_NAME_GUI} ./src/cli/main_gui.cpp)
 # link libs
-target_link_libraries(${PROJECT_NAME_GUI} ${PROJECT_NAME_LIB})
 target_link_libraries(${PROJECT_NAME_NOGUI} ${PROJECT_NAME_LIB})
+target_link_libraries(${PROJECT_NAME_GUI} ${PROJECT_NAME_LIB})
 
 
 #-------------------
@@ -122,13 +120,13 @@ if(MSVC)
         message(FATAL_ERROR "Boost libraries not found at ${Boost_LIBRARY_DIR}")
     endif()
 
-    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 
     include_directories(${Boost_INCLUDE_DIR})
     link_directories(${Boost_LIBRARY_DIR})
 
 else()
-    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 endif()
 
 set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
@@ -139,12 +137,14 @@ include_directories(
 )
 
 set(TEST_SOURCES
-    include/test/ImageFixture.hpp
-    test/ImageFixture.cpp
-    test/master.cpp
-    test/BasicUtilsTest.cpp
-    test/GeometricUtilsTest.cpp
-    test/NoiseRemovalUtilsTest.cpp
+    ./test/master.cpp
+    ./test/core/ImageTest.cpp
+    ./test/opencv/OpenCVImageHelperTest.cpp
+    ./include/test/ImageFixture.hpp
+    ./test/ImageFixture.cpp
+    ./test/core/utils/BasicUtilsTest.cpp
+    ./test/core/utils/GeometricUtilsTest.cpp
+    ./test/core/utils/NoiseRemovalUtilsTest.cpp
 )
 
 add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
@@ -152,6 +152,8 @@ add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
 target_link_libraries(${PROJECT_TEST_NAME}
     ${PROJECT_NAME_LIB}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
 )
 
 add_custom_target(check ${CMAKE_COMMAND} -E env CTEST_OUPUT_ON_FAILURE=1 BOOST_TEST_LOG_LEVEL=all

@@ -1,21 +1,30 @@
+/**
+ *      Purpose:    Fixture class for utils tests
+ *      Created:    13th Nov 2016
+ *      Author:     Jakub Precht
+ */
+
 #ifndef IMAGE_FIXTURE_HPP_
 #define IMAGE_FIXTURE_HPP_
 
-#include "img/ImageCV.hpp"
+#include "core/Image.hpp"
 
 #include <vector>
 
-namespace imgprocapp{ namespace img {
+namespace imgproc
+{
+namespace test
+{
 
 struct DataSet
 {
-    imgprocapp::img::ImageCV &image;
+    core::Image& image;
     const int x;
     const int y;
     const int ch;
     const int size = x * y * ch;
 
-    DataSet( imgprocapp::img::ImageCV &aImage, int aX, int aY, int aCh );
+    DataSet( imgproc::core::Image &aImage, int aX, int aY, int aCh );
     virtual ~DataSet() = default;
 };
 
@@ -36,26 +45,20 @@ public:
     static const int y2 = 3;
     static const int ch2 = 3;
     static const int size2 = x2 * y2 * ch2;
-    static const imgprocapp::img::byte data0[];
-    static const imgprocapp::img::byte data1[];
-    static const imgprocapp::img::byte data2[];
+    static const unsigned char data0[];
+    static const unsigned char data1[];
+    static const unsigned char data2[];
 
-
-    imgprocapp::img::ImageCV image0;
-    imgprocapp::img::ImageCV image1;
-    imgprocapp::img::ImageCV image2;
+    core::Image image0;
+    core::Image image1;
+    core::Image image2;
 
     ImageFixture();
-    bool checkEqual( const imgprocapp::img::byte *data, int index, bool use_test_check = false );
-    bool checkEqual( const imgprocapp::img::byte *data, imgprocapp::img::ImageCV &A,
-                            int x, int y, int ch, bool use_test_check = false );
+    bool checkEqual(const unsigned char* data, int index, bool use_test_check = false);
+    bool checkEqual(const unsigned char* data, core::Image& img, int x, int y, int ch, bool use_test_check = false);
     virtual ~ImageFixture() = default;
-
-private:
-    imgprocapp::img::byte data0_copy[ size0 ];
-    imgprocapp::img::byte data1_copy[ size1 ];
-    imgprocapp::img::byte data2_copy[ size2 ];
 };
 
-} } // namespace
+} // test
+} // imgproc
 #endif // IMAGE_FIXTURE_HPP_

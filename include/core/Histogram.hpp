@@ -36,8 +36,8 @@ class Histogram
 
   private:
     const static int SCALE = 2;
-    const static unsigned char FOREGROUND = 0;
-    const static unsigned char BACKGROUND = Image::CHANNEL_RANGE - 1;
+    const static int FOREGROUND = 0;
+    const static int BACKGROUND = Image::CHANNEL_RANGE - 1;
 
     int *values_;
     int max_value_;

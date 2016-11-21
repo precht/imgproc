@@ -22,22 +22,25 @@ GuiController::GuiController(V_P_SS *arguments)
 
 void GuiController::run()
 {
+    bool show_histogram = (image_.channels() == 1);
     // image
-    windows_.create_window(IMAGE_WINDOW_NAME_);
+    windows_.createWindow(IMAGE_WINDOW_NAME_);
     windows_.show(image_, IMAGE_WINDOW_NAME_);
     // histogram
-    windows_.create_window(HISTOGRAM_WINDOW_NAME_);
-    windows_.show(*histogram_.toImage().get(), HISTOGRAM_WINDOW_NAME_);
+    if(show_histogram)
+    {
+        windows_.createWindow(HISTOGRAM_WINDOW_NAME_);
+        windows_.show(*histogram_.toImage().get(), HISTOGRAM_WINDOW_NAME_);
+    }
     // run operations
     Controller::run();
     windows_.wait();
     // update windows
     windows_.show(image_, IMAGE_WINDOW_NAME_);
-    windows_.show(*histogram_.toImage().get(), HISTOGRAM_WINDOW_NAME_);
+    if(show_histogram) windows_.show(*histogram_.toImage().get(), HISTOGRAM_WINDOW_NAME_);
     windows_.wait();
     // destroy windows
-    windows_.close_window(IMAGE_WINDOW_NAME_);
-    windows_.close_window(HISTOGRAM_WINDOW_NAME_);
+    windows_.closeAll();
 }
 
 } // cli

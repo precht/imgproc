@@ -17,7 +17,7 @@ namespace core
 class NonLinearFiltrationUtils
 {
 public:
-    static void Uolis(Image& image);
+    static void uolis(Image& image);
 };
 
 } // core

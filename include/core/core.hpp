@@ -11,6 +11,7 @@
 
 #include "core/Image.hpp"
 #include "core/Histogram.hpp"
+#include "core/StructuralElement.hpp"
 #include "core/utils/BasicUtils.hpp"
 #include "core/utils/GeometricUtils.hpp"
 #include "core/utils/NoiseRemovalUtils.hpp"

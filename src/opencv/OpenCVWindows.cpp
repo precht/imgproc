@@ -13,7 +13,7 @@ namespace imgproc
 namespace opencv
 {
 
-void OpenCVWindows::create_window(const std::string &name)
+void OpenCVWindows::createWindow(const std::string &name)
 {
     cv::namedWindow(name, cv::WINDOW_AUTOSIZE);
 }
@@ -29,7 +29,6 @@ void OpenCVWindows::show(core::Image &image, const std::string &window_name)
     switch(c)
     {
     case 0:
-        // TODO: check if imshow works with empty mat (?)
         break;
     case 1:
     {
@@ -64,7 +63,12 @@ void OpenCVWindows::show(core::Image &image, const std::string &window_name)
     delete mat;
 }
 
-void OpenCVWindows::close_window(const std::string &name)
+void OpenCVWindows::closeAll()
+{
+    cv::destroyAllWindows();
+}
+
+void OpenCVWindows::closeWindow(const std::string &name)
 {
     cv::destroyWindow(name);
 }

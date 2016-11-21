@@ -16,11 +16,12 @@ namespace opencv
 class OpenCVWindows
 {
 public:
-    void create_window(const std::string &name);
-    void show(core::Image &image, const std::string &window_name);
-    void close_window(const std::string &name);
+    static void createWindow(const std::string &name);
+    static void show(core::Image &image, const std::string &window_name);
+    static void closeWindow(const std::string &name);
+    static void closeAll();
     /* wait for user action */
-    void wait();
+    static void wait();
 };
 
 } // opencv

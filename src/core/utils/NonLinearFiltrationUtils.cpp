@@ -17,7 +17,7 @@ namespace imgproc
 namespace core
 {
 
-void NonLinearFiltrationUtils::Uolis(Image& image)
+void NonLinearFiltrationUtils::uolis(Image& image)
 {
     double numerator;
     double denominator;

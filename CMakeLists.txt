@@ -37,6 +37,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(HEADERS
     ./include/core/Image.hpp
     ./include/core/Histogram.hpp
+    ./include/core/StructuralElement.hpp
     ./include/core/utils/BasicUtils.hpp
     ./include/core/utils/GeometricUtils.hpp
     ./include/core/utils/NoiseRemovalUtils.hpp
@@ -45,6 +46,8 @@ set(HEADERS
     ./include/core/utils/QualityImprovementUtils.hpp
     ./include/core/utils/LinearFiltrationUtils.hpp
     ./include/core/utils/NonLinearFiltrationUtils.hpp
+    ./include/core/utils/MorphologicalUtils.hpp
+    ./include/core/utils/SegmentationUtils.hpp
     ./include/core/core.hpp
     ./include/opencv/OpenCVImageHelper.hpp
     ./include/opencv/OpenCVWindows.hpp
@@ -56,6 +59,7 @@ set(HEADERS
 set(SOURCES
     ./src/core/Image.cpp
     ./src/core/Histogram.cpp
+    ./src/core/StructuralElement.cpp
     ./src/core/utils/BasicUtils.cpp
     ./src/core/utils/GeometricUtils.cpp
     ./src/core/utils/NoiseRemovalUtils.cpp
@@ -64,6 +68,8 @@ set(SOURCES
     ./src/core/utils/QualityImprovementUtils.cpp
     ./src/core/utils/LinearFiltrationUtils.cpp
     ./src/core/utils/NonLinearFiltrationUtils.cpp
+    ./src/core/utils/MorphologicalUtils.cpp
+    ./src/core/utils/SegmentationUtils.cpp
     ./src/opencv/OpenCVImageHelper.cpp
     ./src/opencv/OpenCVWindows.cpp
     ./src/cli/Controller.cpp
@@ -145,6 +151,9 @@ set(TEST_SOURCES
     ./test/core/utils/BasicUtilsTest.cpp
     ./test/core/utils/GeometricUtilsTest.cpp
     ./test/core/utils/NoiseRemovalUtilsTest.cpp
+    ./test/core/StructuralElementTest.cpp
+    ./test/core/utils/MorphologicalUtilsTest.cpp
+    ./test/core/utils/SegmentationUtilsTest.cpp
 )
 
 add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})

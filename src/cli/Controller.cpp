@@ -94,7 +94,7 @@ Controller::Controller(V_P_SS *arguments)
 {
     try
     {
-        image_.load();
+        if(!image_.load()) throw "failed to load image, probably wrong name";
         histogram_.create(image_);
     }
     catch (const char *e)
@@ -256,7 +256,7 @@ void Controller::run()
             }
             else if(it->first.compare(UOLIS) == 0)
             {
-                NonLinearFiltrationUtils::Uolis(image_);
+                NonLinearFiltrationUtils::uolis(image_);
                 modified_image = true;
             }
             // characteristics

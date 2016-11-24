@@ -8,8 +8,10 @@
 
 int main(int argc, char **argv)
 {
-    imgproc::cli::GuiController ctr(imgproc::cli::Controller::read_arguments(argc, argv));
+    auto args = imgproc::cli::Controller::read_arguments(argc, argv);
+    imgproc::cli::GuiController ctr(args);
     ctr.run();
+    delete args;
     return 0;
 }
 

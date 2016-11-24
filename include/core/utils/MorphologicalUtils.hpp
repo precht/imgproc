@@ -19,10 +19,10 @@ namespace core
 class MorphologicalUtils
 {
 public:
-    static void erosion(Image& image, const StructuralElement& element);
-    static void dilation(Image& image, const StructuralElement& element);
-    static void opening(Image& image, const StructuralElement& element);
-    static void closing(Image& image, const StructuralElement& element);
+    static void erosion(Image& image, const StructuralElement& element = plus_se);
+    static void dilation(Image& image, const StructuralElement& element = plus_se);
+    static void opening(Image& image, const StructuralElement& element = plus_se);
+    static void closing(Image& image, const StructuralElement& element = plus_se);
     // hit-and-miss transformation
     static void hmt(Image& image, const StructuralElement& hit, const StructuralElement& miss);
 
@@ -30,6 +30,9 @@ public:
     static void taskM6(Image& image);
 
 private:
+    // default "plus" shaped structural element
+    static const unsigned char plus_se_data[];
+    static const StructuralElement plus_se;
     // variables used for task m6, suffix _H means hit element, _M means miss element
     const static int TASK_M6_LOOPS_LIMIT = 1000;
     const static unsigned char X = Image::CHANNEL_MAX_VALUE;

@@ -35,7 +35,7 @@ class Histogram
     std::unique_ptr<Image> toImage(int scale = SCALE);
 
   private:
-    const static int SCALE = 2;
+    const static int SCALE = 1;
     const static int FOREGROUND = 0;
     const static int BACKGROUND = Image::CHANNEL_RANGE - 1;
 

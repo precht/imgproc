@@ -19,9 +19,9 @@ public:
     // foreground color = Image::CHANNEL_MAX_VALUE tells which pixels should be considered
     // background color = 0 tells which pixels should be ignored
 
-    StructuralElement(int rows, int columns, int channels, int origin_row, int origin_column);
-    StructuralElement(const unsigned char *data, int rows, int columns, int channels,
-                      int origin_row, int origin_column);
+    StructuralElement();
+    StructuralElement(int rows, int columns, int origin_row, int origin_column);
+    StructuralElement(const unsigned char *data, int rows, int columns, int origin_row, int origin_column);
     virtual ~StructuralElement();
 
     int getOriginRow() const;

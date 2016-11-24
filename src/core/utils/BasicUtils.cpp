@@ -29,7 +29,7 @@ void BasicUtils::contrast(Image& image, double slope)
     unsigned char *pallete = new unsigned char[Image::CHANNEL_RANGE];
     for(unsigned i = 0; i < Image::CHANNEL_RANGE; ++i)
     {
-        double value = slope * i + shift;
+        double value = slope * i + shift + (slope < 0); // to convert to uchar properly add 1 when negative slope
         if(value < 0) value = 0;
         else if (value >= Image::CHANNEL_RANGE) value = Image::CHANNEL_RANGE - 1;
         pallete[i] = (unsigned char)value;

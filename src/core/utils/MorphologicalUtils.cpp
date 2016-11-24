@@ -119,8 +119,15 @@ void MorphologicalUtils::taskM6(Image& image)
 //    std::cout << "finished at loop " << loops << std::endl;
 }
 
-
  // X = Image::CHANNEL_MAX_VALUE
+
+const unsigned char MorphologicalUtils::plus_se_data[] {
+    0, X, 0,
+    X, X, X,
+    0, X, 0
+};
+
+const StructuralElement MorphologicalUtils::plus_se(plus_se_data, 3, 3, 1, 1);
 
 const unsigned char MorphologicalUtils::A_H[] {
     X, X, X,
@@ -205,21 +212,21 @@ const unsigned char MorphologicalUtils::H_M[] {
 
 const std::array<std::pair<StructuralElement, StructuralElement>, 8> MorphologicalUtils::elements = {
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(A_H, 3, 3, 1, 1, 1), StructuralElement(A_M, 3, 3, 1, 1, 1)),
+            StructuralElement(A_H, 3, 3, 1, 1), StructuralElement(A_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(B_H, 3, 3, 1, 1, 1), StructuralElement(B_M, 3, 3, 1, 1, 1)),
+            StructuralElement(B_H, 3, 3, 1, 1), StructuralElement(B_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(C_H, 3, 3, 1, 1, 1), StructuralElement(C_M, 3, 3, 1, 1, 1)),
+            StructuralElement(C_H, 3, 3, 1, 1), StructuralElement(C_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(D_H, 3, 3, 1, 1, 1), StructuralElement(D_M, 3, 3, 1, 1, 1)),
+            StructuralElement(D_H, 3, 3, 1, 1), StructuralElement(D_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(E_H, 3, 3, 1, 1, 1), StructuralElement(E_M, 3, 3, 1, 1, 1)),
+            StructuralElement(E_H, 3, 3, 1, 1), StructuralElement(E_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(F_H, 3, 3, 1, 1, 1), StructuralElement(F_M, 3, 3, 1, 1, 1)),
+            StructuralElement(F_H, 3, 3, 1, 1), StructuralElement(F_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(G_H, 3, 3, 1, 1, 1), StructuralElement(G_M, 3, 3, 1, 1, 1)),
+            StructuralElement(G_H, 3, 3, 1, 1), StructuralElement(G_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
-            StructuralElement(H_H, 3, 3, 1, 1, 1), StructuralElement(H_M, 3, 3, 1, 1, 1))
+            StructuralElement(H_H, 3, 3, 1, 1), StructuralElement(H_M, 3, 3, 1, 1))
 };
 
 } // core

@@ -307,30 +307,22 @@ void Controller::run()
             }
             else if(it->first.compare(EROSION) == 0)
             {
-                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
-                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
-                MorphologicalUtils::erosion(image_, plus_se);
+                MorphologicalUtils::erosion(image_);
                 modified_image = true;
             }
             else if(it->first.compare(DILATION) == 0)
             {
-                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
-                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
-                MorphologicalUtils::dilation(image_, plus_se);
+                MorphologicalUtils::dilation(image_);
                 modified_image = true;
             }
             else if(it->first.compare(OPENING) == 0)
             {
-                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
-                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
-                MorphologicalUtils::opening(image_, plus_se);
+                MorphologicalUtils::opening(image_);
                 modified_image = true;
             }
             else if(it->first.compare(CLOSING) == 0)
             {
-                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
-                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
-                MorphologicalUtils::closing(image_, plus_se);
+                MorphologicalUtils::closing(image_);
                 modified_image = true;
             }
             else if(it->first.compare(MSIX) == 0)

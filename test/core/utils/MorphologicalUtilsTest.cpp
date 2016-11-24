@@ -46,6 +46,11 @@ BOOST_AUTO_TEST_CASE(erosion)
         0,   0,   0,   0,   0,   0,   0,   0
     };
     BOOST_CHECK(checkEqual(expected, 2));
+
+    // default structural element should also be plus
+    Image img(data2, x2, y2, ch2);
+    MorphologicalUtils::erosion(img);
+    BOOST_CHECK(checkEqual(expected, 2));
 }
 
 BOOST_AUTO_TEST_CASE(dilation)
@@ -63,6 +68,11 @@ BOOST_AUTO_TEST_CASE(dilation)
           0,   0,   0,   0, 255,   0,   0,   0
     };
     BOOST_CHECK(checkEqual(expected, 2));
+
+    // default structural element should also be plus
+    Image img(data2, x2, y2, ch2);
+    MorphologicalUtils::dilation(img);
+    BOOST_CHECK(checkEqual(expected, img, x2, y2, ch2));
 }
 
 BOOST_AUTO_TEST_CASE(opening)
@@ -80,6 +90,11 @@ BOOST_AUTO_TEST_CASE(opening)
         0,   0,   0,   0,   0,   0,   0,   0
     };
     BOOST_CHECK(checkEqual(expected, 2));
+
+    // default structural element should also be plus
+    Image img(data2, x2, y2, ch2);
+    MorphologicalUtils::opening(img);
+    BOOST_CHECK(checkEqual(expected, img, x2, y2, ch2));
 }
 
 BOOST_AUTO_TEST_CASE(closing)
@@ -97,6 +112,11 @@ BOOST_AUTO_TEST_CASE(closing)
         0,   0,   0,   0,   0,   0,   0,   0
     };
     BOOST_CHECK(checkEqual(expected, 2));
+
+    // default structural element should also be plus
+    Image img(data2, x2, y2, ch2);
+    MorphologicalUtils::closing(img);
+    BOOST_CHECK(checkEqual(expected, img, x2, y2, ch2));
 }
 
 BOOST_AUTO_TEST_CASE(hmt)
@@ -111,8 +131,8 @@ BOOST_AUTO_TEST_CASE(hmt)
         255,   0,   0,
           0,   0,   0
     };
-    const StructuralElement hit(hit_data, 3, 3, 1, 2, 1);
-    const StructuralElement miss(miss_data, 3, 3, 1, 2, 1);
+    const StructuralElement hit(hit_data, 3, 3, 2, 1);
+    const StructuralElement miss(miss_data, 3, 3, 2, 1);
     MorphologicalUtils::hmt(image2, hit, miss);
     unsigned char expected[] {
         0,   0,   0,   0,   0,   0,   0,   0,

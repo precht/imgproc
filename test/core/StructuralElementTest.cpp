@@ -24,19 +24,18 @@ BOOST_AUTO_TEST_SUITE()
 
 BOOST_AUTO_TEST_CASE(dummy)
 {
-    StructuralElement(1, 1, 0, 0, 0);
+    StructuralElement();
 }
 
 BOOST_AUTO_TEST_CASE(constructor_without_data)
 {
-    StructuralElement s1(1, 1, 0, 0, 0);
-    BOOST_CHECK_EQUAL(s1.rows(), 1);
-    BOOST_CHECK_EQUAL(s1.columns(), 1);
-    BOOST_CHECK_EQUAL(s1.channels(), 0);
+    StructuralElement s1;
+    BOOST_CHECK_EQUAL(s1.rows(), 0);
+    BOOST_CHECK_EQUAL(s1.columns(), 0);
     BOOST_CHECK_EQUAL(s1.getOriginRow(), 0);
     BOOST_CHECK_EQUAL(s1.getOriginColumn(), 0);
 
-    StructuralElement s2(10, 20, 1, 4, 7);
+    StructuralElement s2(10, 20, 4, 7);
     BOOST_CHECK_EQUAL(s2.rows(), 10);
     BOOST_CHECK_EQUAL(s2.columns(), 20);
     BOOST_CHECK_EQUAL(s2.channels(), 1);
@@ -47,7 +46,7 @@ BOOST_AUTO_TEST_CASE(constructor_without_data)
 BOOST_AUTO_TEST_CASE(constructor_with_data)
 {
     unsigned char data[] { 0, 1, 2, 3, 4, 5 };
-    StructuralElement s1(data, 2, 3, 1, 1, 2);
+    StructuralElement s1(data, 2, 3, 1, 2);
     BOOST_CHECK_EQUAL(s1.rows(), 2);
     BOOST_CHECK_EQUAL(s1.columns(), 3);
     BOOST_CHECK_EQUAL(s1.channels(), 1);
@@ -58,20 +57,20 @@ BOOST_AUTO_TEST_CASE(constructor_with_data)
 
 BOOST_AUTO_TEST_CASE(invalid_constructor)
 {
-    BOOST_CHECK_THROW(StructuralElement(0, 0, 0, 1, 0), std::invalid_argument);
-    BOOST_CHECK_THROW(StructuralElement(0, 0, 0, 0, 1), std::invalid_argument);
-    BOOST_CHECK_THROW(StructuralElement(2, 3, 1, -1, 0), std::invalid_argument);
-    BOOST_CHECK_THROW(StructuralElement(2, 3, 1, 0, -1), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(0, 0, 1, 0), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(0, 0, 0, 1), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(2, 3, -1, 0), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(2, 3, 0, -1), std::invalid_argument);
     unsigned char data[] { 0, 1, 2, 3, 4, 5 };
-    BOOST_CHECK_THROW(StructuralElement(data, 0, 0, 0, 1, 0), std::invalid_argument);
-    BOOST_CHECK_THROW(StructuralElement(data, 0, 0, 0, 0, 1), std::invalid_argument);
-    BOOST_CHECK_THROW(StructuralElement(data, 2, 3, 1, -1, 0), std::invalid_argument);
-    BOOST_CHECK_THROW(StructuralElement(data, 2, 3, 1, 0, -1), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(data, 0, 0, 1, 0), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(data, 0, 0, 0, 1), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(data, 2, 3, -1, 0), std::invalid_argument);
+    BOOST_CHECK_THROW(StructuralElement(data, 2, 3, 0, -1), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(correct_set_origin)
 {
-        StructuralElement s1(10, 10, 1, 0, 0);
+        StructuralElement s1(10, 10, 0, 0);
         s1.setOriginRow(8);
         s1.setOriginColumn(3);
         BOOST_CHECK_EQUAL(s1.getOriginRow(), 8);
@@ -80,7 +79,7 @@ BOOST_AUTO_TEST_CASE(correct_set_origin)
 
 BOOST_AUTO_TEST_CASE(invalid_set_origin)
 {
-        StructuralElement s1(10, 10, 1, 0, 0);
+        StructuralElement s1(10, 10, 0, 0);
         BOOST_CHECK_THROW(s1.setOriginRow(-1), std::invalid_argument);
         BOOST_CHECK_THROW(s1.setOriginRow(11), std::invalid_argument);
         BOOST_CHECK_THROW(s1.setOriginRow(10), std::invalid_argument);

@@ -14,16 +14,22 @@ namespace core
 const int FOREGROUND = Image::CHANNEL_RANGE - 1;
 const int BACKGROUND = 0;
 
-StructuralElement::StructuralElement(int rows, int columns, int channels, int origin_row, int origin_column)
-    : Image(rows, columns, channels)
+StructuralElement::StructuralElement()
+    : Image()
+    , origin_row_(0)
+    , origin_column_(0)
+{ }
+
+StructuralElement::StructuralElement(int rows, int columns, int origin_row, int origin_column)
+    : Image(rows, columns, 1)
 {
     setOriginRow(origin_row);
     setOriginColumn(origin_column);
 }
 
-StructuralElement::StructuralElement(const unsigned char* data, int rows, int columns, int channels,
+StructuralElement::StructuralElement(const unsigned char* data, int rows, int columns,
                                      int origin_row, int origin_column)
-    : Image(data, rows, columns, channels)
+    : Image(data, rows, columns, 1)
 {
     setOriginRow(origin_row);
     setOriginColumn(origin_column);

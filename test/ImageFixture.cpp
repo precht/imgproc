@@ -31,7 +31,7 @@ ImageFixture::ImageFixture()
     , image1(data1, x1, y1, ch1)
     , image2(data2, x2, y2, ch2)
 //    , image3(data3, x3, y3, ch3)
-    , plus_se(plus_se_data, plus_se_x, plus_se_y, plus_se_ch, plus_se_origin_x, plus_se_origin_y)
+    , plus_se(plus_se_data, plus_se_x, plus_se_y, plus_se_origin_x, plus_se_origin_y)
 {
     data_sets_.push_back(DataSet(image0, x0, y0, ch0));
     data_sets_.push_back(DataSet(image1, x1, y1, ch1));

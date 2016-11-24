@@ -52,10 +52,9 @@ public:
 //    static const int size3 = x3 * y3 * ch3;
     static const int plus_se_x = 3;
     static const int plus_se_y = 3;
-    static const int plus_se_ch = 1;
     static const int plus_se_origin_x = 1;
     static const int plus_se_origin_y = 1;
-    static const int plus_se_size = plus_se_x * plus_se_y * plus_se_ch;
+    static const int plus_se_size = plus_se_x * plus_se_y;
 
     static const unsigned char data0[];
     static const unsigned char data1[];

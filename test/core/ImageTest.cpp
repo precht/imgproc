@@ -70,6 +70,12 @@ BOOST_AUTO_TEST_CASE(data_out_of_range)
     BOOST_CHECK_THROW(c(0, 0, 1), std::out_of_range);
 }
 
+BOOST_AUTO_TEST_CASE(constructor_without_data)
+{
+    Image img(6, 5, 3);
+    for(int i = 0; i < 6 * 5 * 3; ++i) BOOST_CHECK_EQUAL(img(i), 0);
+}
+
 BOOST_AUTO_TEST_CASE(set_data_in_constructor)
 {
     for(int k = 1; k <= 4; k++)

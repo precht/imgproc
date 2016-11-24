@@ -16,8 +16,20 @@ const int BACKGROUND = 0;
 
 StructuralElement::StructuralElement(int rows, int columns, int channels, int origin_row, int origin_column)
     : Image(rows, columns, channels)
-    , origin_row_(origin_row)
-    , origin_column_(origin_column)
+{
+    setOriginRow(origin_row);
+    setOriginColumn(origin_column);
+}
+
+StructuralElement::StructuralElement(const unsigned char* data, int rows, int columns, int channels,
+                                     int origin_row, int origin_column)
+    : Image(data, rows, columns, channels)
+{
+    setOriginRow(origin_row);
+    setOriginColumn(origin_column);
+}
+
+StructuralElement::~StructuralElement()
 { }
 
 int StructuralElement::getOriginRow() const
@@ -25,22 +37,25 @@ int StructuralElement::getOriginRow() const
     return origin_row_;
 }
 
-void StructuralElement::setOriginRow(int origin_row)
-{
-    origin_row_ = origin_row;
-}
-
 int StructuralElement::getOriginColumn() const
 {
     return origin_column_;
 }
 
+void StructuralElement::setOriginRow(int origin_row)
+{
+    if(origin_row < 0) throw std::invalid_argument("cannot set origin row smaller then 0");
+    if(origin_row >= rows()) throw std::invalid_argument("origin row has to be smaller then rows number");
+    origin_row_ = origin_row;
+}
+
 void StructuralElement::setOriginColumn(int origin_column)
 {
+    if(origin_column < 0) throw std::invalid_argument("cannot set origin column smaller then 0");
+    if(origin_column >= columns()) throw std::invalid_argument("origin column has to be smaller then columns number");
     origin_column_ = origin_column;
 }
 
-//virtual StructuralElement::~StructuralElement();
 
 
 } // core

@@ -274,42 +274,68 @@ void Controller::run()
             {
                 histogram_.create(image_);
                 cout << CharacteristicUtils::variance(histogram_) << endl;
-                modified_image = true;
             }
             else if(it->first.compare(CSTDEV) == 0)
             {
                 histogram_.create(image_);
                 cout << CharacteristicUtils::standardDeviation(histogram_) << endl;
-                modified_image = true;
             }
             else if(it->first.compare(CASYCO) == 0)
             {
                 histogram_.create(image_);
                 cout << CharacteristicUtils::asymmetryCoefficient(histogram_) << endl;
-                modified_image = true;
             }
             else if(it->first.compare(CFLATCO) == 0)
             {
                 histogram_.create(image_);
                 cout << CharacteristicUtils::flatteningCoefficient(histogram_) << endl;
-                modified_image = true;
             }
             else if(it->first.compare(CVARCOI) == 0)
             {
                 histogram_.create(image_);
                 cout << CharacteristicUtils::variationCoefficient1(histogram_) << endl;
-                modified_image = true;
             }
             else if(it->first.compare(CVARCOII) == 0)
             {
                 histogram_.create(image_);
                 cout << CharacteristicUtils::variationCoefficient2(histogram_) << endl;
-                modified_image = true;
             }
             else if(it->first.compare(CENTROPY) == 0)
             {
                 histogram_.create(image_);
                 cout << CharacteristicUtils::informationSourceEntropy(histogram_) << endl;
+            }
+            else if(it->first.compare(EROSION) == 0)
+            {
+                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
+                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
+                MorphologicalUtils::erosion(image_, plus_se);
+                modified_image = true;
+            }
+            else if(it->first.compare(DILATION) == 0)
+            {
+                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
+                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
+                MorphologicalUtils::dilation(image_, plus_se);
+                modified_image = true;
+            }
+            else if(it->first.compare(OPENING) == 0)
+            {
+                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
+                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
+                MorphologicalUtils::opening(image_, plus_se);
+                modified_image = true;
+            }
+            else if(it->first.compare(CLOSING) == 0)
+            {
+                unsigned char data[] { 0, 255, 0, 255, 255, 255, 0, 255, 0 };
+                StructuralElement plus_se(data, 3, 3, 1, 1, 1);
+                MorphologicalUtils::closing(image_, plus_se);
+                modified_image = true;
+            }
+            else if(it->first.compare(MSIX) == 0)
+            {
+                MorphologicalUtils::taskM6(image_);
                 modified_image = true;
             }
             else if(it->first.compare(HISTOGRAM) == 0)

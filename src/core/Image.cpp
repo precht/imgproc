@@ -209,6 +209,24 @@ unsigned char& Image::operator()(int row, int column, int channel)
     return data_[(row * (columns_ * channels_)) + (column * channels_) + channel];
 }
 
+unsigned char Image::at(int index) const
+{
+    if(index < 0) throw std::out_of_range("image index cannot be negative");
+    if(index >= rows_ * columns_ * channels_) throw std::out_of_range("image index has to be smaller then size");
+    return data_[index];
+}
+
+unsigned char Image::at(int row, int column, int channel) const
+{
+    if(row < 0) throw std::out_of_range("image row cannot be negative");
+    if(row >= rows_) throw std::out_of_range("image row has to be smaller then rows");
+    if(column < 0) throw std::out_of_range("image column cannot be negative");
+    if(column >= columns_) throw std::out_of_range("image column has to be smaller then columns");
+    if(channel < 0) throw std::out_of_range("image channel cannot be negative");
+    if(channel >= channels_) throw std::out_of_range("image channel has to be smaller then channels");
+    return data_[(row * (columns_ * channels_)) + (column * channels_) + channel];
+}
+
 void Image::resize(int rows, int columns, int channels)
 {
     rows_ = rows;
@@ -302,6 +320,22 @@ std::ostream& operator<<(std::ostream &out, const Image &image)
 {
     image.print(out);
     return out;
+}
+
+bool operator==(const Image& a, const Image& b)
+{
+    if((a.rows_ != b.rows_) || (a.columns_ != b.columns_) || (a.channels_ != b.channels_) || (a.helper_ != b.helper_)
+            || (a.input_name_ != b.input_name_) || (a.output_name_ != b.output_name_))
+        return false;
+    for(int i = 0; i < a.size(); i++)
+        if(a.at(i) != b.at(i))
+            return false;
+    return true;
+}
+
+bool operator!=(const Image& a, const Image& b)
+{
+    return !(a == b);
 }
 
 } // core

@@ -20,5 +20,7 @@
 #include "core/utils/QualityImprovementUtils.hpp"
 #include "core/utils/LinearFiltrationUtils.hpp"
 #include "core/utils/NonLinearFiltrationUtils.hpp"
+#include "core/utils/MorphologicalUtils.hpp"
+#include "core/utils/SegmentationUtils.hpp"
 
 #endif // UTILS_HPP_

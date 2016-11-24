@@ -46,8 +46,6 @@ protected:
     std::shared_ptr<core::ImageHelper> helper_ = nullptr;
     core::Image image_;
     core::Histogram histogram_;
-
-
 };
 
 const std::string INPUT_NAME = "in";
@@ -82,6 +80,12 @@ const std::string CASYCO = "casyco";
 const std::string CFLATCO = "casyco";
 const std::string CVARCOII = "cvarcoii";
 const std::string CENTROPY = "centropy";
+const std::string EROSION = "erosion";
+const std::string DILATION = "dilation";
+const std::string OPENING = "opening";
+const std::string CLOSING = "closing";
+const std::string MSIX = "msix";
+
 
 const std::string HELP_CONTENT = "\n"
 "NAME:\n"

@@ -46,8 +46,10 @@ class Image
 {
 public:
     const static int CHANNEL_RANGE = 256;
+    const static int CHANNEL_MAX_VALUE= CHANNEL_RANGE - 1;
 
     Image();
+    // new image data is filled with 0
     // neither of the constructors reads image from disc, you have to call load
     Image(std::shared_ptr<ImageHelper> helper, std::string input_name = "", std::string output_name_ = "");
     // If you want to save/load image you should implement ImageIO and pass in Image constructor
@@ -55,8 +57,10 @@ public:
           std::string input_name = "", std::string output_name = "");
     Image(const unsigned char *data, int rows, int columns, int channels,
           std::shared_ptr<ImageHelper> helper = nullptr, std::string input_name = "", std::string output_name = "");
+    // Copyable
     Image(const Image& other);
     Image& operator=(const Image& other);
+    // Movable
     Image(Image&& other);
     Image& operator=(Image&& other);
     virtual ~Image();
@@ -73,8 +77,12 @@ public:
     std::string getOutputName() const;
     void setOutputName(std::string output_name);
 
+    // parenthesis operator returns reference
     unsigned char& operator()(int index);
-    unsigned char& operator()(const int row, const int columns, const int channel);
+    unsigned char& operator()(int row, int column, int channel);
+    // at function returns value (to get pixel values when Image is const)
+    unsigned char at(int index) const;
+    unsigned char at(int row, int column, int channel) const;
 
     bool load();
     bool save();
@@ -93,8 +101,10 @@ public:
     void crop(int rows_from_start, int rows_from_end, int columns_from_start, int columns_from_end);
 
     // we cannnot overload operator<<, thus it will use virtual print function
-    virtual void print(std::ostream& where) const;
+    void print(std::ostream& where) const;
     friend std::ostream& operator<<(std::ostream& out, const Image& image);
+    friend bool operator==(const Image& a, const Image& b);
+    friend bool operator!=(const Image& a, const Image& b);
 
 private:
     const static int MAX_CHANNELS = 4;
@@ -116,6 +126,8 @@ struct ImageHelper
     virtual ~ImageHelper() = default;
 };
 
+bool operator==(const Image& a, const Image& b);
+bool operator!=(const Image& a, const Image& b);
 std::ostream& operator<<(std::ostream& out, const Image& image);
 
 } // namespace core

@@ -16,15 +16,17 @@ namespace core
 class StructuralElement : public Image
 {
 public:
-    static const int FOREGROUND = Image::CHANNEL_RANGE - 1;
-    static const int BACKGROUND = 0;
+    // foreground color = Image::CHANNEL_MAX_VALUE tells which pixels should be considered
+    // background color = 0 tells which pixels should be ignored
 
     StructuralElement(int rows, int columns, int channels, int origin_row, int origin_column);
+    StructuralElement(const unsigned char *data, int rows, int columns, int channels,
+                      int origin_row, int origin_column);
     virtual ~StructuralElement();
 
     int getOriginRow() const;
-    void setOriginRow(int origin_row);
     int getOriginColumn() const;
+    void setOriginRow(int origin_row);
     void setOriginColumn(int origin_column);
 
 private:

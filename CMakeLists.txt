@@ -15,10 +15,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)       # ...without compiler extensions like gnu++1
 
 #Set debug profile, also maximum level of optimalization O3
 set(CMAKE_BUILD_TYPE Debug)
-if(CMAKE_COMPILER_IS_GNUCC)
-    # set(CMAKE_C_FLAGS_DEBUG "-g3 -gdwarf-4")
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -O3")
-endif()
+#if(CMAKE_COMPILER_IS_GNUCC)
+#     set(CMAKE_C_FLAGS_DEBUG "-g3 -gdwarf-4")
+#endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
     # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
     add_definitions(-Wall -Wextra -Wpedantic -g3 -gdwarf-4)
@@ -145,13 +144,13 @@ include_directories(
 set(TEST_SOURCES
     ./test/master.cpp
     ./test/core/ImageTest.cpp
+    ./test/core/StructuralElementTest.cpp
     ./test/opencv/OpenCVImageHelperTest.cpp
     ./include/test/ImageFixture.hpp
     ./test/ImageFixture.cpp
     ./test/core/utils/BasicUtilsTest.cpp
     ./test/core/utils/GeometricUtilsTest.cpp
     ./test/core/utils/NoiseRemovalUtilsTest.cpp
-    ./test/core/StructuralElementTest.cpp
     ./test/core/utils/MorphologicalUtilsTest.cpp
     ./test/core/utils/SegmentationUtilsTest.cpp
 )

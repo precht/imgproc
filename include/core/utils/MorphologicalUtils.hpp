@@ -9,6 +9,8 @@
 #include "core/Image.hpp"
 #include "core/StructuralElement.hpp"
 
+#include <utility>
+
 namespace imgproc
 {
 namespace core
@@ -17,15 +19,38 @@ namespace core
 class MorphologicalUtils
 {
 public:
-    static void dilation(Image& image, StructuralElement& element);
-    static void erosion(Image& image, StructuralElement& element);
-    static void opening(Image& image, StructuralElement& element);
-    static void closing(Image& image, StructuralElement& element);
+    static void erosion(Image& image, const StructuralElement& element);
+    static void dilation(Image& image, const StructuralElement& element);
+    static void opening(Image& image, const StructuralElement& element);
+    static void closing(Image& image, const StructuralElement& element);
     // hit-and-miss transformation
-    static void hmt(Image& image, StructuralElement& hit, StructuralElement& miss);
+    static void hmt(Image& image, const StructuralElement& hit, const StructuralElement& miss);
 
     // so far result unknown
-    static void task6(Image& image);
+    static void taskM6(Image& image);
+
+private:
+    // variables used for task m6, suffix _H means hit element, _M means miss element
+    const static int TASK_M6_LOOPS_LIMIT = 1000;
+    const static unsigned char X = Image::CHANNEL_MAX_VALUE;
+    const static unsigned char A_H[];
+    const static unsigned char A_M[];
+    const static unsigned char B_H[];
+    const static unsigned char B_M[];
+    const static unsigned char C_H[];
+    const static unsigned char C_M[];
+    const static unsigned char D_H[];
+    const static unsigned char D_M[];
+    const static unsigned char E_H[];
+    const static unsigned char E_M[];
+    const static unsigned char F_H[];
+    const static unsigned char F_M[];
+    const static unsigned char G_H[];
+    const static unsigned char G_M[];
+    const static unsigned char H_H[];
+    const static unsigned char H_M[];
+    // the first element of the pair is the hit element, the second element is miss
+    const static std::array<std::pair<StructuralElement, StructuralElement>, 8> elements;
 };
 
 } // core

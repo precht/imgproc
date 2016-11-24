@@ -12,6 +12,11 @@
 #include <iostream>
 #include <string>
 
+namespace imgproc
+{
+namespace test
+{
+
 using imgproc::core::Image;
 using imgproc::opencv::OpenCVImageHelper;
 
@@ -61,3 +66,6 @@ BOOST_AUTO_TEST_CASE(save_load_3_channel)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+} // test
+} // imgproc

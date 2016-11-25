@@ -145,7 +145,7 @@ set(TEST_SOURCES
     ./test/master.cpp
     ./test/core/ImageTest.cpp
     ./test/core/StructuralElementTest.cpp
-    ./test/opencv/OpenCVImageHelperTest.cpp
+#    ./test/opencv/OpenCVImageHelperTest.cpp
     ./include/test/ImageFixture.hpp
     ./test/ImageFixture.cpp
     ./test/core/utils/BasicUtilsTest.cpp

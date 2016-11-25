@@ -20,7 +20,7 @@ namespace test
 using imgproc::core::Image;
 using imgproc::core::StructuralElement;
 
-BOOST_AUTO_TEST_SUITE()
+BOOST_AUTO_TEST_SUITE(StructuralElementTest)
 
 BOOST_AUTO_TEST_CASE(dummy)
 {

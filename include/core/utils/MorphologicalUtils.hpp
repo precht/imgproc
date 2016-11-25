@@ -10,6 +10,7 @@
 #include "core/StructuralElement.hpp"
 
 #include <utility>
+#include <array>
 
 namespace imgproc
 {

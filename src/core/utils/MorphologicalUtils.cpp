@@ -10,7 +10,7 @@
 
 #include <utility>
 #include <iostream>
-
+#include <array>
 namespace imgproc
 {
 namespace core

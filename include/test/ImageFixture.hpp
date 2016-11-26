@@ -46,10 +46,10 @@ public:
     static const int y2 = 8;
     static const int ch2 = 1;
     static const int size2 = x2 * y2 * ch2;
-//    static const int x3 = 4;
-//    static const int y3 = 3;
-//    static const int ch3 = 3;
-//    static const int size3 = x3 * y3 * ch3;
+    static const int x3 = 3;
+    static const int y3 = 3;
+    static const int ch3 = 1;
+    static const int size3 = x3 * y3 * ch3;
     static const int plus_se_x = 3;
     static const int plus_se_y = 3;
     static const int plus_se_origin_x = 1;
@@ -59,20 +59,21 @@ public:
     static const unsigned char data0[];
     static const unsigned char data1[];
     static const unsigned char data2[];
-//    static const unsigned char data3[];
+    static const unsigned char data3[];
 
     static const unsigned char plus_se_data[];
 
     core::Image image0;
     core::Image image1;
     core::Image image2;
-//    core::Image image3;
+    core::Image image3;
     // plus shape structural element
     core::StructuralElement plus_se;
 
     ImageFixture();
     bool checkEqual(const unsigned char* data, int index, bool use_test_check = false);
-    bool checkEqual(const unsigned char* data, const core::Image& img, int x, int y, int ch, bool use_test_check = false);
+    bool static checkEqual(const unsigned char* data, const core::Image& img, bool use_test_check = false);
+    bool static checkEqual(const unsigned char* data, const core::Image& img, int x, int y, int ch, bool use_test_check = false);
     virtual ~ImageFixture() = default;
 };
 

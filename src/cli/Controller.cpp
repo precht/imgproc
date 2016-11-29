@@ -233,7 +233,7 @@ void Controller::run()
             else if(it->first.compare(HUNIFORM) == 0)
             {
                 int gmin, gmax;
-                std::regex rgx("^([1-9]\\d*),([1-9]\\d*)$");
+                std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
                 std::smatch match;
                 if(std::regex_search(it->second, match, rgx) && match.size() == 3) {
                     gmin = std::stoi(match[1]);
@@ -330,6 +330,19 @@ void Controller::run()
                 MorphologicalUtils::taskM6(image_);
                 modified_image = true;
             }
+			else if (it->first.compare(DELTARGROWING) == 0)
+			{
+				int lower_delta, higher_delta;
+				std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
+				std::smatch match;
+				if (std::regex_search(it->second, match, rgx) && match.size() == 3) {
+					lower_delta = std::stoi(match[1]);
+					higher_delta = std::stoi(match[2]);
+					SegmentationUtils::deltaRegionGrowing(image_,1, 1, lower_delta, higher_delta);
+				}
+				else std::cout << "you have to type delta in case to apply delta region growing" << std::endl;
+				modified_image = true;
+			}
             else if(it->first.compare(HISTOGRAM) == 0)
             {
                 histogram_.create(image_);

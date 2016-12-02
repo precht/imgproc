@@ -330,19 +330,36 @@ void Controller::run()
                 MorphologicalUtils::taskM6(image_);
                 modified_image = true;
             }
-			else if (it->first.compare(DELTARGROWING) == 0)
+			else if (it->first.compare(DELTARG) == 0)
 			{
-				int lower_delta, higher_delta;
-				std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
+                int seed_x, seed_y, lower_delta, higher_delta;
+                std::regex rgx("^([0-9]\\d*),([0-9]\\d*),([0-9]\\d*),([0-9]\\d*)$");
 				std::smatch match;
-				if (std::regex_search(it->second, match, rgx) && match.size() == 3) {
-					lower_delta = std::stoi(match[1]);
-					higher_delta = std::stoi(match[2]);
-					SegmentationUtils::deltaRegionGrowing(image_,1, 1, lower_delta, higher_delta);
+                if (std::regex_search(it->second, match, rgx) && match.size() == 5) {
+                    seed_x =  std::stoi(match[1]);
+                    seed_y = std::stoi(match[2]);
+                    lower_delta = std::stoi(match[3]);
+                    higher_delta = std::stoi(match[4]);
+                    SegmentationUtils::deltaRegionGrowing(image_, seed_x, seed_y, lower_delta, higher_delta);
 				}
-				else std::cout << "you have to type delta in case to apply delta region growing" << std::endl;
+                else std::cout << "Wrong delta region growing arguments" << std::endl;
 				modified_image = true;
 			}
+            else if (it->first.compare(RANGERG) == 0)
+            {
+                int seed_x, seed_y, lower_delta, higher_delta;
+                std::regex rgx("^([0-9]\\d*),([0-9]\\d*),([0-9]\\d*),([0-9]\\d*)$");
+                std::smatch match;
+                if (std::regex_search(it->second, match, rgx) && match.size() == 5) {
+                    seed_x =  std::stoi(match[1]);
+                    seed_y = std::stoi(match[2]);
+                    lower_delta = std::stoi(match[3]);
+                    higher_delta = std::stoi(match[4]);
+                    SegmentationUtils::rangeRegionGrowing(image_, seed_x, seed_y, lower_delta, higher_delta);
+                }
+                else std::cout << "Wrong range region growing arguments" << std::endl;
+                modified_image = true;
+            }
             else if(it->first.compare(HISTOGRAM) == 0)
             {
                 histogram_.create(image_);

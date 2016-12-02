@@ -20,19 +20,26 @@ class SegmentationUtils
 public:
     static void regionGrowing(Image& image, int seed_row, int seed_column,
                               bool(*condition)(unsigned char seed, unsigned char candidate, int, int),
-                              int lower_condition_coefficient, int higher_condition_coefficient,const StructuralElement& element = plus_se );
+                              const int lower_condition_coefficient, const int higher_condition_coefficient,
+                              const StructuralElement& element = plus_se );
 
     // lower and higer delta specify how much can candidate differ from seed
     static void deltaRegionGrowing(Image& image, int seed_row, int seed_column,
-                                   int lower_delta, int higher_delta, const StructuralElement& element = plus_se);
+                                   const int lower_delta, const int higher_delta,
+                                   const StructuralElement& element = plus_se);
 
     // lower and higher value specify exact range that seed and candidate must be in
     static void rangeRegionGrowing(Image& image, int seed_row, int seed_column,
-                                   int lower_value, int higher_value, const StructuralElement& element);
+                                   const int lower_value, const int higher_value,
+                                   const StructuralElement& element = plus_se);
 
 private:
-    static bool deltaCondition(unsigned char seed, unsigned char candidate, int lower_delta, int higher_delta);
-    static bool rangeCondition(unsigned char seed, unsigned char candidate, int lower_value, int higher_value);
+    static bool deltaCondition(unsigned char seed, unsigned char candidate,
+                               const int lower_delta, const int higher_delta);
+
+    static bool rangeCondition(unsigned char    , unsigned char candidate,
+                               const int lower_value, const int higher_value);
+
 	static const unsigned char plus_se_data[];
 	static const StructuralElement plus_se;
 	const static unsigned char X = Image::CHANNEL_MAX_VALUE;

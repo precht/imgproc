@@ -325,6 +325,11 @@ void Controller::run()
                 MorphologicalUtils::closing(image_);
                 modified_image = true;
             }
+			else if (it->first.compare(HMT) == 0)
+			{
+				MorphologicalUtils::hmt(image_);
+				modified_image = true;
+			}
             else if(it->first.compare(THICKENING) == 0)
             {
                 MorphologicalUtils::thickening(image_);

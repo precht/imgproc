@@ -84,6 +84,7 @@ const std::string EROSION = "erosion";
 const std::string DILATION = "dilation";
 const std::string OPENING = "opening";
 const std::string CLOSING = "closing";
+const std::string HMT = "hmt";
 const std::string THICKENING = "thickening";
 const std::string DELTARG = "deltarg";
 const std::string RANGERG = "rangerg";
@@ -113,6 +114,43 @@ const std::string HELP_CONTENT = "\n"
 "    -out=[output file]\n"
 "        output image name, if left empty image will be saved as a.bmp\n"
 "\n"
+"TASK3 PART\n"
+"    The main aim was to become familiar with\n"
+"    basic morphological operations and perform\n"
+"    some variants of image segmentation\n"
+"\n"
+"    -erosion\n"
+"        it perform erosion on 1-bit image\n"
+"\n"
+"    -dilation\n"
+"        it perform dilation on 1-bit image\n"
+"\n"
+"    -opening\n"
+"        it perform opening on 1-bit image\n"
+"\n"
+"    -closing\n"
+"        it perform closing on 1-bit image\n"
+"\n"
+"    -hmt\n"
+"        it perform hit-and-miss transformation on 1-bit image\n"
+"\n"
+"    -thickening\n"
+"        it perform assigned task variant on 1-bit image\n"
+"\n"
+"    -deltarg=[lower_delta,higher_delta]\n"
+"        it performs region growing, with criteria called by us delta condition\n"
+"        you should insert both numbers from interval [0,255]\n"
+"        delta condition works with respect to the following formula\n"
+"        only those pixels will be joined into groups, which are included in interval\n"
+"        [seed - lower_delta, seed + higher_delta], where seed is the intensity\n"
+"        of pixel to which we are comparing another pixels\n"
+"\n"
+"    -rangerg\n"
+"        it performs region growing, with criteria called by us range condition\n"
+"        you should insert bout number from interval [0,255]\n"
+"        first number indicate lower_value and second higher_value\n"
+"        range condition works in the following way, lower and higher values\n"
+"        indicates from which interval of intensity pixels will be joined into regions\n"
 "TASK2 PART\n"
 "\n"
 "        creating an histogram of an image and displaying it\n"
@@ -250,7 +288,6 @@ const std::string HELP_CONTENT = "\n"
 "    -help\n"
 "        displays help message with all possible options\n"
 "\n";
-
 
 } // cli
 } // imgprocapp

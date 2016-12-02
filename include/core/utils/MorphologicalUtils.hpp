@@ -25,7 +25,7 @@ public:
     static void opening(Image& image, const StructuralElement& element = plus_se);
     static void closing(Image& image, const StructuralElement& element = plus_se);
     // hit-and-miss transformation
-    static void hmt(Image& image, const StructuralElement& hit, const StructuralElement& miss);
+    static void hmt(Image& image, const StructuralElement& hit=elements[6].first, const StructuralElement& miss=elements[6].second);
 
     // so far result unknown
     static void thickening(Image& image);

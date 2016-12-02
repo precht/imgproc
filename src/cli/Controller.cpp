@@ -325,9 +325,9 @@ void Controller::run()
                 MorphologicalUtils::closing(image_);
                 modified_image = true;
             }
-            else if(it->first.compare(MSIX) == 0)
+            else if(it->first.compare(THICKENING) == 0)
             {
-                MorphologicalUtils::taskM6(image_);
+                MorphologicalUtils::thickening(image_);
                 modified_image = true;
             }
 			else if (it->first.compare(DELTARG) == 0)

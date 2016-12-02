@@ -28,14 +28,14 @@ public:
     static void hmt(Image& image, const StructuralElement& hit, const StructuralElement& miss);
 
     // so far result unknown
-    static void taskM6(Image& image);
+    static void thickening(Image& image);
 
 private:
     // default "plus" shaped structural element
     static const unsigned char plus_se_data[];
     static const StructuralElement plus_se;
     // variables used for task m6, suffix _H means hit element, _M means miss element
-    const static int TASK_M6_LOOPS_LIMIT = 1000;
+    const static int THICKENING_LOOPS_LIMIT = 1000;
     const static unsigned char X = Image::CHANNEL_MAX_VALUE;
     const static unsigned char A_H[];
     const static unsigned char A_M[];

@@ -98,11 +98,11 @@ void MorphologicalUtils::hmt(Image& image, const StructuralElement& hit, const S
     for(int i = 0; i < image.size(); ++i) image(i) &= tmp(i);
 }
 
-void MorphologicalUtils::taskM6(Image& image)
+void MorphologicalUtils::thickening(Image& image)
 {
     Image saved;
     Image tmp;
-    int loops = 0;
+    int loops = 1;
     do
     {
         saved = image;
@@ -115,7 +115,7 @@ void MorphologicalUtils::taskM6(Image& image)
 //        if(loops % 10 == 0)
 //            std::cout << loops << " loops..." << std::endl;
     }
-    while ((saved != image) && (loops++ < TASK_M6_LOOPS_LIMIT));
+    while ((saved != image) && (loops++ < THICKENING_LOOPS_LIMIT));
 //    std::cout << "finished at loop " << loops << std::endl;
 }
 

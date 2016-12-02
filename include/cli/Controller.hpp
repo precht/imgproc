@@ -84,7 +84,7 @@ const std::string EROSION = "erosion";
 const std::string DILATION = "dilation";
 const std::string OPENING = "opening";
 const std::string CLOSING = "closing";
-const std::string MSIX = "msix";
+const std::string THICKENING = "thickening";
 const std::string DELTARG = "deltarg";
 const std::string RANGERG = "rangerg";
 

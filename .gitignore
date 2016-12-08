@@ -1,4 +1,5 @@
 bin/
+lib/
 build/
 external/
 CMakeLists.txt.user

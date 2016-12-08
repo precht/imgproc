@@ -2,9 +2,13 @@ cmake_minimum_required(VERSION 2.8)
 
 # set app name
 set(PROJECT_NAME imgproc)
-set(PROJECT_NAME_LIB ${PROJECT_NAME})
-set(PROJECT_NAME_GUI g${PROJECT_NAME}app)
-set(PROJECT_NAME_NOGUI ${PROJECT_NAME}app)
+set(LIBRARY ${PROJECT_NAME}_lib)
+set(GUI ${PROJECT_NAME}_gui)
+set(NOGUI ${PROJECT_NAME}_nogui)
+
+set(LIB_NAME ${PROJECT_NAME})
+set(GUI_NAME g${PROJECT_NAME})
+set(NOGUI_NAME ${PROJECT_NAME})
 
 project(${PROJECT_NAME})
 
@@ -20,7 +24,7 @@ set(CMAKE_BUILD_TYPE Debug)
 #endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
     # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
-    add_definitions(-Wall -Wextra -Wpedantic -g3 -gdwarf-4)
+    add_definitions(-O3 -Wall -Wextra -Wpedantic -g3 -gdwarf-4)
 endif()
 
 enable_language(CXX)
@@ -87,20 +91,25 @@ else()
     include_directories(${OpenCV_INCLUDE_DIR})
 endif()
 
-# set output bin directory
+# set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-# specify headers directory
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+# specify headxxers directory
 include_directories(${PROJECT_SOURCE_DIR}/include)
 # compile library
-add_library(${PROJECT_NAME_LIB} ${SOURCES} ${HEADERS})
-target_link_libraries(${PROJECT_NAME_LIB} ${OpenCV_LIBS})
+add_library(${LIBRARY} ${SOURCES} ${HEADERS})
+target_link_libraries(${LIBRARY} ${OpenCV_LIBS})
+set_target_properties(${LIBRARY} PROPERTIES OUTPUT_NAME ${LIB_NAME})
 
 # create executable
-add_executable(${PROJECT_NAME_NOGUI} ./src/cli/main_nogui.cpp)
-add_executable(${PROJECT_NAME_GUI} ./src/cli/main_gui.cpp)
+add_executable(${NOGUI} ./src/cli/main_nogui.cpp)
+add_executable(${GUI} ./src/cli/main_gui.cpp)
 # link libs
-target_link_libraries(${PROJECT_NAME_NOGUI} ${PROJECT_NAME_LIB})
-target_link_libraries(${PROJECT_NAME_GUI} ${PROJECT_NAME_LIB})
+target_link_libraries(${NOGUI} ${LIBRARY})
+target_link_libraries(${GUI} ${LIBRARY})
+set_target_properties(${NOGUI} PROPERTIES OUTPUT_NAME ${NOGUI_NAME})
+set_target_properties(${GUI} PROPERTIES OUTPUT_NAME ${GUI_NAME})
 
 
 #-------------------
@@ -134,8 +143,8 @@ else()
     find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 endif()
 
-set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+set(PROJECT_TEST_NAME ${PROJECT_NAME}_tests)
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
@@ -158,7 +167,7 @@ set(TEST_SOURCES
 add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
 
 target_link_libraries(${PROJECT_TEST_NAME}
-    ${PROJECT_NAME_LIB}
+    ${LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}

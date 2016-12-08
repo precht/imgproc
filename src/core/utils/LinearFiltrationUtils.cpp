@@ -27,9 +27,9 @@ void LinearFiltrationUtils::lineIdentification(Image& image)
 {
     const int rows = image.rows();
     const int columns = image.columns();
-    int **table = new int*[rows];
     int max_val = INT_MIN;
     int min_val = INT_MAX;
+    int **table = new int*[rows];
     for (int i = 0 ; i < rows; ++i) table[i] = new int[columns]();
     int accumulator = 0;
 
@@ -64,8 +64,8 @@ void LinearFiltrationUtils::lineIdentification(Image& image)
         for (int y = 0; y < columns; ++y)
             image(x, y, 0) = scale * (table[x][y] + shift);
 
-    for (int i = 0; i < image.rows(); ++i) delete table[i];
-    delete table;
+    for (int i = 0; i < image.rows(); ++i) delete[] table[i];
+    delete[] table;
 }
 
 void LinearFiltrationUtils::lineIdentification(Image& image, const int id)
@@ -86,9 +86,9 @@ void LinearFiltrationUtils::perform(Image& image, const int mask[MASK_SIZE])
     const int rows = image.rows();
     const int columns = image.columns();
     const int half_edge = MASK_EDGE / 2;
-    int **table = new int*[rows];
     int max_val = INT_MIN;
     int min_val = INT_MAX;
+    int **table = new int*[rows];
     for (int i = 0 ; i < rows; ++i) table[i] = new int[columns]();
 
     for (int x = 0; x < rows; ++x)
@@ -115,8 +115,8 @@ void LinearFiltrationUtils::perform(Image& image, const int mask[MASK_SIZE])
         for (int y = 0; y < columns; ++y)
             image(x, y, 0) = scale * (table[x][y] + shift);
 
-    for (int i = 0; i < image.rows(); ++i) delete table[i];
-    delete table;
+    for (int i = 0; i < image.rows(); ++i) delete[] table[i];
+    delete[] table;
 }
 
 } // core

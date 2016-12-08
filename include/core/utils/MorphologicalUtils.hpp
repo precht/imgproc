@@ -25,7 +25,8 @@ public:
     static void opening(Image& image, const StructuralElement& element = plus_se);
     static void closing(Image& image, const StructuralElement& element = plus_se);
     // hit-and-miss transformation
-    static void hmt(Image& image, const StructuralElement& hit=elements[6].first, const StructuralElement& miss=elements[6].second);
+    static void hmt(Image& image, const StructuralElement& hit = l_letter_hit_se,
+                    const StructuralElement& miss = l_letter_miss_se);
 
     // so far result unknown
     static void thickening(Image& image);
@@ -33,7 +34,12 @@ public:
 private:
     // default "plus" shaped structural element
     static const unsigned char plus_se_data[];
+    static const unsigned char l_letter_hit_data[];
+    static const unsigned char l_letter_miss_data[];
+
     static const StructuralElement plus_se;
+    static const StructuralElement l_letter_hit_se;
+    static const StructuralElement l_letter_miss_se;
     // variables used for task m6, suffix _H means hit element, _M means miss element
     const static int THICKENING_LOOPS_LIMIT = 1000;
     const static unsigned char X = Image::CHANNEL_MAX_VALUE;

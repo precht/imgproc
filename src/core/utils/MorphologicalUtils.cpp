@@ -129,6 +129,21 @@ const unsigned char MorphologicalUtils::plus_se_data[] {
 
 const StructuralElement MorphologicalUtils::plus_se(plus_se_data, 3, 3, 1, 1);
 
+const unsigned char MorphologicalUtils::l_letter_hit_data[] {
+    X, X, 0,
+    0, X, 0,
+    0, X, 0
+};
+
+const unsigned char MorphologicalUtils::l_letter_miss_data[] {
+    0, 0, X,
+    X, 0, X,
+    X, 0, X
+};
+
+const StructuralElement MorphologicalUtils::l_letter_hit_se(l_letter_hit_data, 3, 3, 1, 1);
+const StructuralElement MorphologicalUtils::l_letter_miss_se(l_letter_miss_data, 3, 3, 1, 1);
+
 const unsigned char MorphologicalUtils::A_H[] {
     X, X, X,
     0, 0, 0,

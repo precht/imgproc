@@ -23,9 +23,9 @@ void NonLinearFiltrationUtils::uolis(Image& image)
     double denominator;
     const int rows = image.rows();
     const int columns = image.columns();
-    double **table = new double*[rows];
     double max_val = 0;
     double min_val = 0;
+    double **table = new double*[rows];
     for (int i = 0 ; i < rows; ++i) table[i] = new double[columns]();
     max_val = DBL_MIN;
     min_val = DBL_MAX;
@@ -49,8 +49,8 @@ void NonLinearFiltrationUtils::uolis(Image& image)
         for (int y = 0; y < columns; ++y)
             image(x, y, 0) = scale * (table[x][y] + shift);
 
-    for (int i = 0; i < image.rows(); ++i) delete table[i];
-    delete table;
+    for (int i = 0; i < image.rows(); ++i) delete[] table[i];
+    delete[] table;
 }
 
 } // core

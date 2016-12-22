@@ -11,10 +11,10 @@ const double FrequencyDomainUtils::PI { std::acos(-1) };
 const std::complex<double>  FrequencyDomainUtils::I { 0, 1 };
 
 std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> FrequencyDomainUtils::fastFourierTransform(
-        const Image& image)
+        const Image& input)
 {
-    const int rows = image.rows();
-    const int cols = image.columns();
+    const int rows = input.rows();
+    const int cols = input.columns();
 
     if (!isPowerOfTwo(rows) || !isPowerOfTwo(cols))
         throw std::invalid_argument("FFT failed, image size must be power of two.");
@@ -25,7 +25,7 @@ std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> FrequencyDo
 
     for (int a = 0; a < rows; a++)
         for (int b = 0; b < cols; b++)
-            mat(a, b) = image.at(a, b, 0);
+            mat(a, b) = input.at(a, b, 0);
 
     for (int i = 0; i < rows; i++)
         FFT(mat, i, TT_ROW);
@@ -36,10 +36,10 @@ std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> FrequencyDo
     return mat_ptr;
 }
 
-void FrequencyDomainUtils::inverseFastFourierTransform(Image& image,
-        std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> matrix_ptr)
+void FrequencyDomainUtils::inverseFastFourierTransform(Image& output,
+        std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> input_matrix_ptr)
 {
-    boost::numeric::ublas::matrix<std::complex<double>>& mat = *(matrix_ptr.get());
+    boost::numeric::ublas::matrix<std::complex<double>>& mat = *(input_matrix_ptr.get());
     const int rows = mat.size1();
     const int cols = mat.size2();
 
@@ -54,7 +54,7 @@ void FrequencyDomainUtils::inverseFastFourierTransform(Image& image,
 
     for (int a = 0; a < rows; a++)
         for (int b = 0; b < cols; b++)
-            image(a, b, 0) = mat(a, b).real();
+            output(a, b, 0) = mat(a, b).real();
 }
 
 void FrequencyDomainUtils::FFT(boost::numeric::ublas::matrix<std::complex<double>>& mat,

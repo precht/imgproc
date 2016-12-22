@@ -23,10 +23,10 @@ class FrequencyDomainUtils
 public:
 
     static std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> fastFourierTransform(
-            const Image& image);
+            const Image& input);
 
-    static void inverseFastFourierTransform(Image& image,
-            std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> matrix_ptr);
+    static void inverseFastFourierTransform(Image& output,
+            std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> input_matrix_ptr);
 
 private:
     const static double PI;

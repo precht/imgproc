@@ -22,5 +22,6 @@
 #include "core/utils/NonLinearFiltrationUtils.hpp"
 #include "core/utils/MorphologicalUtils.hpp"
 #include "core/utils/SegmentationUtils.hpp"
+#include "core/utils/FrequencyDomainUtils.hpp"
 
 #endif // UTILS_HPP_

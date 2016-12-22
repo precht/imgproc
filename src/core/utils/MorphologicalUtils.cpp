@@ -225,7 +225,7 @@ const unsigned char MorphologicalUtils::H_M[] {
     0, X, X
 };
 
-const std::array<std::pair<StructuralElement, StructuralElement>, 8> MorphologicalUtils::elements = {
+const std::array<std::pair<StructuralElement, StructuralElement>, 8> MorphologicalUtils::elements = {{
     std::make_pair<StructuralElement, StructuralElement>(
             StructuralElement(A_H, 3, 3, 1, 1), StructuralElement(A_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
@@ -242,7 +242,7 @@ const std::array<std::pair<StructuralElement, StructuralElement>, 8> Morphologic
             StructuralElement(G_H, 3, 3, 1, 1), StructuralElement(G_M, 3, 3, 1, 1)),
     std::make_pair<StructuralElement, StructuralElement>(
             StructuralElement(H_H, 3, 3, 1, 1), StructuralElement(H_M, 3, 3, 1, 1))
-};
+}};
 
 } // core
 } // imgproc

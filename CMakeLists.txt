@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
+# set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+
 # set app name
 set(PROJECT_NAME imgproc)
-set(LIBRARY ${PROJECT_NAME}_lib)
-set(GUI ${PROJECT_NAME}_gui)
-set(NOGUI ${PROJECT_NAME}_nogui)
+set(LIB_TARGET ${PROJECT_NAME}_lib)
+set(GUI_TARGET ${PROJECT_NAME}_gui)
+set(NOGUI_TARGET ${PROJECT_NAME}_nogui)
 
 set(LIB_NAME ${PROJECT_NAME})
 set(GUI_NAME g${PROJECT_NAME})
@@ -22,14 +24,14 @@ set(CMAKE_BUILD_TYPE Debug)
 #if(CMAKE_COMPILER_IS_GNUCC)
 #     set(CMAKE_C_FLAGS_DEBUG "-g3 -gdwarf-4")
 #endif()
-if(CMAKE_COMPILER_IS_GNUCXX)
+if(NOT WIN32 OR MINGW)
     # set(CMAKE_CXX_FLAGS_DEBUG "-g3 -gdwarf-4")
     add_definitions(-O3 -Wall -Wextra -Wpedantic -g3 -gdwarf-4)
 endif()
 
 enable_language(CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# set(CMAKE_VERBOSE_MAKEFILE TRUE)
+#set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 
 #-------------------
@@ -51,6 +53,7 @@ set(HEADERS
     ./include/core/utils/NonLinearFiltrationUtils.hpp
     ./include/core/utils/MorphologicalUtils.hpp
     ./include/core/utils/SegmentationUtils.hpp
+    ./include/core/utils/FrequencyDomainUtils.hpp
     ./include/core/core.hpp
     ./include/opencv/OpenCVImageHelper.hpp
     ./include/opencv/OpenCVWindows.hpp
@@ -73,6 +76,7 @@ set(SOURCES
     ./src/core/utils/NonLinearFiltrationUtils.cpp
     ./src/core/utils/MorphologicalUtils.cpp
     ./src/core/utils/SegmentationUtils.cpp
+    ./src/core/utils/FrequencyDomainUtils.cpp
     ./src/opencv/OpenCVImageHelper.cpp
     ./src/opencv/OpenCVWindows.cpp
     ./src/cli/Controller.cpp
@@ -98,18 +102,18 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 # specify headxxers directory
 include_directories(${PROJECT_SOURCE_DIR}/include)
 # compile library
-add_library(${LIBRARY} ${SOURCES} ${HEADERS})
-target_link_libraries(${LIBRARY} ${OpenCV_LIBS})
-set_target_properties(${LIBRARY} PROPERTIES OUTPUT_NAME ${LIB_NAME})
+add_library(${LIB_TARGET} ${SOURCES} ${HEADERS})
+target_link_libraries(${LIB_TARGET} ${OpenCV_LIBS})
+set_target_properties(${LIB_TARGET} PROPERTIES OUTPUT_NAME ${LIB_NAME})
 
 # create executable
-add_executable(${NOGUI} ./src/cli/main_nogui.cpp)
-add_executable(${GUI} ./src/cli/main_gui.cpp)
+add_executable(${NOGUI_TARGET} ./src/cli/main_nogui.cpp)
+add_executable(${GUI_TARGET} ./src/cli/main_gui.cpp)
 # link libs
-target_link_libraries(${NOGUI} ${LIBRARY})
-target_link_libraries(${GUI} ${LIBRARY})
-set_target_properties(${NOGUI} PROPERTIES OUTPUT_NAME ${NOGUI_NAME})
-set_target_properties(${GUI} PROPERTIES OUTPUT_NAME ${GUI_NAME})
+target_link_libraries(${NOGUI_TARGET} ${LIB_TARGET})
+target_link_libraries(${GUI_TARGET} ${LIB_TARGET})
+set_target_properties(${NOGUI_TARGET} PROPERTIES OUTPUT_NAME ${NOGUI_NAME})
+set_target_properties(${GUI_TARGET} PROPERTIES OUTPUT_NAME ${GUI_NAME})
 
 
 #-------------------
@@ -143,7 +147,7 @@ else()
     find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 endif()
 
-set(PROJECT_TEST_NAME ${PROJECT_NAME}_tests)
+set(TEST_TARGET ${PROJECT_NAME}_test)
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -158,16 +162,17 @@ set(TEST_SOURCES
     ./include/test/ImageFixture.hpp
     ./test/ImageFixture.cpp
     ./test/core/utils/BasicUtilsTest.cpp
-    ./test/core/utils/GeometricUtilsTest.cpp
+#    ./test/core/utils/GeometricUtilsTest.cpp
     ./test/core/utils/NoiseRemovalUtilsTest.cpp
     ./test/core/utils/MorphologicalUtilsTest.cpp
     ./test/core/utils/SegmentationUtilsTest.cpp
+    ./test/core/utils/FrequencyDomainUtilsTest.cpp
 )
 
-add_executable(${PROJECT_TEST_NAME} ${TEST_SOURCES})
+add_executable(${TEST_TARGET} ${TEST_SOURCES})
 
-target_link_libraries(${PROJECT_TEST_NAME}
-    ${LIBRARY}
+target_link_libraries(${TEST_TARGET}
+    ${LIB_TARGET}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
@@ -179,5 +184,5 @@ add_custom_target(check ${CMAKE_COMMAND} -E env CTEST_OUPUT_ON_FAILURE=1 BOOST_T
 )
 
 enable_testing()
-add_test(${PROJECT_TEST_NAME}s ${PROJECT_TEST_NAME})
+add_test(${TEST_TARGET}s ${TEST_TARGET})
 

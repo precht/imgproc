@@ -53,7 +53,7 @@ set(HEADERS
     ./include/core/utils/NonLinearFiltrationUtils.hpp
     ./include/core/utils/MorphologicalUtils.hpp
     ./include/core/utils/SegmentationUtils.hpp
-    ./include/core/utils/FrequencyDomainUtils.hpp
+    ./include/core/utils/FrequencyUtils.hpp
     ./include/core/core.hpp
     ./include/opencv/OpenCVImageHelper.hpp
     ./include/opencv/OpenCVWindows.hpp
@@ -76,7 +76,7 @@ set(SOURCES
     ./src/core/utils/NonLinearFiltrationUtils.cpp
     ./src/core/utils/MorphologicalUtils.cpp
     ./src/core/utils/SegmentationUtils.cpp
-    ./src/core/utils/FrequencyDomainUtils.cpp
+    ./src/core/utils/FrequencyUtils.cpp
     ./src/opencv/OpenCVImageHelper.cpp
     ./src/opencv/OpenCVWindows.cpp
     ./src/cli/Controller.cpp
@@ -95,6 +95,10 @@ else()
     include_directories(${OpenCV_INCLUDE_DIR})
 endif()
 
+# request threads
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package (Threads REQUIRED)
+
 # set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -103,7 +107,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 # compile library
 add_library(${LIB_TARGET} ${SOURCES} ${HEADERS})
-target_link_libraries(${LIB_TARGET} ${OpenCV_LIBS})
+target_link_libraries(${LIB_TARGET}
+    ${OpenCV_LIBS}
+    Threads::Threads
+)
 set_target_properties(${LIB_TARGET} PROPERTIES OUTPUT_NAME ${LIB_NAME})
 
 # create executable
@@ -156,17 +163,17 @@ include_directories(
 
 set(TEST_SOURCES
     ./test/master.cpp
-    ./test/core/ImageTest.cpp
-    ./test/core/StructuralElementTest.cpp
+#    ./test/core/ImageTest.cpp
+#    ./test/core/StructuralElementTest.cpp
 #    ./test/opencv/OpenCVImageHelperTest.cpp
-    ./include/test/ImageFixture.hpp
-    ./test/ImageFixture.cpp
-    ./test/core/utils/BasicUtilsTest.cpp
+#    ./include/test/ImageFixture.hpp
+#    ./test/ImageFixture.cpp
+#    ./test/core/utils/BasicUtilsTest.cpp
 #    ./test/core/utils/GeometricUtilsTest.cpp
-    ./test/core/utils/NoiseRemovalUtilsTest.cpp
-    ./test/core/utils/MorphologicalUtilsTest.cpp
-    ./test/core/utils/SegmentationUtilsTest.cpp
-    ./test/core/utils/FrequencyDomainUtilsTest.cpp
+#    ./test/core/utils/NoiseRemovalUtilsTest.cpp
+#    ./test/core/utils/MorphologicalUtilsTest.cpp
+#    ./test/core/utils/SegmentationUtilsTest.cpp
+    ./test/core/utils/FrequencyUtilsTest.cpp
 )
 
 add_executable(${TEST_TARGET} ${TEST_SOURCES})

@@ -377,9 +377,9 @@ void Controller::run()
             {
                 Image output1(image_);
                 Image output2(image_);
-                auto matrix = FrequencyDomainUtils::fastFourierTransform(image_);
-                FrequencyDomainUtils::complexMatrixToImages(*(matrix.get()), output1, output2, CT_PHASE_MAGNITUDE);
-                FrequencyDomainUtils::inverseFastFourierTransform(image_, *(matrix.get()));
+                auto matrix = FrequencyUtils::fastFourierTransform(image_);
+                FrequencyUtils::complexMatrixToImages(*(matrix.get()), output1, output2, CT_PHASE_MAGNITUDE);
+                FrequencyUtils::inverseFastFourierTransform(image_, *(matrix.get()));
 
                 output1.save("a_1.bmp");
                 output2.save("a_2.bmp");

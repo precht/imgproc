@@ -373,6 +373,18 @@ void Controller::run()
                     name = it->second;
                 histogram_.toImage()->save(name);
             }
+            else if (it->first.compare(FFT) == 0)
+            {
+                Image output1(image_);
+                Image output2(image_);
+                auto matrix = FrequencyDomainUtils::fastFourierTransform(image_);
+                FrequencyDomainUtils::complexMatrixToImages(*(matrix.get()), output1, output2, CT_PHASE_MAGNITUDE);
+                FrequencyDomainUtils::inverseFastFourierTransform(image_, *(matrix.get()));
+
+                output1.save("a_1.bmp");
+                output2.save("a_2.bmp");
+                modified_image = true;
+            }
             // Default, wrong input args
             else throw "Unknown option";
         }

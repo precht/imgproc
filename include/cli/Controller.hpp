@@ -88,6 +88,7 @@ const std::string HMT = "hmt";
 const std::string THICKENING = "thickening";
 const std::string DELTARG = "deltarg";
 const std::string RANGERG = "rangerg";
+const std::string FFT = "fft";
 
 const std::string HELP_CONTENT = "\n"
 "NAME:\n"

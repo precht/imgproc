@@ -6,6 +6,7 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <complex>
+#include <vector>
 #include <memory>
 #include <cmath>
 
@@ -15,6 +16,7 @@ namespace core
 {
 
 enum TransformType { TT_ROW, TT_COLUMN };
+enum ConvertType { CT_PHASE_MAGNITUDE, CT_REAL_IMAGINARY };
 
 // TODO fft for color images
 
@@ -22,11 +24,13 @@ class FrequencyDomainUtils
 {
 public:
 
-    static std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> fastFourierTransform(
+    static std::unique_ptr<std::vector<boost::numeric::ublas::matrix<std::complex<double>>>> fastFourierTransform(
             const Image& input);
 
-    static void inverseFastFourierTransform(Image& output,
-            std::unique_ptr<boost::numeric::ublas::matrix<std::complex<double>>> input_matrix_ptr);
+    static void inverseFastFourierTransform(Image& output, std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats);
+
+    static void complexMatrixToImages(const std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats,
+                                      Image& output1, Image& output2, ConvertType type);
 
 private:
     const static double PI;

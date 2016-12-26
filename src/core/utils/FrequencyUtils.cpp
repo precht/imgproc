@@ -53,8 +53,8 @@ unique_ptr<vector<matrix<complex<double>>>> FrequencyUtils::fastFourierTransform
 
         // transform columns
         for (int i = 1; i < thr_num; i++)
-            thrs.push_back(std::move(thread(threadFftLoop, i, thr_num, rows, std::ref(mat), TT_COLUMN)));
-        threadFftLoop(0, thr_num, rows, std::ref(mat), TT_COLUMN);
+            thrs.push_back(std::move(thread(threadFftLoop, i, thr_num, cols, std::ref(mat), TT_COLUMN)));
+        threadFftLoop(0, thr_num, cols, std::ref(mat), TT_COLUMN);
 
         for (auto it = thrs.begin(); it != thrs.end(); ++it) it->join();
         thrs.clear();
@@ -102,8 +102,8 @@ void FrequencyUtils::inverseFastFourierTransform(Image& output, vector<matrix<co
 
         // transform columns
         for (int i = 1; i < thr_num; i++)
-            thrs.push_back(std::move(thread(threadIfftLoop, i, thr_num, rows, std::ref(mat), TT_COLUMN)));
-        threadIfftLoop(0, thr_num, rows, std::ref(mat), TT_COLUMN);
+            thrs.push_back(std::move(thread(threadIfftLoop, i, thr_num, cols, std::ref(mat), TT_COLUMN)));
+        threadIfftLoop(0, thr_num, cols, std::ref(mat), TT_COLUMN);
 
         for (auto it = thrs.begin(); it != thrs.end(); ++it) it->join();
         thrs.clear();

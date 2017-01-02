@@ -1,12 +1,10 @@
-/**
- *      Created:    21st Nov 2016
- *      Author:     Jakub Precht
- */
-
 #ifndef OPEN_CV_WINDOWS_
 #define OPEN_CV_WINDOWS_
 
 #include "core/Image.hpp"
+
+#include <set>
+#include <string>
 
 namespace imgproc
 {
@@ -16,12 +14,16 @@ namespace opencv
 class OpenCVWindows
 {
 public:
-    static void createWindow(const std::string &name);
-    static void show(core::Image &image, const std::string &window_name);
-    static void closeWindow(const std::string &name);
-    static void closeAll();
+    void createWindow(const std::string& name);
+    void show(core::Image& image, const std::string& window_name);
+    void closeWindow(const std::string& name);
+    void closeAll();
     /* wait for user action */
-    static void wait();
+    void wait();
+    bool existWindow(const std::string& name);
+
+private:
+    std::set<std::string> windows_;
 };
 
 } // opencv

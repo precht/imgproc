@@ -1,16 +1,21 @@
-/**
- *      Created:    12th Oct 2016
- *      Author:     Jakub Precht
- */
-
 #include "cli/Controller.hpp"
+
+#include <iostream>
 
 int main(int argc, char **argv)
 {
-    auto args = imgproc::cli::Controller::read_arguments(argc, argv);
-    imgproc::cli::Controller ctr(args);
-    ctr.run();
-    delete args;
+    try {
+        imgproc::cli::Controller ctr(argc, argv);
+        ctr.run();
+    }
+    catch(const std::exception& e) {
+        std::cerr << "error: " << e.what() << std::endl;
+        return 1;
+    }
+    catch(...) {
+        std::cerr << "Exception of unknown type!" << std::endl;
+        return 1;
+    }
 
     return 0;
 }

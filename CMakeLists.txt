@@ -33,10 +33,34 @@ enable_language(CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
+# setup boost on win
+if(MSVC)
+    if(NOT BOOST_ROOT)
+        set(BOOST_ROOT "C:/local/boost_1_60_0")
+    endif()
+    set(Boost_INCLUDE_DIR "${BOOST_ROOT}")
+    set(Boost_LIBRARY_DIR "${BOOST_ROOT}/lib64-msvc-14.0")
+    set(Boost_USE_STATIC_LIBS ON)
+    set(Boost_USE_MULTITHREADED ON)
+
+    if(NOT EXISTS ${Boost_LIBRARY_DIR})
+        message(WARNING "Boost library requires manual installation in Windows")
+        message("1) Browse: https://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/")
+        message("2) Download: boost_1_60_0-msvc-14.0-32.exe")
+        message("3) Install into default directory: C:\\local")
+        message("")
+        message(FATAL_ERROR "Boost libraries not found at ${Boost_LIBRARY_DIR}")
+    endif()
+
+    include_directories(${Boost_INCLUDE_DIR})
+    link_directories(${Boost_LIBRARY_DIR})
+endif()
 
 #-------------------
 # Main
 #-------------------
+
+find_package(Boost COMPONENTS program_options REQUIRED)
 
 # set headers (put all your .hpp files here)
 set(HEADERS
@@ -116,43 +140,25 @@ set_target_properties(${LIB_TARGET} PROPERTIES OUTPUT_NAME ${LIB_NAME})
 # create executable
 add_executable(${NOGUI_TARGET} ./src/cli/main_nogui.cpp)
 add_executable(${GUI_TARGET} ./src/cli/main_gui.cpp)
+
 # link libs
-target_link_libraries(${NOGUI_TARGET} ${LIB_TARGET})
+target_link_libraries(${NOGUI_TARGET}
+    ${LIB_TARGET}
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+)
+set_target_properties(${NOGUI_TARGET}
+    PROPERTIES OUTPUT_NAME ${NOGUI_NAME}
+)
+
 target_link_libraries(${GUI_TARGET} ${LIB_TARGET})
-set_target_properties(${NOGUI_TARGET} PROPERTIES OUTPUT_NAME ${NOGUI_NAME})
 set_target_properties(${GUI_TARGET} PROPERTIES OUTPUT_NAME ${GUI_NAME})
 
 
-#-------------------
+#-------------------0
 # Test
 #-------------------
 
-if(MSVC)
-    if(NOT BOOST_ROOT)
-        set(BOOST_ROOT "C:/local/boost_1_60_0")
-    endif()
-    set(Boost_INCLUDE_DIR "${BOOST_ROOT}")
-    set(Boost_LIBRARY_DIR "${BOOST_ROOT}/lib64-msvc-14.0")
-    set(Boost_USE_STATIC_LIBS ON)
-    set(Boost_USE_MULTITHREADED ON)
-
-    if(NOT EXISTS ${Boost_LIBRARY_DIR})
-        message(WARNING "Boost library requires manual installation in Windows")
-        message("1) Browse: https://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/")
-        message("2) Download: boost_1_60_0-msvc-14.0-32.exe")
-        message("3) Install into default directory: C:\\local")
-        message("")
-        message(FATAL_ERROR "Boost libraries not found at ${Boost_LIBRARY_DIR}")
-    endif()
-
-    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
-
-    include_directories(${Boost_INCLUDE_DIR})
-    link_directories(${Boost_LIBRARY_DIR})
-
-else()
-    find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
-endif()
+find_package(Boost COMPONENTS unit_test_framework system filesystem REQUIRED)
 
 set(TEST_TARGET ${PROJECT_NAME}_test)
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)

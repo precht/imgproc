@@ -1,8 +1,3 @@
-/**
- *      Created:    21st Nov 2016
- *      Author:     Jakub Precht
- */
-
 #include "core/Image.hpp"
 #include "opencv/OpenCVWindows.hpp"
 
@@ -13,12 +8,13 @@ namespace imgproc
 namespace opencv
 {
 
-void OpenCVWindows::createWindow(const std::string &name)
+void OpenCVWindows::createWindow(const std::string& name)
 {
     cv::namedWindow(name, cv::WINDOW_AUTOSIZE);
+    windows_.insert(name);
 }
 
-void OpenCVWindows::show(core::Image &image, const std::string &window_name)
+void OpenCVWindows::show(core::Image &image, const std::string& window_name)
 {
     if(image.size() == 0) return;
     const int a = image.rows();
@@ -66,16 +62,23 @@ void OpenCVWindows::show(core::Image &image, const std::string &window_name)
 void OpenCVWindows::closeAll()
 {
     cv::destroyAllWindows();
+    windows_.clear();
 }
 
-void OpenCVWindows::closeWindow(const std::string &name)
+void OpenCVWindows::closeWindow(const std::string& name)
 {
     cv::destroyWindow(name);
+    windows_.erase(windows_.find(name));
 }
 
 void OpenCVWindows::wait()
 {
     cv::waitKey(0);
+}
+
+bool OpenCVWindows::existWindow(const std::string& name)
+{
+    return windows_.count(name);
 }
 
 } // opencv

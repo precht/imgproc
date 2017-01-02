@@ -23,5 +23,6 @@
 #include "core/utils/MorphologicalUtils.hpp"
 #include "core/utils/SegmentationUtils.hpp"
 #include "core/utils/FrequencyUtils.hpp"
+#include "core/utils/FrequencyFiltrationUtils.hpp"
 
 #endif // UTILS_HPP_

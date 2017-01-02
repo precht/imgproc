@@ -385,6 +385,83 @@ void Controller::run()
                 output2.save("a_2.bmp");
                 modified_image = true;
             }
+			else if (it->first.compare(LPF) == 0)
+			{
+				Image output1(image_);
+				Image output2(image_);
+				std::regex rgx("^\\d+$");
+				if (!std::regex_match(it->second, rgx)) throw "Wrong bandsize value";
+				int bandsize = std::stoi(it->second);
+				auto matrix1 = FrequencyUtils::fastFourierTransform(image_);
+				auto matrix2 = FrequencyFiltrationUtils::LowPassFilter(*(matrix1.get()), bandsize);
+				FrequencyUtils::complexMatrixToImages(*(matrix2.get()), output1, output2, CT_PHASE_MAGNITUDE);
+				FrequencyUtils::inverseFastFourierTransform(image_, *(matrix2.get()));
+
+				output1.save("Low_Pass_Magnitude.bmp");
+				output2.save("Low_Pass_Phase.bmp");
+				modified_image = true;
+			}
+	
+			else if (it->first.compare(HPF) == 0)
+			{
+				Image output1(image_);
+				Image output2(image_);
+				std::regex rgx("^\\d+$");
+				if (!std::regex_match(it->second, rgx)) throw "Wrong bandsize value";
+				int bandsize = std::stoi(it->second);
+				auto matrix1 = FrequencyUtils::fastFourierTransform(image_);
+				auto matrix2 = FrequencyFiltrationUtils::HighPassFilter(*(matrix1.get()), bandsize);
+				FrequencyUtils::complexMatrixToImages(*(matrix2.get()), output1, output2, CT_PHASE_MAGNITUDE);
+				FrequencyUtils::inverseFastFourierTransform(image_, *(matrix2.get()));
+
+				output1.save("High_Pass_Magnitude.bmp");
+				output2.save("High_Pass_Phase.bmp");
+				modified_image = true;
+			}
+			else if (it->first.compare(BPF) == 0)
+			{
+				Image output1(image_);
+				Image output2(image_);
+				int min, max;
+				std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
+				std::smatch match;
+				if (std::regex_search(it->second, match, rgx) && match.size() == 3)
+				{
+					min = std::stoi(match[1]);
+					max = std::stoi(match[2]);
+				}
+				auto matrix1 = FrequencyUtils::fastFourierTransform(image_);
+				auto matrix2 = FrequencyFiltrationUtils::LowPassFilter(*(matrix1.get()), max);
+				auto matrix3 = FrequencyFiltrationUtils::HighPassFilter(*(matrix2.get()), min);
+				FrequencyUtils::complexMatrixToImages(*(matrix3.get()), output1, output2, CT_PHASE_MAGNITUDE);
+				FrequencyUtils::inverseFastFourierTransform(image_, *(matrix3.get()));
+
+				output1.save("Band_Pass_Magnitude.bmp");
+				output2.save("Band_Pass_Phase.bmp");
+				modified_image = true;
+			}
+			else if (it->first.compare(BCF) == 0)
+			{
+				Image output1(image_);
+				Image output2(image_);
+				int min, max;
+				std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
+				std::smatch match;
+				if (std::regex_search(it->second, match, rgx) && match.size() == 3)
+				{
+					min = std::stoi(match[1]);
+					max = std::stoi(match[2]);
+				}
+				auto matrix1 = FrequencyUtils::fastFourierTransform(image_);
+				auto matrix2 = FrequencyFiltrationUtils::BandCutFilter(*(matrix1.get()), min, max);
+
+				FrequencyUtils::complexMatrixToImages(*(matrix2.get()), output1, output2, CT_PHASE_MAGNITUDE);
+				FrequencyUtils::inverseFastFourierTransform(image_, *(matrix2.get()));
+
+				output1.save("Band_Cut_Magnitude.bmp");
+				output2.save("Band_Cut_Phase.bmp");
+				modified_image = true;
+			}
             // Default, wrong input args
             else throw "Unknown option";
         }

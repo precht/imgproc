@@ -54,6 +54,7 @@ set(HEADERS
     ./include/core/utils/MorphologicalUtils.hpp
     ./include/core/utils/SegmentationUtils.hpp
     ./include/core/utils/FrequencyUtils.hpp
+    ./include/core/utils/FrequencyFiltrationUtils.hpp
     ./include/core/core.hpp
     ./include/opencv/OpenCVImageHelper.hpp
     ./include/opencv/OpenCVWindows.hpp
@@ -77,6 +78,7 @@ set(SOURCES
     ./src/core/utils/MorphologicalUtils.cpp
     ./src/core/utils/SegmentationUtils.cpp
     ./src/core/utils/FrequencyUtils.cpp
+	./src/core/utils/FrequencyFiltrationUtils.cpp
     ./src/opencv/OpenCVImageHelper.cpp
     ./src/opencv/OpenCVWindows.cpp
     ./src/cli/Controller.cpp

@@ -3,182 +3,148 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <iostream>
 #include <functional>
+#include <cmath>
 
-using std::vector;
-using std::complex;
 using boost::numeric::ublas::matrix;
 using std::unique_ptr;
-
+using std::complex;
+using std::vector;
+using std::pow;
+using std::sqrt;
 
 namespace imgproc
 {
 namespace core
 {
-	const double FrequencyFiltrationUtils::PI{ std::acos(-1) };
 
-	matrix<complex<double>> FrequencyFiltrationUtils::imageTOcomplex( Image& input)
-	{
-		const int rows = input.rows();
-		const int cols = input.columns();
+const double FrequencyFiltrationUtils::PI{ std::acos(-1) };
 
-		matrix<complex<double>> mat(rows, cols);
+//matrix<complex<double>> FrequencyFiltrationUtils::imageTOcomplex( Image& input)
+//{
+//    const int rows = input.rows();
+//    const int cols = input.columns();
 
-		for (int c = 0; c < input.channels(); c++)
-		{
-			// copy image to complex matrix
-			for (int a = 0; a < rows; a++)
-				for (int b = 0; b < cols; b++)
-					mat(a, b) = input.at(a, b, c);
-		}
-		return mat;
-	}
-	unique_ptr<vector<matrix<complex<double>>>> FrequencyFiltrationUtils::LowPassFilter(vector<matrix<complex<double>>>& mats, int bandsize)
-	{
-		unique_ptr<vector<matrix<complex<double>>>> mats_ptr(new vector<matrix<complex<double>>>());
-		
-		auto& mat = mats[0];
-		const int rows = mat.size1();
-		const int cols = mat.size2();
+//    matrix<complex<double>> mat(rows, cols);
 
-		for (int i = 0; i < rows; ++i)
-		{
-			for (int j = 0; j < cols; ++j)
-			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize);
-				else mat(i, j) = complex<double>(0, 0);
-			}
-		}
-		mats_ptr->push_back(mat);
-		return mats_ptr;
-	}
-	unique_ptr<vector<matrix<complex<double>>>> FrequencyFiltrationUtils::HighPassFilter(vector<matrix<complex<double>>>& mats, int bandsize)
-	{
-		unique_ptr<vector<matrix<complex<double>>>> mats_ptr(new vector<matrix<complex<double>>>());
+//    for (int c = 0; c < input.channels(); c++)
+//    {
+//        // copy image to complex matrix
+//        for (int a = 0; a < rows; a++)
+//            for (int b = 0; b < cols; b++)
+//                mat(a, b) = input.at(a, b, c);
+//    }
+//    return mat;
+//}
 
-		auto& mat = mats[0];
-		const int rows = mat.size1();
-		const int cols = mat.size2();
-		
-		auto spectral_component = mat(rows / 2, cols / 2);
+void FrequencyFiltrationUtils::lowPassFilter(vector<matrix<complex<double>>>& mats, int bandsize)
+{
+    const int chns = mats.size();
+    for (int c = 0; c < chns; c++)
+    {
+        const int rows = mats[c].size1();
+        const int cols = mats[c].size2();
+        for (int x = 0; x < rows; ++x)
+        {
+            const auto x_distance = pow(x - (rows >> 1), 2);
+            for (int y = 0; y < cols; ++y)
+                if (sqrt(x_distance + pow(y - (cols >> 1), 2)) > bandsize)
+                    mats[c](x, y) = complex<double>(0, 0);
+        }
+    }
+}
 
-		for (int i = 0; i < rows; ++i)
-		{
-			for (int j = 0; j < cols; ++j)
-			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat(i, j) *= complex<double>(0, 0);				
-			}
-		}
-		mat(rows / 2, cols / 2) = spectral_component;
-		mats_ptr->push_back(mat);
-		return mats_ptr;
-	}
-	unique_ptr<vector<matrix<complex<double>>>> FrequencyFiltrationUtils::BandCutFilter(vector<matrix<complex<double>>>& mats, int min, int max)
-	{
-		unique_ptr<vector<matrix<complex<double>>>> mats_ptr(new vector<matrix<complex<double>>>());
+void FrequencyFiltrationUtils::highPassFilter(vector<matrix<complex<double>>>& mats, int bandsize)
+{
+    const int chns = mats.size();
+    for (int c = 0; c < chns; c++)
+    {
+        const int rows = mats[c].size1();
+        const int cols = mats[c].size2();
+        auto spectral_val = mats[c](rows >> 1, cols >> 1); // should remain unchanged
+        for (int x = 0; x < rows; ++x)
+        {
+            const auto x_distance = pow(x - (rows >> 1), 2);
+            for (int y = 0; y < cols; ++y)
+                if (sqrt(x_distance + pow(y - (cols >> 1), 2)) <= bandsize)
+                    mats[c](x, y) = complex<double>(0, 0);
+        }
+        mats[c](rows >> 1, cols >> 1) = spectral_val;
+    }
+}
 
-		auto& mat = mats[0];
-		const int rows = mat.size1();
-		const int cols = mat.size2();
+void FrequencyFiltrationUtils::bandCutFilter(vector<matrix<complex<double>>>& mats, int min, int max)
+{
+    const int chns = mats.size();
+    for (int c = 0; c < chns; c++)
+    {
+        const int rows = mats[c].size1();
+        const int cols = mats[c].size2();
+        for (int x = 0; x < rows; ++x)
+        {
+            const auto x_distance = pow(x - (rows >> 1), 2);
+            for (int y = 0; y < cols; ++y)
+            {
+                const auto t = sqrt(x_distance +  pow(y - (cols >> 1), 2));
+                if (t <= max && t >= min)
+                    mats[c](x, y) = complex<double>(0, 0);
+            }
+        }
+    }
+}
 
-		for (int i = 0; i < rows; ++i)
-		{
-			for (int j = 0; j < cols; ++j)
-			{
-				double x = sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2));
-				if ((x <= max) && (x >= min))mat(i, j) = complex<double>(0, 0);
-			}
-		}
-		mats_ptr->push_back(mat);
-		return mats_ptr;
-	}
+void FrequencyFiltrationUtils::highPassWithEdgeDetFilter(vector<matrix<complex<double>>>& mats, int variant)
+{
+    Image mask(std::make_shared<opencv::OpenCVImageHelper>());
+    switch (variant)
+    {
+    case 1: mask.load("F5mask1.bmp"); break;
+    case 2: mask.load("F5mask2.bmp"); break;
+    default: mask.load("F5mask1.bmp"); break;
+    }
 
-	unique_ptr<vector<matrix<complex<double>>>> FrequencyFiltrationUtils::HighPassWithEdgeDetFilter(vector<matrix<complex<double>>>& mats, int variant , int bandsize)
-	{
-		unique_ptr<vector<matrix<complex<double>>>> mats_ptr(new vector<matrix<complex<double>>>());
+    const double inv_max_color = 1.0 / 255.0;
 
-		auto& mat1 = mats[0];
-		auto& mat2 = mats[1];
-		auto& mat3 = mats[2];
-		const int rows = mat1.size1();
-		const int cols = mat1.size2();
-		Image input(std::make_shared<opencv::OpenCVImageHelper>());
-		switch (variant)
-		{
-		case 1: input.load("horizontal.bmp"); break;
-		case 2: input.load("horizontalanddiagonal.bmp"); break;
-		default: input.load("horizontal.bmp"); break;
-		}
-		const int mask_rows = input.rows();
-		const int mask_cols = input.columns();
+    const int chns = mats.size();
 
-		auto spectral_component1 = mat1(rows / 2, cols / 2);
-		auto spectral_component2 = mat2(rows / 2, cols / 2);
-		auto spectral_component3 = mat3(rows / 2, cols / 2);
+    for (int c = 0; c < chns; c++)
+    {
+        const int rows = mats[c].size1();
+        const int cols = mats[c].size2();
 
-		matrix<complex<double>> mask(mask_rows, mask_cols);
-		for (int x = 0; x < mask_rows; ++x) 
-		{
-			for (int y = 0; y < mask_cols; ++y)
-			{
-				for (int c = 0; c < input.channels(); ++c)
-				{
-					if (input(x, y, c) == 255) mask(x, y) = (1, 0);
-					else if (input(x, y, c) == 0) mask(x, y) = (0, 0);
-				}
-			}
-		}
-		for (int i = 0; i < mask_rows; ++i)
-		{
-			for (int j = 0; j < mask_cols; ++j)
-			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat1(i, j) *= complex<double>(0, 0);
-				else mat1(i, j) *= mask(i, j);
-			}
-		}
-		for (int i = 0; i < mask_rows; ++i)
-		{
-			for (int j = 0; j < mask_cols; ++j)
-			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat2(i, j) *= complex<double>(0, 0);
-				else mat2(i, j) *= mask(i, j);
-			}
-		}
-		for (int i = 0; i < mask_rows; ++i)
-		{
-			for (int j = 0; j < mask_cols; ++j)
-			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat3(i, j) *= complex<double>(0, 0);
-				else mat3(i, j) *= mask(i, j);
-			}
-		}
-		mat1(rows / 2, cols / 2) = spectral_component1;
-		mat2(rows / 2, cols / 2) = spectral_component2;
-		mat3(rows / 2, cols / 2) = spectral_component3;
-		mats_ptr->push_back(mat1);
-		mats_ptr->push_back(mat2);
-		mats_ptr->push_back(mat3);
-		return mats_ptr;
-	}
-	
+        if (mask.rows() != rows || mask.columns() != cols)
+            throw "HPWED: Wrong mask size!";
 
-	unique_ptr<vector<matrix<complex<double>>>> FrequencyFiltrationUtils::PhaseModFilter(vector<matrix<complex<double>>>& mats, int k, int l)
-	{
-		unique_ptr<vector<matrix<complex<double>>>> mats_ptr(new vector<matrix<complex<double>>>());
+        auto spectral_val = mats[c](rows >> 1, cols >> 1);
 
-		auto& mat = mats[0];
-		const int rows = mat.size1();
-		const int cols = mat.size2();
+        for (int x = 0; x < rows; ++x)
+            for (int y = 0; y < cols; ++y)
+                mats[c](x, y) *= mask(x, y, c) * inv_max_color;
 
-		for (int i = 0; i < rows; ++i)
-		{
-			for (int j = 0; j < cols; ++j)
-			{
-				double x = (((-i * k * 2 * PI) / rows) + ((-j * l * 2 * PI) / cols) + (k + l) * PI);
-				mat(i,j) *= complex<double>(cos(x), sin(x));
-			}
-		}
-		mats_ptr->push_back(mat);
-		return mats_ptr;
-	}
+        mats[c](rows >> 1, cols >> 1) = spectral_val;
+    }
+}
+
+void FrequencyFiltrationUtils::phaseModFilter(vector<matrix<complex<double>>>& mats, int k, int l)
+{
+    const int chns = mats.size();
+    const auto z_comp = (k + l) * PI;
+    for (int c = 0; c < chns; c++)
+    {
+        const int rows = mats[c].size1();
+        const int cols = mats[c].size2();
+        const double inv_rows = 1.0 / rows;
+        const double inv_cols = 1.0 / cols;
+        for (int x = 0; x < rows; ++x)
+        {
+            const auto x_comp = -x * k * 2 * inv_rows * PI;
+            for (int y = 0; y < cols; ++y)
+            {
+                const auto t = (x_comp + (-y * l * 2 * inv_cols * PI) + z_comp);
+                mats[c](x, y) *= complex<double>(cos(t), sin(t));
+            }
+        }
+    }
+}
+
 }//core
 }//imgproc

@@ -11,11 +11,6 @@
 #include <vector>
 #include <cmath>
 
-using boost::numeric::ublas::matrix;
-using std::complex;
-using std::vector;
-using std::unique_ptr;
-
 enum TransformType { TT_ROW, TT_COLUMN };
 enum ConvertType { CT_PHASE_MAGNITUDE, CT_REAL_IMAGINARY };
 
@@ -26,12 +21,12 @@ namespace core
 class FrequencyFiltrationUtils	
 {
 public:
-	static matrix<complex<double>> imageTOcomplex ( Image& input);
-	static unique_ptr<vector<matrix<complex<double>>>> LowPassFilter (vector<matrix<complex<double>>>& mats, int bandsize);
-	static unique_ptr<vector<matrix<complex<double>>>> HighPassFilter(vector<matrix<complex<double>>>& mats, int bandsize);
-	static unique_ptr<vector<matrix<complex<double>>>> BandCutFilter(vector<matrix<complex<double>>>& mats, int min, int max);
-	static unique_ptr<vector<matrix<complex<double>>>> HighPassWithEdgeDetFilter(vector<matrix<complex<double>>>& mats,int variant, int bandsize);
-	static unique_ptr<vector<matrix<complex<double>>>> PhaseModFilter(vector<matrix<complex<double>>>& mats, int k, int l);
+//    static boost::numeric::ublas::matrix<std::complex<double>> imageTOcomplex ( Image& input);
+    static void lowPassFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int bandsize);
+    static void highPassFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int bandsize);
+    static void bandCutFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int min, int max);
+    static void highPassWithEdgeDetFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int variant);
+    static void phaseModFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int k, int l);
 
 private:
 	const static double PI;

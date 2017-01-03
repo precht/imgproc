@@ -283,6 +283,9 @@ void FrequencyUtils::complexMatrixToImages(const vector<matrix<complex<double>>>
                 }
             }
 
+            // NOTE: min1 = 0 to prevent image after filtration from being brighter
+            min1 = 0;
+
             double scale1 = 255.0 / (max1 - min1);
             double shift1 = -min1;
             double scale2 = 255.0 / (max2 - min2);

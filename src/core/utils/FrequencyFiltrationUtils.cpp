@@ -122,8 +122,8 @@ namespace core
 			{
 				for (int c = 0; c < input.channels(); ++c)
 				{
-					if (input(x, y, c) == 255) mask(x, y) = (1, 0);
-					else if (input(x, y, c) == 0) mask(x, y) = (0, 0);
+                    if (input(x, y, c) == 0) mask(x, y) = complex<double>(0, 0);
+                    else mask(x, y) = complex<double>(1, 0);
 				}
 			}
 		}
@@ -131,29 +131,29 @@ namespace core
 		{
 			for (int j = 0; j < mask_cols; ++j)
 			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat1(i, j) *= complex<double>(0, 0);
-				else mat1(i, j) *= mask(i, j);
+//                if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat1(i, j) = complex<double>(0, 0);
+                if (input(i, j, 0) == 0) mat1(i, j) = complex<double>(0, 0);
 			}
 		}
 		for (int i = 0; i < mask_rows; ++i)
 		{
 			for (int j = 0; j < mask_cols; ++j)
 			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat2(i, j) *= complex<double>(0, 0);
-				else mat2(i, j) *= mask(i, j);
+//                if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat2(i, j) = complex<double>(0, 0);
+                if (input(i, j, 1) == 0) mat2(i, j) = complex<double>(0, 0);
 			}
 		}
 		for (int i = 0; i < mask_rows; ++i)
 		{
 			for (int j = 0; j < mask_cols; ++j)
 			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat3(i, j) *= complex<double>(0, 0);
-				else mat3(i, j) *= mask(i, j);
+//                if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat3(i, j) = complex<double>(0, 0);
+                if (input(i, j, 2) == 0) mat3(i, j) = complex<double>(0, 0);
 			}
 		}
-		mat1(rows / 2, cols / 2) = spectral_component1;
-		mat2(rows / 2, cols / 2) = spectral_component2;
-		mat3(rows / 2, cols / 2) = spectral_component3;
+        mat1(rows / 2, cols / 2) = spectral_component1;
+        mat2(rows / 2, cols / 2) = spectral_component2;
+        mat3(rows / 2, cols / 2) = spectral_component3;
 		mats_ptr->push_back(mat1);
 		mats_ptr->push_back(mat2);
 		mats_ptr->push_back(mat3);

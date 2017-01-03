@@ -58,15 +58,17 @@ namespace core
 		auto& mat = mats[0];
 		const int rows = mat.size1();
 		const int cols = mat.size2();
+		
+		auto spectral_component = mat(rows / 2, cols / 2);
 
 		for (int i = 0; i < rows; ++i)
 		{
 			for (int j = 0; j < cols; ++j)
 			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat(i, j) *= complex<double>(0, 0);
-				
+				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat(i, j) *= complex<double>(0, 0);				
 			}
 		}
+		mat(rows / 2, cols / 2) = spectral_component;
 		mats_ptr->push_back(mat);
 		return mats_ptr;
 	}
@@ -94,9 +96,11 @@ namespace core
 	{
 		unique_ptr<vector<matrix<complex<double>>>> mats_ptr(new vector<matrix<complex<double>>>());
 
-		auto& mat = mats[0];
-		const int rows = mat.size1();
-		const int cols = mat.size2();
+		auto& mat1 = mats[0];
+		auto& mat2 = mats[1];
+		auto& mat3 = mats[2];
+		const int rows = mat1.size1();
+		const int cols = mat1.size2();
 		Image input(std::make_shared<opencv::OpenCVImageHelper>());
 		switch (variant)
 		{
@@ -107,24 +111,52 @@ namespace core
 		const int mask_rows = input.rows();
 		const int mask_cols = input.columns();
 
+		auto spectral_component1 = mat1(rows / 2, cols / 2);
+		auto spectral_component2 = mat2(rows / 2, cols / 2);
+		auto spectral_component3 = mat3(rows / 2, cols / 2);
+
 		matrix<complex<double>> mask(mask_rows, mask_cols);
 		for (int x = 0; x < mask_rows; ++x) 
 		{
 			for (int y = 0; y < mask_cols; ++y)
 			{
-					if (input(x, y, 0) == 255) mask(x, y) = (1, 0);
-					else if (input(x, y, 0) == 0) mask(x, y) = (0, 0);
+				for (int c = 0; c < input.channels(); ++c)
+				{
+					if (input(x, y, c) == 255) mask(x, y) = (1, 0);
+					else if (input(x, y, c) == 0) mask(x, y) = (0, 0);
+				}
 			}
 		}
-		for (int i = 0; i < rows; ++i)
+		for (int i = 0; i < mask_rows; ++i)
 		{
-			for (int j = 0; j < cols; ++j)
+			for (int j = 0; j < mask_cols; ++j)
 			{
-				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat(i, j) *= complex<double>(0, 0);
-				else mat(i, j) *= mask(i, j);
+				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat1(i, j) *= complex<double>(0, 0);
+				else mat1(i, j) *= mask(i, j);
 			}
 		}
-		mats_ptr->push_back(mat);
+		for (int i = 0; i < mask_rows; ++i)
+		{
+			for (int j = 0; j < mask_cols; ++j)
+			{
+				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat2(i, j) *= complex<double>(0, 0);
+				else mat2(i, j) *= mask(i, j);
+			}
+		}
+		for (int i = 0; i < mask_rows; ++i)
+		{
+			for (int j = 0; j < mask_cols; ++j)
+			{
+				if ((sqrt((i - rows / 2)*(i - rows / 2) + (j - cols / 2)*(j - cols / 2))) < bandsize)	mat3(i, j) *= complex<double>(0, 0);
+				else mat3(i, j) *= mask(i, j);
+			}
+		}
+		mat1(rows / 2, cols / 2) = spectral_component1;
+		mat2(rows / 2, cols / 2) = spectral_component2;
+		mat3(rows / 2, cols / 2) = spectral_component3;
+		mats_ptr->push_back(mat1);
+		mats_ptr->push_back(mat2);
+		mats_ptr->push_back(mat3);
 		return mats_ptr;
 	}
 	

@@ -93,6 +93,8 @@ const std::string LPF = "lpf";
 const std::string HPF = "hpf";
 const std::string BPF = "bpf";
 const std::string BCF = "bcf";
+const std::string HPFED = "hpfed";
+const std::string PMF = "pmf";
 
 const std::string HELP_CONTENT = "\n"
 "NAME:\n"

@@ -462,6 +462,50 @@ void Controller::run()
 				output2.save("Band_Cut_Phase.bmp");
 				modified_image = true;
 			}
+			else if (it->first.compare(HPFED) == 0)
+			{
+				Image output1(image_);
+				Image output2(image_);
+				int variant, max;
+				std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
+				std::smatch match;
+				if (std::regex_search(it->second, match, rgx) && match.size() == 3) 
+				{
+					variant = std::stoi(match[1]);
+					max = std::stoi(match[2]);
+				}
+				auto matrix1 = FrequencyUtils::fastFourierTransform(image_);
+				auto matrix2 = FrequencyFiltrationUtils::HighPassWithEdgeDetFilter(*(matrix1.get()), variant, max);
+
+				FrequencyUtils::complexMatrixToImages(*(matrix2.get()), output1, output2, CT_PHASE_MAGNITUDE);
+				FrequencyUtils::inverseFastFourierTransform(image_, *(matrix2.get()));
+
+				output1.save("High_Pass_Edge_Det_Magnitude.bmp");
+				output2.save("High_Pass_Edge_Det_Phase.bmp");
+				modified_image = true;
+			}
+			else if (it->first.compare(PMF) == 0)
+			{
+				Image output1(image_);
+				Image output2(image_);
+				int k,l;
+				std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
+				std::smatch match;
+				if (std::regex_search(it->second, match, rgx) && match.size() == 3)
+				{
+					k = std::stoi(match[1]);
+					l = std::stoi(match[2]);
+				}
+				auto matrix1 = FrequencyUtils::fastFourierTransform(image_);
+				auto matrix2 = FrequencyFiltrationUtils::PhaseModFilter(*(matrix1.get()), k,l);
+
+				FrequencyUtils::complexMatrixToImages(*(matrix2.get()), output1, output2, CT_PHASE_MAGNITUDE);
+				FrequencyUtils::inverseFastFourierTransform(image_, *(matrix2.get()));
+
+				output1.save("Phase_Mod_Magnitude.bmp");
+				output2.save("Phase_Mod_Phase.bmp");
+				modified_image = true;
+			}
             // Default, wrong input args
             else throw "Unknown option";
         }

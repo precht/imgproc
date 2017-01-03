@@ -78,8 +78,9 @@ void FrequencyUtils::threadFftLoop(int thr_id, int thr_num, int range, matrix<co
 
 void FrequencyUtils::inverseFastFourierTransform(Image& output, vector<matrix<complex<double>>>& mats)
 {
-    if (output.channels() != (int)mats.size())
-        throw std::invalid_argument("IFFT failed, output image and input matrix must have same number of channels.");
+	if (output.channels() != (int)mats.size())
+		output.resize(mats[0].size1(), mats[0].size2(), mats.size());
+       // throw std::invalid_argument("IFFT failed, output image and input matrix must have same number of channels.");
 
     for (int c = 0; c < output.channels(); c++)
     {
@@ -242,19 +243,23 @@ void FrequencyUtils::bitReverse(matrix<complex<double>>& mat, int position, Tran
 void FrequencyUtils::complexMatrixToImages(const vector<matrix<complex<double>>>& mats,
                                            Image& output1, Image& output2, ConvertType type)
 {
-    if (output1.channels() != (int)mats.size() || output2.channels() != (int)mats.size())
+   /* if (output1.channels() != (int)mats.size() || output2.channels() != (int)mats.size())
         throw std::invalid_argument("matrix to images convert failed, output images and input matrix"
                                     "must have same number of channels.");
-
+									*/
+	if (output1.channels() != (int)mats.size() || output2.channels() != (int)mats.size())
+	{
+		output1.resize(mats[0].size1(), mats[0].size2(), mats.size());
+		output2.resize(mats[0].size1(), mats[0].size2(), mats.size());
+	}
     for (int c = 0; c < output1.channels(); c++)
     {
         auto& mat = mats[c];
         const int rows = mat.size1();
         const int cols = mat.size2();
 
-        if (output1.rows() != rows || output2.rows() != rows || output1.columns() != cols || output2.columns() != cols)
-            throw std::invalid_argument("matrix to images convert failed, images and matrix must have the same size.");
-
+		if (output1.rows() != rows || output2.rows() != rows || output1.columns() != cols || output2.columns() != cols)
+			throw std::invalid_argument("matrix to images convert failed, images and matrix must have the same size");
         if (type == CT_PHASE_MAGNITUDE) // magnitude has logarithmic scale and phase has normal
         {
             matrix<double> tab1(rows, cols);

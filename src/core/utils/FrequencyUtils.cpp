@@ -73,7 +73,7 @@ unique_ptr<vector<matrix<complex<double>>>> FrequencyUtils::fastFourierTransform
 void FrequencyUtils::threadFftLoop(int thr_id, int thr_num, int range, matrix<complex<double>>& mat, TransformType type)
 {
     for (; thr_id < range; thr_id += thr_num)
-        fftDit(mat, thr_id, type);
+        fftDif(mat, thr_id, type);
 }
 
 void FrequencyUtils::inverseFastFourierTransform(Image& output, vector<matrix<complex<double>>>& mats)
@@ -127,7 +127,7 @@ void FrequencyUtils::inverseFastFourierTransform(Image& output, vector<matrix<co
 void FrequencyUtils::threadIfftLoop(int thr_id, int thr_num, int range, matrix<complex<double>>& mat, TransformType type)
 {
     for (; thr_id < range; thr_id += thr_num)
-        ifftDit(mat, thr_id, type);
+        ifftDif(mat, thr_id, type);
 }
 
 void FrequencyUtils::fftDit(matrix<complex<double>>& mat, int position, TransformType type)
@@ -209,6 +209,85 @@ void FrequencyUtils::ifftDit(matrix<complex<double>>& mat, int position, Transfo
         if(type == TT_ROW) mat(position, i) /= size;
         else mat(i, position) /= size;
     }
+}
+
+void FrequencyUtils::fftDif(boost::numeric::ublas::matrix<std::complex<double> >& mat, int position, TransformType type)
+{
+    const int size = (type == TT_ROW ? mat.size2() : mat.size1());
+    const int lsize = std::log2(size);
+    for(int s = lsize; s > 0; s--)
+    {
+        const int m = 2 << (s - 1);
+        complex<double> wm = std::exp(-2 * PI / m * I);
+        for(int k = 0; k < size; k += m)
+        {
+            complex<double> w{1, 0};
+            const int mh = m >> 1;
+            for(int j = 0; j < mh; ++j)
+            {
+                const int fst = k + j;
+                const int snd = fst + mh;
+                if(type == TT_ROW)
+                {
+                    complex<double> t = mat(position, fst);
+                    complex<double> u = mat(position, snd);
+                    mat(position, fst) = t + u;
+                    mat(position, snd) = (t - u) * w;
+                }
+                else
+                {
+                    complex<double> t = mat(fst, position);
+                    complex<double> u = mat(snd, position);
+                    mat(fst, position) = t + u;
+                    mat(snd, position) = (t - u) * w;
+                }
+                w *= wm;
+            }
+        }
+    }
+    bitReverse(mat, position, type);
+}
+
+void FrequencyUtils::ifftDif(boost::numeric::ublas::matrix<std::complex<double> >& mat, int position, TransformType type)
+{
+    const int size = (type == TT_ROW ? mat.size2() : mat.size1());
+    const int lsize = std::log2(size);
+    for(int s = lsize; s > 0; s--)
+    {
+        const int m = 2 << (s - 1);
+        complex<double> wm = std::exp(2 * PI / m * I);
+        for(int k = 0; k < size; k += m)
+        {
+            complex<double> w{1, 0};
+            const int mh = m >> 1;
+            for(int j = 0; j < mh; ++j)
+            {
+                const int fst = k + j;
+                const int snd = fst + mh;
+                if(type == TT_ROW)
+                {
+                    complex<double> t = mat(position, fst);
+                    complex<double> u = mat(position, snd);
+                    mat(position, fst) = t + u;
+                    mat(position, snd) = (t - u) * w;
+                }
+                else
+                {
+                    complex<double> t = mat(fst, position);
+                    complex<double> u = mat(snd, position);
+                    mat(fst, position) = t + u;
+                    mat(snd, position) = (t - u) * w;
+                }
+                w *= wm;
+            }
+        }
+    }
+    for(int i = 0; i < size; i++)
+    {
+        if(type == TT_ROW) mat(position, i) /= size;
+        else mat(i, position) /= size;
+    }
+    bitReverse(mat, position, type);
 }
 
 bool FrequencyUtils::isPowerOfTwo(int number)

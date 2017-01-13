@@ -38,7 +38,10 @@ private:
     const static std::complex<double> I;
 
     static void fftDit(boost::numeric::ublas::matrix<std::complex<double>>& mat, int position, TransformType type);
+    static void fftDif(boost::numeric::ublas::matrix<std::complex<double>>& mat, int position, TransformType type);
     static void ifftDit(boost::numeric::ublas::matrix<std::complex<double>>& mat, int position, TransformType type);
+    static void ifftDif(boost::numeric::ublas::matrix<std::complex<double>>& mat, int position, TransformType type);
+
 
     static void threadFftLoop(int thr_id, int thr_num, int range,
                           boost::numeric::ublas::matrix<std::complex<double>>& mat, TransformType type);

@@ -25,7 +25,7 @@ public:
     static void lowPassFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int bandsize);
     static void highPassFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int bandsize);
     static void bandCutFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int min, int max);
-    static void highPassWithEdgeDetFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int variant);
+    static void highPassWithEdgeDetFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int variant, int bandsize);
     static void phaseModFilter(std::vector<boost::numeric::ublas::matrix<std::complex<double>>>& mats, int k, int l);
 
 private:

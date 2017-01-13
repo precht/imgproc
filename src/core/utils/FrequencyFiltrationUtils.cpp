@@ -92,7 +92,7 @@ void FrequencyFiltrationUtils::bandCutFilter(vector<matrix<complex<double>>>& ma
     }
 }
 
-void FrequencyFiltrationUtils::highPassWithEdgeDetFilter(vector<matrix<complex<double>>>& mats, int variant)
+void FrequencyFiltrationUtils::highPassWithEdgeDetFilter(vector<matrix<complex<double>>>& mats, int variant, int bandsize)
 {
     Image mask(std::make_shared<opencv::OpenCVImageHelper>());
     switch (variant)
@@ -117,9 +117,12 @@ void FrequencyFiltrationUtils::highPassWithEdgeDetFilter(vector<matrix<complex<d
         auto spectral_val = mats[c](rows >> 1, cols >> 1);
 
         for (int x = 0; x < rows; ++x)
+        {
+            const auto x_distance = pow(x - (rows >> 1), 2);
             for (int y = 0; y < cols; ++y)
-                mats[c](x, y) *= mask(x, y, c) * inv_max_color;
-
+                if (sqrt(x_distance + pow(y - (cols >> 1), 2)) <= bandsize) mats[c](x, y) = complex<double>{0,0};
+                else mats[c](x, y) *= mask(x, y, c) * inv_max_color;
+        }
         mats[c](rows >> 1, cols >> 1) = spectral_val;
     }
 }

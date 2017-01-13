@@ -469,16 +469,17 @@ void Controller::run()
                 Image output1(image_);
                 Image output2(image_);
                 int variant = 0;
-                std::regex rgx("^([0-9]\\d*)$");
+                int bandsize = 0;
+                std::regex rgx("^([0-9]\\d*),([0-9]\\d*)$");
                 std::smatch match;
-                if (std::regex_search(it->second, match, rgx) && match.size() == 2)
+                if (std::regex_search(it->second, match, rgx) && match.size() == 3)
                 {
                     variant = std::stoi(match[1]);
+                    bandsize = std::stoi(match[2]);
                 }
                 auto m = FrequencyUtils::fastFourierTransform(image_);
-                std::cout << "into 1 ---" << variant << std::endl;
-                FrequencyFiltrationUtils::highPassWithEdgeDetFilter(*(m.get()), variant);
-                std::cout << "into 2 ---" << std::endl;
+//                FrequencyFiltrationUtils::highPassFilter(*(m.get()), bandsize);
+                FrequencyFiltrationUtils::highPassWithEdgeDetFilter(*(m.get()), variant, bandsize);
                 FrequencyUtils::complexMatrixToImages(*(m.get()), output1, output2, CT_PHASE_MAGNITUDE);
                 FrequencyUtils::inverseFastFourierTransform(image_, *(m.get()));
 
